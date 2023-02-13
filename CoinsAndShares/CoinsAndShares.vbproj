@@ -1,0 +1,673 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C781E53C-1AEF-4E54-92D3-86AFB2DC9EE2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>CoinsAndShares.CApp</StartupObject>
+    <RootNamespace>CoinsAndShares</RootNamespace>
+    <AssemblyName>CoinsAndShares</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>\\nas\common\CS\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Unc</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>\\nas\common\CS\</InstallUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>35</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>CoinsAndShares.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>CoinsAndShares.xml</DocumentationFile>
+    <NoWarn>
+    </NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>On</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>3D37F8D59A2C5B41CF6458282DE59DDEEC41CF70</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>CoinsAndShares_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Flurl, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.3.0.1\lib\net461\Flurl.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.33.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.33\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Infragistics.Shared.v5.1, Version=5.1.20051.37, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics.Win.UltraWinGrid.v5.1, Version=5.1.20051.37, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics.Win.v5.1, Version=5.1.20051.37, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\CAccounts.vb" />
+    <Compile Include="Accounts\CAdjustment.vb" />
+    <Compile Include="Accounts\CBuySell.vb" />
+    <Compile Include="Accounts\CTransfer.vb" />
+    <Compile Include="Accounts\FAccount.Designer.vb">
+      <DependentUpon>FAccount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FAccount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FAccountList.Designer.vb">
+      <DependentUpon>FAccountList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FAccountList.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FAdjust.Designer.vb">
+      <DependentUpon>FAdjust.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FAdjust.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FBuySell.Designer.vb">
+      <DependentUpon>FBuySell.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FBuySell.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FNewAccount.Designer.vb">
+      <DependentUpon>FNewAccount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FNewAccount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FSwapCrypto.Designer.vb">
+      <DependentUpon>FSwapCrypto.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FSwapCrypto.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FTransferCrypto.Designer.vb">
+      <DependentUpon>FTransferCrypto.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FTransferCrypto.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\FTransferFiat.Designer.vb">
+      <DependentUpon>FTransferFiat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\FTransferFiat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounts\CSwap.vb" />
+    <Compile Include="BackupRestore\JSon\JSonAccount.vb" />
+    <Compile Include="BackupRestore\JSon\JSonCurrency.vb" />
+    <Compile Include="BackupRestore\JSon\JSonDatabase.vb" />
+    <Compile Include="BackupRestore\JSon\JSonElectricityItem.vb" />
+    <Compile Include="BackupRestore\JSon\JSonInstrument.vb" />
+    <Compile Include="BackupRestore\JSon\JsonNetworkItem.vb" />
+    <Compile Include="BackupRestore\JSon\JsonNoteItem.vb" />
+    <Compile Include="BackupRestore\JSon\JSonSettings.vb" />
+    <Compile Include="BackupRestore\JSon\JSonSnapshot.vb" />
+    <Compile Include="BackupRestore\JSon\JSonTransaction.vb" />
+    <Compile Include="CCsv.vb" />
+    <Compile Include="Charts\FAssets.Designer.vb">
+      <DependentUpon>FAssets.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\FAssets.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Charts\FInterest.Designer.vb">
+      <DependentUpon>FInterest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\FInterest.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Charts\FReports.Designer.vb">
+      <DependentUpon>FReports.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\FReports.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Currencies\CCurrencies.vb" />
+    <Compile Include="Currencies\CCurrencyDetail.vb" />
+    <Compile Include="Currencies\CCurrencyBase.vb" />
+    <Compile Include="Currencies\ExchangeRatesApiIo\CJsonRate.vb" />
+    <Compile Include="Currencies\ExchangeRatesApiIo\CJsonResponse.vb" />
+    <Compile Include="Currencies\FCurrencies.Designer.vb">
+      <DependentUpon>FCurrencies.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Currencies\FCurrencies.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Currencies\ICurrencyRateApi.vb" />
+    <Compile Include="Currencies\MCurrencies.vb" />
+    <Compile Include="Dashboard\IDashboardPanel.vb" />
+    <Compile Include="Dashboard\UCurrency.Designer.vb">
+      <DependentUpon>UCurrency.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard\UCurrency.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard\UHoldings.Designer.vb">
+      <DependentUpon>UHoldings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard\UHoldings.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BackupRestore\CBackupRestore.vb" />
+    <Compile Include="Electricity\CElectricity.vb" />
+    <Compile Include="Electricity\CElectricityItem.vb" />
+    <Compile Include="Electricity\FElectricity.Designer.vb">
+      <DependentUpon>FElectricity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Electricity\FElectricity.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Hedging\FHedging.Designer.vb">
+      <DependentUpon>FHedging.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Hedging\FHedging.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IDataChangedHandler.vb" />
+    <Compile Include="Networks\CNetwork.vb" />
+    <Compile Include="Networks\CNetworks.vb" />
+    <Compile Include="Networks\FNetworks.Designer.vb">
+      <DependentUpon>FNetworks.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Networks\FNetworks.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Notes\CNote.vb" />
+    <Compile Include="Notes\CNotes.vb" />
+    <Compile Include="Notes\FNotes.Designer.vb">
+      <DependentUpon>FNotes.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Notes\FNotes.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Notes\MNotes.vb" />
+    <Compile Include="Rates\Alphavantage\CAlphavantage.vb" />
+    <Compile Include="Rates\Alphavantage\CBestMatch.vb" />
+    <Compile Include="Rates\Alphavantage\CResponse.vb" />
+    <Compile Include="Rates\Alphavantage\CGlobalQuote.vb" />
+    <Compile Include="Rates\CoinGecko\CCoinGeckoCoin.vb" />
+    <Compile Include="Rates\CoinGecko\CCoinGecko.vb" />
+    <Compile Include="Rates\CoinGecko\CCoinGeckoCurrencyAndRate.vb" />
+    <Compile Include="Rates\CoinGecko\CCoinGeckoSymbolAndRates.vb" />
+    <Compile Include="Rates\CRate.vb" />
+    <Compile Include="Rates\CRateType.vb" />
+    <Compile Include="Rates\FSharePriceScraper.Designer.vb">
+      <DependentUpon>FSharePriceScraper.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Rates\FSharePriceScraper.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rates\IRateProvider.vb" />
+    <Compile Include="GrowLabel.designer.vb">
+      <DependentUpon>GrowLabel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="GrowLabel.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IDataRefresh.vb" />
+    <Compile Include="Accounts\MAccounts.vb" />
+    <Compile Include="CApp.vb" />
+    <Compile Include="CColours.vb" />
+    <Compile Include="CCommonObjects.vb" />
+    <Compile Include="CDatabase.vb" />
+    <Compile Include="CDropdowns.vb" />
+    <Compile Include="CErrors.vb" />
+    <Compile Include="Accounts\CAccount.vb" />
+    <Compile Include="Instruments\FNewInstrument.Designer.vb">
+      <DependentUpon>FNewInstrument.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Instruments\FNewInstrument.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Instruments\FSelectProviderLinkCode.Designer.vb">
+      <DependentUpon>FSelectProviderLinkCode.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Instruments\FSelectProviderLinkCode.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rates\MarketWatch\CMarketWatch.vb" />
+    <Compile Include="Rates\MRates.vb" />
+    <Compile Include="Rates\YahooFinance\CYahooFinance.vb" />
+    <Compile Include="Settings\CSettings.vb" />
+    <Compile Include="Settings\FSettings.Designer.vb">
+      <DependentUpon>FSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\FSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Snapshots\CSnapshot.vb" />
+    <Compile Include="Snapshots\CSnapshots.vb" />
+    <Compile Include="Snapshots\FSnapshots.Designer.vb">
+      <DependentUpon>FSnapshots.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Snapshots\FSnapshots.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SQLInterface\FSqlInterface.Designer.vb">
+      <DependentUpon>FSqlInterface.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SQLInterface\FSqlInterface.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Transactions\CBatch.vb" />
+    <Compile Include="Transactions\CCoinsAndShares.vb" />
+    <Compile Include="Transactions\CHoldingsGridHelper.vb" />
+    <Compile Include="Transactions\CInstrumentAnalysis.vb" />
+    <Compile Include="Transactions\CInstrumentBalance.vb" />
+    <Compile Include="Transactions\CTransaction.vb" />
+    <Compile Include="Transactions\CTransactionAnalyserResult.vb" />
+    <Compile Include="Transactions\CTransactionExporter.vb" />
+    <Compile Include="Transactions\CTransactions.vb" />
+    <Compile Include="Instruments\CInstrument.vb" />
+    <Compile Include="Instruments\CInstruments.vb" />
+    <Compile Include="FMdi.Designer.vb">
+      <DependentUpon>FMdi.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FMdi.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Instruments\FInstrument.Designer.vb">
+      <DependentUpon>FInstrument.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Instruments\FInstrument.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Instruments\FInstruments.Designer.vb">
+      <DependentUpon>FInstruments.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Instruments\FInstruments.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Instruments\IInstrumentReader.vb" />
+    <Compile Include="Instruments\MInstruments.vb" />
+    <Compile Include="Transactions\FAllTransactions.Designer.vb">
+      <DependentUpon>FAllTransactions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Transactions\FAllTransactions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Transactions\FTransactionEdit.Designer.vb">
+      <DependentUpon>FTransactionEdit.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Transactions\FTransactionEdit.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Transactions\ITransactionsForm.vb" />
+    <Compile Include="Transactions\MTransactions.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="PublicFunctions.vb" />
+    <Compile Include="TagBits.vb" />
+    <Compile Include="Transactions\CTransactionsGridHelper.vb" />
+    <Compile Include="Dashboard\UDashboard.Designer.vb">
+      <DependentUpon>UDashboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard\UDashboard.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Accounts\FAccount.resx">
+      <DependentUpon>FAccount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FAccountList.resx">
+      <DependentUpon>FAccountList.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FAdjust.resx">
+      <DependentUpon>FAdjust.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FBuySell.resx">
+      <DependentUpon>FBuySell.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FNewAccount.resx">
+      <DependentUpon>FNewAccount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FSwapCrypto.resx">
+      <DependentUpon>FSwapCrypto.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FTransferCrypto.resx">
+      <DependentUpon>FTransferCrypto.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounts\FTransferFiat.resx">
+      <DependentUpon>FTransferFiat.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Charts\FAssets.resx">
+      <DependentUpon>FAssets.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Charts\FInterest.resx">
+      <DependentUpon>FInterest.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Charts\FReports.resx">
+      <DependentUpon>FReports.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Currencies\FCurrencies.resx">
+      <DependentUpon>FCurrencies.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\UCurrency.resx">
+      <DependentUpon>UCurrency.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\UHoldings.resx">
+      <DependentUpon>UHoldings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Electricity\FElectricity.resx">
+      <DependentUpon>FElectricity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FMdi.resx">
+      <DependentUpon>FMdi.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GrowLabel.resx">
+      <DependentUpon>GrowLabel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hedging\FHedging.resx">
+      <DependentUpon>FHedging.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Instruments\FInstrument.resx">
+      <DependentUpon>FInstrument.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Instruments\FInstruments.resx">
+      <DependentUpon>FInstruments.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Instruments\FNewInstrument.resx">
+      <DependentUpon>FNewInstrument.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Instruments\FSelectProviderLinkCode.resx">
+      <DependentUpon>FSelectProviderLinkCode.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\licenses.licx" />
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Networks\FNetworks.resx">
+      <DependentUpon>FNetworks.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Notes\FNotes.resx">
+      <DependentUpon>FNotes.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rates\FSharePriceScraper.resx">
+      <DependentUpon>FSharePriceScraper.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\FSettings.resx">
+      <DependentUpon>FSettings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Snapshots\FSnapshots.resx">
+      <DependentUpon>FSnapshots.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SQLInterface\FSqlInterface.resx">
+      <DependentUpon>FSqlInterface.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Transactions\FAllTransactions.resx">
+      <DependentUpon>FAllTransactions.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\UDashboard.resx">
+      <DependentUpon>UDashboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Transactions\FTransactionEdit.resx">
+      <DependentUpon>FTransactionEdit.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <Compile Include="Currencies\ExchangeRatesApiIo\CExchangeRatesApiIo.vb" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart-up-color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blue-folder-open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tick-circle-frame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross-circle-frame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross-script.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-resize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\money.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-circle-double-135.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\present.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\binocular.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\block--pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\globe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exclamation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\currency.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\analyzers\dotnet\vb\Microsoft.CodeAnalysis.NetAnalyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\analyzers\dotnet\vb\Microsoft.CodeAnalysis.VisualBasic.NetAnalyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database-share.png" />
+    <None Include="Resources\camera.png" />
+    <None Include="Resources\toolbox--pencil.png" />
+    <None Include="Resources\chart.png" />
+    <None Include="Resources\database.png" />
+    <None Include="Resources\wand.png" />
+    <None Include="Resources\control-power.png" />
+    <None Include="Resources\water--minus.png" />
+    <None Include="Resources\paint-can.png" />
+    <Content Include="sqlceca40.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlcecompact40.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlceer40EN.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlceme40.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlceqp40.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sqlcese40.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
+    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
+    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.5.0.3\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" />
+</Project>
