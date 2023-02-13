@@ -6,6 +6,7 @@ Imports CoinsAndShares.Instruments.MInstuments
 Imports CoinsAndShares.Networks
 Imports Infragistics.Win.UltraWinGrid
 
+
 Friend Class CDropdowns
     Friend NotInheritable Class CInstrumentTypeNames
         Private Enum Columns
