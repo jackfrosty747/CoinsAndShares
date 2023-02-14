@@ -26,19 +26,19 @@ Friend Class FMdi
     Private m_shortcutPanel As Panel
 
     Friend Sub New(database As CDatabase, errors As CErrors)
+
         InitializeComponent()
+
         m_commonObjects = New CCommonObjects(database, errors, Me)
         Icon = Icon.FromHandle(My.Resources.chart_up_color.GetHicon)
 
-        Dim sVersion As String
-        If ApplicationDeployment.IsNetworkDeployed Then
-            sVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
-        Else
-            ' strTemp = Application.ProductVersion.ToString
-            sVersion = "Not_Deployed"
+        Text = Application.ProductName
+        Dim buildDateTime = GetBuildDateTime()
+
+        If buildDateTime.HasValue Then
+            Text &= " - Build " & buildDateTime.Value.ToShortDateString & " " & buildDateTime.Value.ToShortTimeString
         End If
 
-        Text = Application.ProductName & " v" & sVersion
 
         m_dashboard = New UDashboard With {
             .Parent = Me,

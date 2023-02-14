@@ -137,4 +137,22 @@ Module PublicFunctions
         Return ri.CurrencyNativeName
     End Function
 
+    Friend Function GetBuildDateTime() As Date?
+
+        Dim sBuildDateTime = My.Resources.BuildDate
+
+        Dim lines = Split(sBuildDateTime, Environment.NewLine)
+
+        For Each line In lines
+            Dim d As Date
+            Dim s = line.Trim
+            If Date.TryParseExact(s, "dd/MM/yyyy HH:mm:ss.ff", CultureInfo.InvariantCulture, DateTimeStyles.None, d) Then
+                Return d
+            End If
+        Next
+
+        Return Nothing
+
+    End Function
+
 End Module
