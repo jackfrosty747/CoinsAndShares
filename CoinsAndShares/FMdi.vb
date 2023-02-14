@@ -1,4 +1,6 @@
-﻿Imports CoinsAndShares.Accounts
+﻿Imports System.Deployment.Application
+Imports System.Reflection
+Imports CoinsAndShares.Accounts
 Imports CoinsAndShares.BackupRestore
 Imports CoinsAndShares.Charts
 Imports CoinsAndShares.Currencies
@@ -16,8 +18,6 @@ Imports CoinsAndShares.Transactions
 
 Friend Class FMdi
 
-    ' TEST
-
     Private Const SHOW_SHORTCUTS = True
 
     Private ReadOnly m_commonObjects As CCommonObjects
@@ -29,7 +29,16 @@ Friend Class FMdi
         InitializeComponent()
         m_commonObjects = New CCommonObjects(database, errors, Me)
         Icon = Icon.FromHandle(My.Resources.chart_up_color.GetHicon)
-        Text = Application.ProductName & " v" & Application.ProductVersion
+
+        Dim sVersion As String
+        If ApplicationDeployment.IsNetworkDeployed Then
+            sVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString
+        Else
+            ' strTemp = Application.ProductVersion.ToString
+            sVersion = "Not_Deployed"
+        End If
+
+        Text = Application.ProductName & " v" & sVersion
 
         m_dashboard = New UDashboard With {
             .Parent = Me,
