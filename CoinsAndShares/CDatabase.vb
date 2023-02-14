@@ -7,6 +7,8 @@ Friend Class CDatabase : Implements IDisposable
 
     Private Const DB_VERSION As Integer = 25
 
+    Friend Const DATABASE_PASSWORD = "1234"
+
     Private Const ERROR_TRANSACTION_IS_ACTIVE As String = "Transaction is active"
     Private Const ERROR_TRANSACTION_IS_NOT_ACTIVE As String = "Transaction is not active"
 
@@ -123,12 +125,19 @@ Friend Class CDatabase : Implements IDisposable
         <Description("bit")> Bit
     End Enum
 
+    Friend Shared Function GetDatabaseLocation() As String
+
+        Dim sDatabaseFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CoinsAndShares.sdf")
+
+        Return sDatabaseFile
+
+    End Function
+
     Friend Sub New()
 
-        Dim sDatabaseFile As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CoinsAndShares.sdf")
-        Dim sPassword As String = "1234"
+        Dim sDatabaseFile = GetDatabaseLocation()
 
-        m_sConnectionString = $"Data Source={sDatabaseFile}; Password={sPassword};"
+        m_sConnectionString = $"Data Source={sDatabaseFile}; Password={DATABASE_PASSWORD};"
 
         If Not File.Exists(sDatabaseFile) Then
             Using sqlCeEngine As New SqlCeEngine(m_sConnectionString)

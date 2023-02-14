@@ -487,4 +487,14 @@ Friend Class FMdi
             Cursor = Cursors.Default
         End Try
     End Sub
+
+    Private Sub MnuHelpAbout_Click(sender As Object, e As EventArgs) Handles MnuHelpAbout.Click
+        Try
+            Using frmAbout = New FAbout
+                frmAbout.ShowDialog()
+            End Using
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        End Try
+    End Sub
 End Class

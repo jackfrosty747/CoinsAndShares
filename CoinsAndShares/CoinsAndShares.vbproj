@@ -31,7 +31,7 @@
     <InstallUrl>https://raw.githubusercontent.com/jackfrosty747/CoinsAndShares/master/published/</InstallUrl>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>48</ApplicationRevision>
+    <ApplicationRevision>49</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -97,6 +97,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Emblem-Money-64.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flurl, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -265,6 +268,12 @@
       <DependentUpon>FElectricity.vb</DependentUpon>
     </Compile>
     <Compile Include="Electricity\FElectricity.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FAbout.Designer.vb">
+      <DependentUpon>FAbout.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FAbout.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Hedging\FHedging.Designer.vb">
@@ -476,6 +485,9 @@
     <EmbeddedResource Include="Electricity\FElectricity.resx">
       <DependentUpon>FElectricity.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FAbout.resx">
+      <DependentUpon>FAbout.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FMdi.resx">
       <DependentUpon>FMdi.vb</DependentUpon>
     </EmbeddedResource>
@@ -639,7 +651,10 @@
     <None Include="Resources\control-power.png" />
     <None Include="Resources\water--minus.png" />
     <None Include="Resources\paint-can.png" />
+    <Content Include="Emblem-Money-64.ico" />
     <Content Include="Resources\BuildDate.txt" />
+    <None Include="Resources\Emblem-Money-64.png" />
+    <None Include="Resources\information.png" />
     <Content Include="sqlceca40.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

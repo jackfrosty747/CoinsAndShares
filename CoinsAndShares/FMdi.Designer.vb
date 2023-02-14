@@ -72,12 +72,14 @@ Partial Class FMdi
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuHelpAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.InstrumentsToolStripMenuItem, Me.AccountsToolStripMenuItem, Me.HistoryToolStripMenuItem, Me.SnapshotsToolStripMenuItem, Me.ChartsToolStripMenuItem, Me.NoptesToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.InstrumentsToolStripMenuItem, Me.AccountsToolStripMenuItem, Me.HistoryToolStripMenuItem, Me.SnapshotsToolStripMenuItem, Me.ChartsToolStripMenuItem, Me.NoptesToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(800, 24)
@@ -177,24 +179,24 @@ Partial Class FMdi
         'MnuSetupInstruments
         '
         Me.MnuSetupInstruments.Name = "MnuSetupInstruments"
-        Me.MnuSetupInstruments.Size = New System.Drawing.Size(180, 22)
+        Me.MnuSetupInstruments.Size = New System.Drawing.Size(174, 22)
         Me.MnuSetupInstruments.Text = "Setup Instruments"
         '
         'TsmiInstrumentRateUpdater
         '
         Me.TsmiInstrumentRateUpdater.Name = "TsmiInstrumentRateUpdater"
-        Me.TsmiInstrumentRateUpdater.Size = New System.Drawing.Size(180, 22)
+        Me.TsmiInstrumentRateUpdater.Size = New System.Drawing.Size(174, 22)
         Me.TsmiInstrumentRateUpdater.Text = "Share Price Scraper"
         '
         'ToolStripMenuItem4
         '
         Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(171, 6)
         '
         'TsmiInstrumentHedging
         '
         Me.TsmiInstrumentHedging.Name = "TsmiInstrumentHedging"
-        Me.TsmiInstrumentHedging.Size = New System.Drawing.Size(180, 22)
+        Me.TsmiInstrumentHedging.Size = New System.Drawing.Size(174, 22)
         Me.TsmiInstrumentHedging.Text = "Hedging"
         '
         'AccountsToolStripMenuItem
@@ -207,18 +209,18 @@ Partial Class FMdi
         'MnuAccountList
         '
         Me.MnuAccountList.Name = "MnuAccountList"
-        Me.MnuAccountList.Size = New System.Drawing.Size(180, 22)
+        Me.MnuAccountList.Size = New System.Drawing.Size(140, 22)
         Me.MnuAccountList.Text = "Account List"
         '
         'ToolStripMenuItem5
         '
         Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(137, 6)
         '
         'MnuAccountsNetworks
         '
         Me.MnuAccountsNetworks.Name = "MnuAccountsNetworks"
-        Me.MnuAccountsNetworks.Size = New System.Drawing.Size(180, 22)
+        Me.MnuAccountsNetworks.Size = New System.Drawing.Size(140, 22)
         Me.MnuAccountsNetworks.Text = "Networks"
         '
         'HistoryToolStripMenuItem
@@ -298,6 +300,19 @@ Partial Class FMdi
         Me.StatusStrip1.TabIndex = 2
         Me.StatusStrip1.Text = "StatusStrip1"
         '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuHelpAbout})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'MnuHelpAbout
+        '
+        Me.MnuHelpAbout.Name = "MnuHelpAbout"
+        Me.MnuHelpAbout.Size = New System.Drawing.Size(180, 22)
+        Me.MnuHelpAbout.Text = "About"
+        '
         'FMdi
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -355,4 +370,6 @@ Partial Class FMdi
     Friend WithEvents NoptesToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MnuNotes As ToolStripMenuItem
     Friend WithEvents MnuAccountsNetworks As ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MnuHelpAbout As ToolStripMenuItem
 End Class

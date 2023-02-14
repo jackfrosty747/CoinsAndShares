@@ -141,7 +141,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 14/02/2023 15:00:36.55 
+        '''  Looks up a localized string similar to 14/02/2023 15:30:24.93 
         '''.
         '''</summary>
         Friend ReadOnly Property BuildDate() As String
@@ -256,6 +256,16 @@ Namespace My.Resources
         Friend ReadOnly Property disk() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("disk", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property Emblem_Money_64() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Emblem_Money_64", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -447,6 +457,16 @@ Namespace My.Resources
         Friend ReadOnly Property globe() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("globe", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property information() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("information", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

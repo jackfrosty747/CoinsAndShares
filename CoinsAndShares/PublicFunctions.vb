@@ -7,7 +7,7 @@ Imports Infragistics.Win.UltraWinGrid
 
 Module PublicFunctions
 
-    Friend Const DATABASE_NAME = "CoinsAndShares"
+    'Friend Const DATABASE_NAME = "CoinsAndShares"
 
     Friend Const FORMAT_QUANTITY As String = "#,###,###,##0.##########"
     Friend Const FORMAT_RATE As String = "#,###,###,##0.##########"
