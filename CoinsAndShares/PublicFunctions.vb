@@ -9,6 +9,8 @@ Module PublicFunctions
 
     'Friend Const DATABASE_NAME = "CoinsAndShares"
 
+    Public Const APP_URL = "https://www.jack-frost.co.uk/coins_and_shares.php"
+
     Friend Const FORMAT_QUANTITY As String = "#,###,###,##0.##########"
     Friend Const FORMAT_RATE As String = "#,###,###,##0.##########"
 

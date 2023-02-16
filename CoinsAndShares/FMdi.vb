@@ -8,6 +8,7 @@ Imports CoinsAndShares.Dashboard
 Imports CoinsAndShares.Electricity
 Imports CoinsAndShares.Hedging
 Imports CoinsAndShares.Instruments
+Imports CoinsAndShares.Maintenance
 Imports CoinsAndShares.Networks
 Imports CoinsAndShares.Notes
 Imports CoinsAndShares.Rates
@@ -490,11 +491,27 @@ Friend Class FMdi
 
     Private Sub MnuHelpAbout_Click(sender As Object, e As EventArgs) Handles MnuHelpAbout.Click
         Try
-            Using frmAbout = New FAbout
+            Using frmAbout = New FAbout(m_commonObjects)
                 frmAbout.ShowDialog()
             End Using
         Catch ex As Exception
             m_commonObjects.Errors.Handle(ex)
         End Try
     End Sub
+
+    Private Sub MnuFileDatabaseMaintenance_Click(sender As Object, e As EventArgs) Handles MnuFileDatabaseMaintenance.Click
+        Try
+            Cursor = Cursors.WaitCursor
+            Dim frmMaintenance = New FMaintenance(m_commonObjects) With {
+                .MdiParent = Me
+                }
+            frmMaintenance.Show()
+            frmMaintenance.BringToFront()
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        Finally
+            Cursor = Cursors.Default
+        End Try
+    End Sub
+
 End Class

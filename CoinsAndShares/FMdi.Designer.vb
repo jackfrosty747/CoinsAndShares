@@ -49,6 +49,7 @@ Partial Class FMdi
         Me.MnuFileDatabaseCleardown = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
         Me.MnuFileDatabaseSqlInterface = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuFileDatabaseMaintenance = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
         Me.MnuFileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstrumentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -70,10 +71,10 @@ Partial Class FMdi
         Me.MnuInterest = New System.Windows.Forms.ToolStripMenuItem()
         Me.NoptesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuHelpAbout = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -124,7 +125,7 @@ Partial Class FMdi
         '
         'MnuFileBackup
         '
-        Me.MnuFileBackup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuFileBackupBackup, Me.MnuFileBackupRestore, Me.MnuFileDatabaseCleardown, Me.ToolStripMenuItem3, Me.MnuFileDatabaseSqlInterface})
+        Me.MnuFileBackup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuFileBackupBackup, Me.MnuFileBackupRestore, Me.MnuFileDatabaseCleardown, Me.ToolStripMenuItem3, Me.MnuFileDatabaseMaintenance, Me.MnuFileDatabaseSqlInterface})
         Me.MnuFileBackup.Name = "MnuFileBackup"
         Me.MnuFileBackup.Size = New System.Drawing.Size(180, 22)
         Me.MnuFileBackup.Text = "Database"
@@ -132,31 +133,37 @@ Partial Class FMdi
         'MnuFileBackupBackup
         '
         Me.MnuFileBackupBackup.Name = "MnuFileBackupBackup"
-        Me.MnuFileBackupBackup.Size = New System.Drawing.Size(144, 22)
+        Me.MnuFileBackupBackup.Size = New System.Drawing.Size(180, 22)
         Me.MnuFileBackupBackup.Text = "Backup Data"
         '
         'MnuFileBackupRestore
         '
         Me.MnuFileBackupRestore.Name = "MnuFileBackupRestore"
-        Me.MnuFileBackupRestore.Size = New System.Drawing.Size(144, 22)
+        Me.MnuFileBackupRestore.Size = New System.Drawing.Size(180, 22)
         Me.MnuFileBackupRestore.Text = "Restore Data"
         '
         'MnuFileDatabaseCleardown
         '
         Me.MnuFileDatabaseCleardown.Name = "MnuFileDatabaseCleardown"
-        Me.MnuFileDatabaseCleardown.Size = New System.Drawing.Size(144, 22)
+        Me.MnuFileDatabaseCleardown.Size = New System.Drawing.Size(180, 22)
         Me.MnuFileDatabaseCleardown.Text = "Cleardown"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(141, 6)
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(177, 6)
         '
         'MnuFileDatabaseSqlInterface
         '
         Me.MnuFileDatabaseSqlInterface.Name = "MnuFileDatabaseSqlInterface"
-        Me.MnuFileDatabaseSqlInterface.Size = New System.Drawing.Size(144, 22)
+        Me.MnuFileDatabaseSqlInterface.Size = New System.Drawing.Size(180, 22)
         Me.MnuFileDatabaseSqlInterface.Text = "SQL Interface"
+        '
+        'MnuFileDatabaseMaintenance
+        '
+        Me.MnuFileDatabaseMaintenance.Name = "MnuFileDatabaseMaintenance"
+        Me.MnuFileDatabaseMaintenance.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileDatabaseMaintenance.Text = "Maintenance"
         '
         'ToolStripMenuItem2
         '
@@ -287,6 +294,19 @@ Partial Class FMdi
         Me.MnuNotes.Size = New System.Drawing.Size(105, 22)
         Me.MnuNotes.Text = "Notes"
         '
+        'HelpToolStripMenuItem
+        '
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuHelpAbout})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "Help"
+        '
+        'MnuHelpAbout
+        '
+        Me.MnuHelpAbout.Name = "MnuHelpAbout"
+        Me.MnuHelpAbout.Size = New System.Drawing.Size(107, 22)
+        Me.MnuHelpAbout.Text = "About"
+        '
         'ContextMenuStrip1
         '
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
@@ -299,19 +319,6 @@ Partial Class FMdi
         Me.StatusStrip1.Size = New System.Drawing.Size(800, 22)
         Me.StatusStrip1.TabIndex = 2
         Me.StatusStrip1.Text = "StatusStrip1"
-        '
-        'HelpToolStripMenuItem
-        '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuHelpAbout})
-        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
-        Me.HelpToolStripMenuItem.Text = "Help"
-        '
-        'MnuHelpAbout
-        '
-        Me.MnuHelpAbout.Name = "MnuHelpAbout"
-        Me.MnuHelpAbout.Size = New System.Drawing.Size(180, 22)
-        Me.MnuHelpAbout.Text = "About"
         '
         'FMdi
         '
@@ -372,4 +379,5 @@ Partial Class FMdi
     Friend WithEvents MnuAccountsNetworks As ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MnuHelpAbout As ToolStripMenuItem
+    Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
 End Class

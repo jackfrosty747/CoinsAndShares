@@ -219,6 +219,7 @@ Namespace Accounts
         Private Sub BtnRefresh_Click(sender As Object, e As EventArgs) Handles BtnRefresh.Click
             Try
                 Cursor = Cursors.WaitCursor
+                m_commonObjects.ClearCache()
                 LoadData()
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)

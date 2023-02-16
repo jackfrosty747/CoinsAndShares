@@ -50,6 +50,14 @@
             End Try
         End Sub
 
+        Private Sub GrdSql_InitializeLayout(sender As Object, e As Infragistics.Win.UltraWinGrid.InitializeLayoutEventArgs) Handles GrdSql.InitializeLayout
+            Try
+                GridDefaults(e.Layout)
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            End Try
+
+        End Sub
     End Class
 End Namespace
 

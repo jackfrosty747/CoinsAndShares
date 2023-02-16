@@ -12,19 +12,8 @@ Namespace Transactions
         End Sub
         Friend Sub AddNewTransactions(transactions As IEnumerable(Of CTransaction))
             m_commonObjects.Database.TransactionBegin()
-            Dim accounts = m_commonObjects.Accounts
-            Dim allAccounts = accounts.GetAll()
-            Dim instruments = m_commonObjects.Instruments
-            Dim allInstruments = instruments.GetAll()
             Try
-                Dim lBatch As Long = GetMaxBatch() + 1
-                Dim lId As Long = GetMaxId()
-                For Each transaction In transactions
-                    lId += 1
-                    transaction.Id = lId
-                    transaction.Batch = lBatch
-                    SaveTransactionNow(transaction, allAccounts, allInstruments)
-                Next
+                AddNewTransactionsNow(transactions)
                 m_commonObjects.Database.TransactionCommit()
                 RefreshForms()
             Catch ex As Exception
@@ -32,7 +21,21 @@ Namespace Transactions
                 Throw
             End Try
         End Sub
-
+        Friend Sub AddNewTransactionsNow(transactions As IEnumerable(Of CTransaction))
+            m_commonObjects.Database.TransactionEnsureActive()
+            Dim accounts = m_commonObjects.Accounts
+            Dim allAccounts = accounts.GetAll()
+            Dim instruments = m_commonObjects.Instruments
+            Dim allInstruments = instruments.GetAll()
+            Dim lBatch As Long = GetMaxBatch() + 1
+            Dim lId As Long = GetMaxId()
+            For Each transaction In transactions
+                lId += 1
+                transaction.Id = lId
+                transaction.Batch = lBatch
+                SaveTransactionNow(transaction, allAccounts, allInstruments)
+            Next
+        End Sub
         Private Function GetMaxBatch() As Long
             Dim sql As String = $"
                 SELECT Max({CDatabase.FIELD_TRANSACTIONS_BATCH})

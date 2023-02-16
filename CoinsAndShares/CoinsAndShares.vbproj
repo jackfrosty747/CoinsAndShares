@@ -31,7 +31,7 @@
     <InstallUrl>https://raw.githubusercontent.com/jackfrosty747/CoinsAndShares/master/published/</InstallUrl>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>49</ApplicationRevision>
+    <ApplicationRevision>50</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -283,6 +283,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="IDataChangedHandler.vb" />
+    <Compile Include="Maintenance\CCombiner.vb" />
+    <Compile Include="Maintenance\FMaintenance.Designer.vb">
+      <DependentUpon>FMaintenance.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Maintenance\FMaintenance.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Networks\CNetwork.vb" />
     <Compile Include="Networks\CNetworks.vb" />
     <Compile Include="Networks\FNetworks.Designer.vb">
@@ -508,6 +515,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Instruments\FSelectProviderLinkCode.resx">
       <DependentUpon>FSelectProviderLinkCode.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Maintenance\FMaintenance.resx">
+      <DependentUpon>FMaintenance.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\licenses.licx" />
     <EmbeddedResource Include="My Project\Resources.resx">

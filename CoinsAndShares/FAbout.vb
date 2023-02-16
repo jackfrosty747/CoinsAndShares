@@ -1,5 +1,6 @@
 ﻿Friend Class FAbout
-    Friend Sub New()
+    Private ReadOnly m_commonObjects As CCommonObjects
+    Friend Sub New(commonObjects As CCommonObjects)
 
         ' This call is required by the designer.
         InitializeComponent()
@@ -16,13 +17,16 @@
         End If
 
         LblName.Text = Application.ProductName.ToUpper & vbNewLine & "BUILD: " & sBuild
+        LlUrl.Text = APP_URL
 
         Dim sOut = Text
 
         sOut &= $"
+{Application.ProductName.ToUpper}
+Build: {sBuild}
 Database: {CDatabase.GetDatabaseLocation()}
 Password: {CDatabase.DATABASE_PASSWORD}
-Build: {sBuild}"
+"
 
 
         TxtOut.Text = sOut
@@ -31,5 +35,14 @@ Build: {sBuild}"
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Close()
+    End Sub
+
+    Private Sub LlUrl_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LlUrl.LinkClicked
+        Try
+            Dim ll = CType(sender, LinkLabel)
+            Process.Start(ll.Text)
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        End Try
     End Sub
 End Class

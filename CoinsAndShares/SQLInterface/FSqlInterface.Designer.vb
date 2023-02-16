@@ -58,7 +58,7 @@
             Me.GrdSql.Name = "GrdSql"
             Me.GrdSql.Size = New System.Drawing.Size(784, 275)
             Me.GrdSql.TabIndex = 3
-            Me.GrdSql.Text = "Snapshots"
+            Me.GrdSql.Text = "Query Output"
             '
             'BtnGo
             '

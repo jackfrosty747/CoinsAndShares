@@ -235,6 +235,9 @@
   <data name="Error_SelectOneItemOnly" xml:space="preserve">
     <value>Select one item only</value>
   </data>
+  <data name="Error_TransactionTypeNotValid" xml:space="preserve">
+    <value>Transaction type not valid</value>
+  </data>
   <data name="exclamation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exclamation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

@@ -26,6 +26,7 @@ Partial Class FAbout
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.LblName = New System.Windows.Forms.Label()
         Me.TxtOut = New System.Windows.Forms.TextBox()
+        Me.LlUrl = New System.Windows.Forms.LinkLabel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.BtnOk = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -44,11 +45,13 @@ Partial Class FAbout
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.PictureBox1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.LblName, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TxtOut, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.TxtOut, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.LlUrl, 1, 1)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(5, 5)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowCount = 3
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(614, 388)
@@ -60,6 +63,7 @@ Partial Class FAbout
         Me.PictureBox1.Image = Global.CoinsAndShares.My.Resources.Resources.Emblem_Money_64
         Me.PictureBox1.Location = New System.Drawing.Point(3, 3)
         Me.PictureBox1.Name = "PictureBox1"
+        Me.TableLayoutPanel1.SetRowSpan(Me.PictureBox1, 2)
         Me.PictureBox1.Size = New System.Drawing.Size(64, 64)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
         Me.PictureBox1.TabIndex = 1
@@ -67,10 +71,9 @@ Partial Class FAbout
         '
         'LblName
         '
-        Me.LblName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LblName.Location = New System.Drawing.Point(73, 0)
         Me.LblName.Name = "LblName"
-        Me.LblName.Size = New System.Drawing.Size(538, 70)
+        Me.LblName.Size = New System.Drawing.Size(538, 38)
         Me.LblName.TabIndex = 2
         Me.LblName.Text = "LblName"
         Me.LblName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -88,6 +91,18 @@ Partial Class FAbout
         Me.TxtOut.Size = New System.Drawing.Size(608, 312)
         Me.TxtOut.TabIndex = 0
         Me.TxtOut.Text = "TxtOut"
+        '
+        'LlUrl
+        '
+        Me.LlUrl.AutoSize = True
+        Me.LlUrl.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LlUrl.Location = New System.Drawing.Point(73, 38)
+        Me.LlUrl.Name = "LlUrl"
+        Me.LlUrl.Size = New System.Drawing.Size(538, 32)
+        Me.LlUrl.TabIndex = 3
+        Me.LlUrl.TabStop = True
+        Me.LlUrl.Text = "LlUrl"
+        Me.LlUrl.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Panel1
         '
@@ -166,4 +181,5 @@ Partial Class FAbout
     Friend WithEvents Label1 As Label
     Friend WithEvents BtnOk As Button
     Friend WithEvents Panel2 As Panel
+    Friend WithEvents LlUrl As LinkLabel
 End Class

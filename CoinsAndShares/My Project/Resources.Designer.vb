@@ -141,7 +141,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 14/02/2023 15:30:24.93 
+        '''  Looks up a localized string similar to 16/02/2023 10:59:42.46 
         '''.
         '''</summary>
         Friend ReadOnly Property BuildDate() As String
@@ -438,6 +438,15 @@ Namespace My.Resources
         Friend ReadOnly Property Error_SelectOneItemOnly() As String
             Get
                 Return ResourceManager.GetString("Error_SelectOneItemOnly", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Transaction type not valid.
+        '''</summary>
+        Friend ReadOnly Property Error_TransactionTypeNotValid() As String
+            Get
+                Return ResourceManager.GetString("Error_TransactionTypeNotValid", resourceCulture)
             End Get
         End Property
         
