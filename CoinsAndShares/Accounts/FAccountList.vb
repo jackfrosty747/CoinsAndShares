@@ -9,6 +9,9 @@ Imports Infragistics.Win.UltraWinGrid
 Namespace Accounts
     Friend Class FAccountList : Implements IDataRefresh
 
+        Const REG_SETTING_TRUE = "1"
+        Const REG_SETTING_FALSE = "0"
+
         Private ReadOnly m_commonObjects As CCommonObjects
         Friend Sub New(commonObjects As CCommonObjects)
 
@@ -20,7 +23,11 @@ Namespace Accounts
 
             Icon = Icon.FromHandle(My.Resources.bank.GetHicon)
 
+            ChkShowZero.Checked = GetSetting(Application.ProductName, Name, ChkShowZero.Name, REG_SETTING_TRUE) = REG_SETTING_TRUE
+
             LoadData()
+
+            AddHandler ChkShowZero.CheckedChanged, AddressOf ChkShowZeroCheckedChanged
         End Sub
         Private Sub LoadData()
             Dim allInstruments = m_commonObjects.Instruments.GetAll()
@@ -417,10 +424,12 @@ Namespace Accounts
             End Try
         End Sub
 
-        Private Sub ChkShowZero_CheckedChanged(sender As Object, e As EventArgs) Handles ChkShowZero.CheckedChanged
+        Private Sub ChkShowZeroCheckedChanged(sender As Object, e As EventArgs)
             Try
                 Cursor = Cursors.WaitCursor
                 LoadData()
+                Dim sSetting = If(ChkShowZero.Checked, REG_SETTING_TRUE, REG_SETTING_FALSE)
+                SaveSetting(Application.ProductName, Name, ChkShowZero.Name, sSetting)
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             Finally
