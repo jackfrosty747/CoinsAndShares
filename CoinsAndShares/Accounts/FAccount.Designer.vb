@@ -291,6 +291,7 @@
             Me.ChkIncludeOnShortcuts.Size = New System.Drawing.Size(70, 17)
             Me.ChkIncludeOnShortcuts.TabIndex = 14
             Me.ChkIncludeOnShortcuts.Text = "Shortcut"
+            Me.ToolTip1.SetToolTip(Me.ChkIncludeOnShortcuts, "Create a shortcut button to this account on the left panel")
             Me.ChkIncludeOnShortcuts.UseVisualStyleBackColor = True
             '
             'Panel1

@@ -131,11 +131,11 @@ Module PublicFunctions
     End Function
 
     Friend Function GetLocalCurrencyIso() As String
-        Dim ri = New RegionInfo(Threading.Thread.CurrentThread.CurrentUICulture.LCID)
+        Dim ri = New RegionInfo(CultureInfo.CurrentCulture.Name)
         Return ri.ISOCurrencySymbol
     End Function
     Friend Function GetLocalCurrencyName() As String
-        Dim ri = New RegionInfo(Threading.Thread.CurrentThread.CurrentUICulture.LCID)
+        Dim ri = New RegionInfo(CultureInfo.CurrentCulture.Name)
         Return ri.CurrencyNativeName
     End Function
 
