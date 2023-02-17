@@ -434,6 +434,26 @@ Friend Class CDatabase : Implements IDisposable
                 DELETE
                 FROM {TABLE_SNAPSHOTS};"
         ExecuteQuery(sql)
+
+        sql = $"
+                DELETE
+                FROM {TABLE_NOTES};"
+        ExecuteQuery(sql)
+
+        sql = $"
+                DELETE
+                FROM {TABLE_NETWORKS};"
+        ExecuteQuery(sql)
+
+        sql = $"
+                DELETE
+                FROM {TABLE_LIQUIDATION};"
+        ExecuteQuery(sql)
+
+        sql = $"
+                DELETE
+                FROM {TABLE_ELECTRICITY};"
+        ExecuteQuery(sql)
     End Sub
 
 
