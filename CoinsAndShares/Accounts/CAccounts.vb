@@ -21,32 +21,34 @@ Namespace Accounts
                 FROM {CDatabase.TABLE_ACCOUNTS} a LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
                     a.{CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE}
                 ORDER BY a.{CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
-            Dim col As New Collection(Of CAccount)
-            Using dt = m_commonObjects.Database.GetDatatable(sql)
-                Dim account As CAccount = Nothing
-                For Each dr As DataRow In dt.Rows
-                    Dim sAccountCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE))
-                    If account Is Nothing OrElse Not account.AccountCode.Equals(sAccountCode, StringComparison.CurrentCultureIgnoreCase) Then
-                        account = col.FirstOrDefault(Function(c) c.AccountCode.Equals(sAccountCode, StringComparison.CurrentCultureIgnoreCase))
-                        If account Is Nothing Then
-                            Dim sAccountName As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME))
-                            Dim sAccountType As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE))
-                            Dim accountType As EAccountType = GetAccountTypeFromCode(sAccountType, True)
-                            Dim sNotes As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NOTES))
-                            Dim sNetworkId As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NETWORKID))
-                            Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
+            Dim accounts As New Dictionary(Of String, CAccount)
+            Dim result As New List(Of CAccount)
 
-                            account = New CAccount(sAccountCode, sAccountName, accountType, sNotes, sNetworkId, includeOnShortcuts)
-                            col.Add(account)
-                        End If
+            Using dt = m_commonObjects.Database.GetDatatable(sql)
+                For Each dr As DataRow In dt.Rows
+                    Dim accountCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE))
+                    Dim account As CAccount = Nothing
+
+                    If Not accounts.TryGetValue(accountCode, account) Then
+                        Dim accountName As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME))
+                        Dim accountType As EAccountType = GetAccountTypeFromCode(CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE)), True)
+                        Dim notes As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NOTES))
+                        Dim networkId As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NETWORKID))
+                        Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
+
+                        account = New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts)
+                        accounts.Add(accountCode, account)
+                        result.Add(account)
                     End If
+
                     If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_ID)) Then
                         Dim transaction = CTransactions.GetTransactionFromDr(dr)
                         account.Transactions.Add(transaction)
                     End If
                 Next
             End Using
-            Return col
+
+            Return result
         End Function
 
         Friend Sub CreateNew(sCode As String, sDescription As String, accountType As EAccountType)

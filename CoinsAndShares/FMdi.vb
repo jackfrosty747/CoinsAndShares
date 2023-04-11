@@ -514,4 +514,26 @@ Friend Class FMdi
         End Try
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        Dim cs = New Test.CCoinsAndShares(m_commonObjects)
+
+        Dim all = cs.AllTransactions
+
+        Dim accounts = cs.AllAccounts
+
+        Dim instruments = cs.AllInstruments
+
+        For Each account In accounts
+            Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
+
+        Next
+
+        For Each account In accounts
+            Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
+
+        Next
+
+    End Sub
+
 End Class

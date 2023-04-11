@@ -1,5 +1,4 @@
-﻿Imports System.Collections.ObjectModel
-Imports System.Data.SqlServerCe
+﻿Imports System.Data.SqlServerCe
 Imports CoinsAndShares.Currencies
 Imports CoinsAndShares.Rates
 Imports CoinsAndShares.Transactions
@@ -17,49 +16,99 @@ Namespace Instruments
             End If
             Return m_all
         End Function
+        ' Replacing all with ChatGPT optimised below
+        'Private Function GetAllNow() As IEnumerable(Of CInstrument)
+        '    Const TEMP_INSTRUMENT_RATE As String = "instrumentRate"
+        '    Dim sql As String = $"
+        '        SELECT
+        '            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
+        '            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE},
+        '            i.{CDatabase.FIELD_INSTRUMENT_DESCRIPTION},
+        '            i.{CDatabase.FIELD_INSTRUMENT_RATE} {TEMP_INSTRUMENT_RATE},
+        '            i.{CDatabase.FIELD_INSTRUMENT_RATEUPDATED},
+        '            i.{CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE},
+        '            i.{CDatabase.FIELD_INSTRUMENT_CURRENCYCODE},
+        '            i.{CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER},
+        '            i.{CDatabase.FIELD_INSTRUMENT_NOTES},
+        '            i.{CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE},
+        '            t.*
+        '        FROM {CDatabase.TABLE_INSTRUMENT} i LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
+        '            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE}
+        '        ORDER BY i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
+        '    Dim col As New Collection(Of CInstrument)
+        '    Using dt = m_commonObjects.Database.GetDatatable(sql)
+        '        Dim instrument As CInstrument = Nothing
+        '        For Each dr As DataRow In dt.Rows
+        '            Dim sInstrumentCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE))
+        '            If instrument Is Nothing OrElse Not instrument.Code.Equals(sInstrumentCode, StringComparison.CurrentCultureIgnoreCase) Then
+        '                instrument = col.Where(Function(c) c.Code.Equals(sInstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+        '                If instrument Is Nothing Then
+        '                    Dim sTypeCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE))
+        '                    Dim instrumentType As EInstrumentType = GetInstrumentTypeFromCode(sTypeCode, True)
+        '                    Dim sDescription As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_DESCRIPTION))
+        '                    Dim rRate As Decimal = CDatabase.DbToDecimal(dr(TEMP_INSTRUMENT_RATE))
+        '                    Dim sProviderLinkCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE))
+        '                    Dim sCurrencyCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_CURRENCYCODE))
+        '                    Dim rateUpdated As Date? = Nothing
+        '                    If Not IsDBNull(dr(CDatabase.FIELD_INSTRUMENT_RATEUPDATED)) Then
+        '                        rateUpdated = CType(dr(CDatabase.FIELD_INSTRUMENT_RATEUPDATED), Date)
+        '                    End If
+        '                    Dim providerMultiplier As Decimal = CDatabase.DbToDecimal(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER))
+        '                    Dim sNotes As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_NOTES))
+        '                    Dim sHedgingGroupCode = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE))
+        '                    instrument = New CInstrument(sInstrumentCode, instrumentType, sDescription, rRate,
+        '                        rateUpdated, sProviderLinkCode, sCurrencyCode, providerMultiplier, sNotes, sHedgingGroupCode)
+        '                    col.Add(instrument)
+        '                End If
+        '            End If
+        '            If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_ID)) Then
+        '                Dim transaction = CTransactions.GetTransactionFromDr(dr)
+        '                instrument.Transactions.Add(transaction)
+        '            End If
+        '        Next
+        '    End Using
+        '    Return col
+        'End Function
         Private Function GetAllNow() As IEnumerable(Of CInstrument)
             Const TEMP_INSTRUMENT_RATE As String = "instrumentRate"
             Dim sql As String = $"
-                SELECT
-                    i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
-                    i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE},
-                    i.{CDatabase.FIELD_INSTRUMENT_DESCRIPTION},
-                    i.{CDatabase.FIELD_INSTRUMENT_RATE} {TEMP_INSTRUMENT_RATE},
-                    i.{CDatabase.FIELD_INSTRUMENT_RATEUPDATED},
-                    i.{CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE},
-                    i.{CDatabase.FIELD_INSTRUMENT_CURRENCYCODE},
-                    i.{CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER},
-                    i.{CDatabase.FIELD_INSTRUMENT_NOTES},
-                    i.{CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE},
-                    t.*
-                FROM {CDatabase.TABLE_INSTRUMENT} i LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
-                    i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE}
-                ORDER BY i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
-            Dim col As New Collection(Of CInstrument)
+        SELECT
+            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
+            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE},
+            i.{CDatabase.FIELD_INSTRUMENT_DESCRIPTION},
+            i.{CDatabase.FIELD_INSTRUMENT_RATE} {TEMP_INSTRUMENT_RATE},
+            i.{CDatabase.FIELD_INSTRUMENT_RATEUPDATED},
+            i.{CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE},
+            i.{CDatabase.FIELD_INSTRUMENT_CURRENCYCODE},
+            i.{CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER},
+            i.{CDatabase.FIELD_INSTRUMENT_NOTES},
+            i.{CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE},
+            t.*
+        FROM {CDatabase.TABLE_INSTRUMENT} i LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
+            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE}
+        ORDER BY i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
+            Dim col As New Dictionary(Of String, CInstrument)
             Using dt = m_commonObjects.Database.GetDatatable(sql)
-                Dim instrument As CInstrument = Nothing
                 For Each dr As DataRow In dt.Rows
                     Dim sInstrumentCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE))
-                    If instrument Is Nothing OrElse Not instrument.Code.Equals(sInstrumentCode, StringComparison.CurrentCultureIgnoreCase) Then
-                        instrument = col.Where(Function(c) c.Code.Equals(sInstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                        If instrument Is Nothing Then
-                            Dim sTypeCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE))
-                            Dim instrumentType As EInstrumentType = GetInstrumentTypeFromCode(sTypeCode, True)
-                            Dim sDescription As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_DESCRIPTION))
-                            Dim rRate As Decimal = CDatabase.DbToDecimal(dr(TEMP_INSTRUMENT_RATE))
-                            Dim sProviderLinkCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE))
-                            Dim sCurrencyCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_CURRENCYCODE))
-                            Dim rateUpdated As Date? = Nothing
-                            If Not IsDBNull(dr(CDatabase.FIELD_INSTRUMENT_RATEUPDATED)) Then
-                                rateUpdated = CType(dr(CDatabase.FIELD_INSTRUMENT_RATEUPDATED), Date)
-                            End If
-                            Dim providerMultiplier As Decimal = CDatabase.DbToDecimal(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER))
-                            Dim sNotes As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_NOTES))
-                            Dim sHedgingGroupCode = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE))
-                            instrument = New CInstrument(sInstrumentCode, instrumentType, sDescription, rRate,
-                                rateUpdated, sProviderLinkCode, sCurrencyCode, providerMultiplier, sNotes, sHedgingGroupCode)
-                            col.Add(instrument)
+                    Dim instrument As CInstrument = Nothing
+                    If Not col.TryGetValue(sInstrumentCode, instrument) Then
+                        Dim sTypeCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE))
+                        Dim instrumentType As EInstrumentType = GetInstrumentTypeFromCode(sTypeCode, True)
+                        Dim sDescription As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_DESCRIPTION))
+                        Dim rRate As Decimal = CDatabase.DbToDecimal(dr(TEMP_INSTRUMENT_RATE))
+                        Dim sProviderLinkCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE))
+                        Dim sCurrencyCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_CURRENCYCODE))
+                        Dim rateUpdated As Date? = Nothing
+                        If Not IsDBNull(dr(CDatabase.FIELD_INSTRUMENT_RATEUPDATED)) Then
+                            rateUpdated = CType(dr(CDatabase.FIELD_INSTRUMENT_RATEUPDATED), Date)
                         End If
+                        Dim providerMultiplier As Decimal = CDatabase.DbToDecimal(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER))
+                        Dim sNotes As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_NOTES))
+                        Dim sHedgingGroupCode = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE))
+                        instrument = New CInstrument(sInstrumentCode, instrumentType, sDescription, rRate,
+                                                     rateUpdated, sProviderLinkCode, sCurrencyCode, providerMultiplier, sNotes, sHedgingGroupCode)
+                        col.Add(sInstrumentCode, instrument)
                     End If
                     If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_ID)) Then
                         Dim transaction = CTransactions.GetTransactionFromDr(dr)
@@ -67,7 +116,7 @@ Namespace Instruments
                     End If
                 Next
             End Using
-            Return col
+            Return col.Values
         End Function
 
         Friend Sub UpdateRates(instrumentType As EInstrumentType)

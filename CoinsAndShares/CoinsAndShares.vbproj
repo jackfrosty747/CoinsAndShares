@@ -235,6 +235,8 @@
     <Compile Include="Charts\FReports.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\CAccount.vb" />
+    <Compile Include="Test\CCoinsAndShares.vb" />
     <Compile Include="Currencies\CCurrencies.vb" />
     <Compile Include="Currencies\CCurrencyDetail.vb" />
     <Compile Include="Currencies\CCurrencyBase.vb" />
@@ -375,6 +377,8 @@
     <Compile Include="SQLInterface\FSqlInterface.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\CInstrument.vb" />
+    <Compile Include="Test\CTransaction.vb" />
     <Compile Include="Transactions\CBatch.vb" />
     <Compile Include="Transactions\CCoinsAndShares.vb" />
     <Compile Include="Transactions\CHoldingsGridHelper.vb" />

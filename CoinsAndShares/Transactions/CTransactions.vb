@@ -278,18 +278,10 @@ Namespace Transactions
                                      TransType = Group.Max(Function(c) c.TransactionType),
                                      InstrumentCode = Group.Max(Function(c) c.InstrumentCode),
                                      MonetaryAmount = Group.Sum(Function(c)
-                                                                    If String.IsNullOrEmpty(c.InstrumentCode) Then
-                                                                        Return c.Amount
-                                                                    Else
-                                                                        Return 0
-                                                                    End If
+                                                                    Return If(String.IsNullOrEmpty(c.InstrumentCode), c.Amount, 0)
                                                                 End Function),
                                      InstrumentAmount = Group.Sum(Function(c)
-                                                                      If String.IsNullOrEmpty(c.InstrumentCode) Then
-                                                                          Return 0
-                                                                      Else
-                                                                          Return c.Amount
-                                                                      End If
+                                                                      Return If(String.IsNullOrEmpty(c.InstrumentCode), 0, c.Amount)
                                                                   End Function)
 
 

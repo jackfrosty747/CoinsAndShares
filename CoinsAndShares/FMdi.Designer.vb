@@ -48,8 +48,8 @@ Partial Class FMdi
         Me.MnuFileBackupRestore = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuFileDatabaseCleardown = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.MnuFileDatabaseSqlInterface = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuFileDatabaseMaintenance = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuFileDatabaseSqlInterface = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripSeparator()
         Me.MnuFileExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.InstrumentsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -75,6 +75,7 @@ Partial Class FMdi
         Me.MnuHelpAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -97,83 +98,83 @@ Partial Class FMdi
         'MnuFileViewDashboard
         '
         Me.MnuFileViewDashboard.Name = "MnuFileViewDashboard"
-        Me.MnuFileViewDashboard.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileViewDashboard.Size = New System.Drawing.Size(159, 22)
         Me.MnuFileViewDashboard.Text = "View Dashboard"
         '
         'MnuFileCurrencies
         '
         Me.MnuFileCurrencies.Name = "MnuFileCurrencies"
-        Me.MnuFileCurrencies.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileCurrencies.Size = New System.Drawing.Size(159, 22)
         Me.MnuFileCurrencies.Text = "Currencies"
         '
         'MnuFileElectricityRates
         '
         Me.MnuFileElectricityRates.Name = "MnuFileElectricityRates"
-        Me.MnuFileElectricityRates.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileElectricityRates.Size = New System.Drawing.Size(159, 22)
         Me.MnuFileElectricityRates.Text = "Electricity Rates"
         '
         'MnuFileSettings
         '
         Me.MnuFileSettings.Name = "MnuFileSettings"
-        Me.MnuFileSettings.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileSettings.Size = New System.Drawing.Size(159, 22)
         Me.MnuFileSettings.Text = "Settings"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(156, 6)
         '
         'MnuFileBackup
         '
         Me.MnuFileBackup.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuFileBackupBackup, Me.MnuFileBackupRestore, Me.MnuFileDatabaseCleardown, Me.ToolStripMenuItem3, Me.MnuFileDatabaseMaintenance, Me.MnuFileDatabaseSqlInterface})
         Me.MnuFileBackup.Name = "MnuFileBackup"
-        Me.MnuFileBackup.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileBackup.Size = New System.Drawing.Size(159, 22)
         Me.MnuFileBackup.Text = "Database"
         '
         'MnuFileBackupBackup
         '
         Me.MnuFileBackupBackup.Name = "MnuFileBackupBackup"
-        Me.MnuFileBackupBackup.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileBackupBackup.Size = New System.Drawing.Size(144, 22)
         Me.MnuFileBackupBackup.Text = "Backup Data"
         '
         'MnuFileBackupRestore
         '
         Me.MnuFileBackupRestore.Name = "MnuFileBackupRestore"
-        Me.MnuFileBackupRestore.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileBackupRestore.Size = New System.Drawing.Size(144, 22)
         Me.MnuFileBackupRestore.Text = "Restore Data"
         '
         'MnuFileDatabaseCleardown
         '
         Me.MnuFileDatabaseCleardown.Name = "MnuFileDatabaseCleardown"
-        Me.MnuFileDatabaseCleardown.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileDatabaseCleardown.Size = New System.Drawing.Size(144, 22)
         Me.MnuFileDatabaseCleardown.Text = "Cleardown"
         '
         'ToolStripMenuItem3
         '
         Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(177, 6)
-        '
-        'MnuFileDatabaseSqlInterface
-        '
-        Me.MnuFileDatabaseSqlInterface.Name = "MnuFileDatabaseSqlInterface"
-        Me.MnuFileDatabaseSqlInterface.Size = New System.Drawing.Size(180, 22)
-        Me.MnuFileDatabaseSqlInterface.Text = "SQL Interface"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(141, 6)
         '
         'MnuFileDatabaseMaintenance
         '
         Me.MnuFileDatabaseMaintenance.Name = "MnuFileDatabaseMaintenance"
-        Me.MnuFileDatabaseMaintenance.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileDatabaseMaintenance.Size = New System.Drawing.Size(144, 22)
         Me.MnuFileDatabaseMaintenance.Text = "Maintenance"
+        '
+        'MnuFileDatabaseSqlInterface
+        '
+        Me.MnuFileDatabaseSqlInterface.Name = "MnuFileDatabaseSqlInterface"
+        Me.MnuFileDatabaseSqlInterface.Size = New System.Drawing.Size(144, 22)
+        Me.MnuFileDatabaseSqlInterface.Text = "SQL Interface"
         '
         'ToolStripMenuItem2
         '
         Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(156, 6)
         '
         'MnuFileExit
         '
         Me.MnuFileExit.Name = "MnuFileExit"
-        Me.MnuFileExit.Size = New System.Drawing.Size(180, 22)
+        Me.MnuFileExit.Size = New System.Drawing.Size(159, 22)
         Me.MnuFileExit.Text = "E&xit"
         '
         'InstrumentsToolStripMenuItem
@@ -320,11 +321,21 @@ Partial Class FMdi
         Me.StatusStrip1.TabIndex = 2
         Me.StatusStrip1.Text = "StatusStrip1"
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(556, 109)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(72, 54)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'FMdi
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -380,4 +391,5 @@ Partial Class FMdi
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MnuHelpAbout As ToolStripMenuItem
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
+    Friend WithEvents Button1 As Button
 End Class

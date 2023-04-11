@@ -52,12 +52,14 @@ Namespace Instruments
         Private Sub FilterAndDisplay()
             Dim filtered = m_allInstruments
 
+            Dim filterText = TxtFilter.Text.ToUpper()
+
             filtered = filtered.Where(Function(c)
-                                          If TxtFilter.Text.Length > 0 AndAlso Not (
-                                                        c.Code.ToUpper.Contains(TxtFilter.Text.ToUpper) OrElse
-                                                        c.Description.ToUpper.Contains(TxtFilter.Text.ToUpper) OrElse
-                                                        c.ProviderLinkCode.ToUpper.Contains(TxtFilter.Text.ToUpper)
-                                          ) Then
+                                          If filterText.Length > 0 AndAlso Not (
+                                                c.Code.ToUpper.Contains(filterText) OrElse
+                                                c.Description.ToUpper.Contains(filterText) OrElse
+                                                c.ProviderLinkCode.ToUpper.Contains(filterText)
+                                  ) Then
                                               Return False
                                           End If
                                           If OptTypeCrypto.Checked AndAlso Not c.InstrumentType = EInstrumentType.Crypto Then
