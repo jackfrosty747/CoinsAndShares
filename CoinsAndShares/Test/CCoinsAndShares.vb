@@ -38,7 +38,7 @@
                 Yield transaction
             Next
         End Function
-        Private Function GetAllTransactions() As IEnumerable(Of CTransaction)
+        Private Iterator Function GetAllTransactions() As IEnumerable(Of CTransaction)
 
             Dim sql = $"
                 SELECT 
@@ -58,8 +58,6 @@
                     1=1
                 ORDER BY
                     {CDatabase.FIELD_TRANSACTIONS_ID};"
-
-            Dim all = New List(Of CTransaction)
 
             Using cmd = m_commonObjects.Database.GetCommand(sql)
                 Using dr = cmd.ExecuteReader
@@ -94,15 +92,11 @@
                         Dim batch = If(dr.IsDBNull(iBatchOrdinal), 0, dr.GetFieldValue(Of Integer)(iBatchOrdinal))
                         Dim exchangeRate = If(dr.IsDBNull(iExchangeRateOrdinal), 0, dr.GetFieldValue(Of Single)(iExchangeRateOrdinal))
 
-                        Dim trans = New CTransaction(id, transDate, transType, accountCode, instrumentCode, rate,
+                        Yield New CTransaction(id, transDate, transType, accountCode, instrumentCode, rate,
                                                  amount, description, batch, exchangeRate)
-
-                        all.Add(trans)
                     End While
                 End Using
             End Using
-
-            Return all
 
         End Function
 
