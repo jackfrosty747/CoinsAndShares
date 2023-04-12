@@ -516,23 +516,27 @@ Friend Class FMdi
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-        Dim cs = New Test.CCoinsAndShares(m_commonObjects)
+        'Dim cs = Test.CCoinsAndShares.GetInstance(m_commonObjects)
 
-        Dim all = cs.AllTransactions
+        'Dim all = cs.AllTransactions
 
-        Dim accounts = cs.AllAccounts
+        'Dim accounts = cs.AllAccounts
 
-        Dim instruments = cs.AllInstruments
+        'Dim instruments = cs.AllInstruments
 
-        For Each account In accounts
-            Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
+        'For Each account In accounts
+        '    Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
 
-        Next
+        'Next
 
-        For Each account In accounts
-            Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
+        'For Each account In accounts
+        '    Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
 
-        Next
+        'Next
+
+        Dim frm = New Test.FAccounts(m_commonObjects)
+        frm.MdiParent = Me
+        frm.Show()
 
     End Sub
 

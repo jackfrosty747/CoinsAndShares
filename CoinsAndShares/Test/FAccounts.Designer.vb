@@ -23,11 +23,51 @@
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            components = New System.ComponentModel.Container
+            Me.GrdAccounts = New Infragistics.Win.UltraWinGrid.UltraGrid()
+            Me.BtnRefresh = New System.Windows.Forms.Button()
+            CType(Me.GrdAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
+            Me.SuspendLayout()
+            '
+            'GrdAccounts
+            '
+            Me.GrdAccounts.Location = New System.Drawing.Point(8, 8)
+            Me.GrdAccounts.Name = "GrdAccounts"
+            Me.GrdAccounts.Size = New System.Drawing.Size(682, 518)
+            Me.GrdAccounts.TabIndex = 2
+            Me.GrdAccounts.Text = "Accounts"
+            '
+            'BtnRefresh
+            '
+            Me.BtnRefresh.AutoSize = True
+            Me.BtnRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnRefresh.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnRefresh.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_circle_double_135
+            Me.BtnRefresh.Location = New System.Drawing.Point(558, 351)
+            Me.BtnRefresh.Name = "BtnRefresh"
+            Me.BtnRefresh.Size = New System.Drawing.Size(72, 23)
+            Me.BtnRefresh.TabIndex = 3
+            Me.BtnRefresh.Text = "Refresh"
+            Me.BtnRefresh.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.BtnRefresh.UseVisualStyleBackColor = False
+            '
+            'FAccounts
+            '
+            Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-            Me.ClientSize = New System.Drawing.Size(800, 450)
-            Me.Text = "FAccounts"
+            Me.ClientSize = New System.Drawing.Size(784, 561)
+            Me.Controls.Add(Me.BtnRefresh)
+            Me.Controls.Add(Me.GrdAccounts)
+            Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Name = "FAccounts"
+            Me.Text = "Accounts"
+            CType(Me.GrdAccounts, System.ComponentModel.ISupportInitialize).EndInit()
+            Me.ResumeLayout(False)
+            Me.PerformLayout()
+
         End Sub
+
+        Friend WithEvents GrdAccounts As Infragistics.Win.UltraWinGrid.UltraGrid
+        Friend WithEvents BtnRefresh As Button
     End Class
 End Namespace
 

@@ -18,9 +18,13 @@
             Me.Transactions = transactions
         End Sub
 
-        Friend Function CashBalance() As Decimal
+        Public Function GetCashBalance() As Decimal
             ' You must Cache this if required, calling this multiple times will iterate the collection each time
             Return Transactions.Sum(Function(c) c.CashBalance)
+        End Function
+
+        Public Function GetPl() As Decimal
+            Return Transactions.Sum(Function(c) c.CurrentValue - c.Transfers)
         End Function
 
     End Class

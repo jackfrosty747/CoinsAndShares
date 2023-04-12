@@ -11,9 +11,12 @@
         Friend ReadOnly Property Batch As Integer
         Friend ReadOnly Property ExchangeRate As Single
 
+        Friend ReadOnly Property CurrentInstrumentRate As Decimal
+        Friend ReadOnly Property CurrentExchangeRate As Single
+
         Friend Sub New(id As Integer, transactionDate As Date, transactionType As ETransactionType, accountCode As String,
                        instrumentCode As String, rate As Decimal, amount As Decimal, description As String, batch As Integer,
-                       exchangeRate As Single)
+                       exchangeRate As Single, currentInstrumentRate As Decimal, currentExchangeRate As Single)
             Me.Id = id
             Me.TransactionDate = transactionDate
             Me.TransactionType = transactionType
@@ -24,13 +27,21 @@
             Me.Description = description
             Me.Batch = batch
             Me.ExchangeRate = exchangeRate
+
+            Me.CurrentInstrumentRate = currentInstrumentRate
+            Me.CurrentExchangeRate = currentExchangeRate
         End Sub
 
         Friend Function CashBalance() As Decimal
-            If String.IsNullOrEmpty(InstrumentCode) Then
-                Return Amount
-            End If
-            Return 0
+            Return If(String.IsNullOrEmpty(InstrumentCode), Amount, 0)
+        End Function
+
+        Friend Function Transfers() As Decimal
+            Return If(TransactionType = ETransactionType.Transfer, Amount * If(Rate = 0, 1, Rate), 0)
+        End Function
+
+        Friend Function CurrentValue() As Decimal
+            Return CDec(If(String.IsNullOrEmpty(InstrumentCode), Amount, CurrentInstrumentRate * Amount / If(CurrentExchangeRate > 0, CurrentExchangeRate, 1)))
         End Function
 
     End Class

@@ -236,7 +236,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Test\CAccount.vb" />
-    <Compile Include="Test\CCoinsAndShares.vb" />
     <Compile Include="Currencies\CCurrencies.vb" />
     <Compile Include="Currencies\CCurrencyDetail.vb" />
     <Compile Include="Currencies\CCurrencyBase.vb" />
@@ -377,6 +376,7 @@
     <Compile Include="SQLInterface\FSqlInterface.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\CCoinsAndShares.vb" />
     <Compile Include="Test\CInstrument.vb" />
     <Compile Include="Test\CTransaction.vb" />
     <Compile Include="Test\FAccounts.Designer.vb">
@@ -553,6 +553,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SQLInterface\FSqlInterface.resx">
       <DependentUpon>FSqlInterface.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FAccounts.resx">
+      <DependentUpon>FAccounts.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Transactions\FAllTransactions.resx">
       <DependentUpon>FAllTransactions.vb</DependentUpon>

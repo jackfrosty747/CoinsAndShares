@@ -1,16 +1,20 @@
 ﻿Namespace Test
     Friend Class CCoinsAndShares
 
-        Private ReadOnly m_commonObjects As CCommonObjects
-        Private ReadOnly m_transactionTypeLookup As Dictionary(Of String, ETransactionType)
-        Private ReadOnly m_accountTypeLookup As Dictionary(Of String, Accounts.EAccountType)
-        Private ReadOnly m_instrumentTypeLookup As Dictionary(Of String, Instruments.EInstrumentType)
+        Private Shared instance As CCoinsAndShares
 
-        Private m_transactionCache As IEnumerable(Of CTransaction)
-        Private m_accountsCache As IEnumerable(Of CAccount)
-        Private m_instrumentsCache As IEnumerable(Of CInstrument)
+        Private Shared m_commonObjects As CCommonObjects
 
-        Friend Sub New(commonObjects As CCommonObjects)
+        Private Shared m_transactionTypeLookup As Dictionary(Of String, ETransactionType)
+        Private Shared m_accountTypeLookup As Dictionary(Of String, Accounts.EAccountType)
+        Private Shared m_instrumentTypeLookup As Dictionary(Of String, Instruments.EInstrumentType)
+
+        Private Shared m_transactionCache As IEnumerable(Of CTransaction)
+        Private Shared m_accountsCache As IEnumerable(Of CAccount)
+        Private Shared m_instrumentsCache As IEnumerable(Of CInstrument)
+
+        Private Sub New(commonObjects As CCommonObjects)
+
             m_commonObjects = commonObjects
 
             ' When calling thousands of times, this is quicker than using the enum directly
@@ -19,7 +23,7 @@
                 m_transactionTypeLookup.Add(tt.Code.ToUpper, tt)
             Next
 
-            m_accountTypeLookup = New Dictionary(Of String, Accounts.MAccounts.EAccountType)
+            m_accountTypeLookup = New Dictionary(Of String, Accounts.EAccountType)
             For Each act As Accounts.EAccountType In [Enum].GetValues(GetType(Accounts.EAccountType))
                 m_accountTypeLookup.Add(act.Code.ToUpper, act)
             Next
@@ -30,7 +34,16 @@
             Next
 
         End Sub
-        Friend Iterator Function AllTransactions() As IEnumerable(Of CTransaction)
+
+        Friend Shared Function GetInstance(commonObjects As CCommonObjects) As CCoinsAndShares
+            If instance Is Nothing Then
+                instance = New CCoinsAndShares(commonObjects)
+            End If
+            Return instance
+        End Function
+
+#Region "TRANSACTIONS"
+        Friend Shared Iterator Function AllTransactions() As IEnumerable(Of CTransaction)
             If m_transactionCache Is Nothing Then
                 m_transactionCache = GetAllTransactions().ToList
             End If
@@ -38,26 +51,37 @@
                 Yield transaction
             Next
         End Function
-        Private Iterator Function GetAllTransactions() As IEnumerable(Of CTransaction)
+        Private Shared Iterator Function GetAllTransactions() As IEnumerable(Of CTransaction)
+
+            Const CURRENT_INSTRUMENT_RATE = "currentInstrumentRate"
+            Const CURRENT_EXCHANGE_RATE = "currentExchangeRate"
 
             Dim sql = $"
                 SELECT 
-                    {CDatabase.FIELD_TRANSACTIONS_ID},
-                    {CDatabase.FIELD_TRANSACTIONS_TRANSDATE},
-                    {CDatabase.FIELD_TRANSACTIONS_TRANSTYPE},
-                    {CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE},
-                    {CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE},
-                    {CDatabase.FIELD_TRANSACTIONS_RATE},
-                    {CDatabase.FIELD_TRANSACTIONS_AMOUNT},
-                    {CDatabase.FIELD_TRANSACTIONS_DESCRIPTION},
-                    {CDatabase.FIELD_TRANSACTIONS_BATCH},
-                    {CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE}
+                    t.{CDatabase.FIELD_TRANSACTIONS_ID},
+                    t.{CDatabase.FIELD_TRANSACTIONS_TRANSDATE},
+                    t.{CDatabase.FIELD_TRANSACTIONS_TRANSTYPE},
+                    t.{CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE},
+                    t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE},
+                    t.{CDatabase.FIELD_TRANSACTIONS_RATE},
+                    t.{CDatabase.FIELD_TRANSACTIONS_AMOUNT},
+                    t.{CDatabase.FIELD_TRANSACTIONS_DESCRIPTION},
+                    t.{CDatabase.FIELD_TRANSACTIONS_BATCH},
+                    t.{CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE},
+
+                    i.{CDatabase.FIELD_INSTRUMENT_RATE} {CURRENT_INSTRUMENT_RATE},
+                    c.{CDatabase.FIELD_CURRENCIES_CURRENCYRATE} {CURRENT_EXCHANGE_RATE}
+
                 FROM
-                    {CDatabase.TABLE_TRANSACTIONS}
+                    {CDatabase.TABLE_TRANSACTIONS} t LEFT JOIN {CDatabase.TABLE_INSTRUMENT} i ON
+                        t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE} = i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} LEFT JOIN {CDatabase.TABLE_CURRENCIES} c ON
+                        i.{CDatabase.FIELD_INSTRUMENT_CURRENCYCODE} = c.{CDatabase.FIELD_CURRENCIES_CURRENCYCODE}
                 WHERE
                     1=1
                 ORDER BY
                     {CDatabase.FIELD_TRANSACTIONS_ID};"
+
+            Dim instruments = AllInstruments()
 
             Using cmd = m_commonObjects.Database.GetCommand(sql)
                 Using dr = cmd.ExecuteReader
@@ -71,6 +95,8 @@
                     Dim iDescriptionOrdinal = dr.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_DESCRIPTION)
                     Dim iBatchOrdinal = dr.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_BATCH)
                     Dim iExchangeRateOrdinal = dr.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE)
+                    Dim iCurrentInstrumentRateOrdinal = dr.GetOrdinal(CURRENT_INSTRUMENT_RATE)
+                    Dim iCurrentExchangeRateOrdinal = dr.GetOrdinal(CURRENT_EXCHANGE_RATE)
 
                     While dr.Read
                         Dim id = dr.GetFieldValue(Of Integer)(iIdOrdinal)
@@ -92,15 +118,20 @@
                         Dim batch = If(dr.IsDBNull(iBatchOrdinal), 0, dr.GetFieldValue(Of Integer)(iBatchOrdinal))
                         Dim exchangeRate = If(dr.IsDBNull(iExchangeRateOrdinal), 0, dr.GetFieldValue(Of Single)(iExchangeRateOrdinal))
 
+                        Dim currentInstrumentRate = If(dr.IsDBNull(iCurrentInstrumentRateOrdinal), 0, dr.GetFieldValue(Of Decimal)(iCurrentInstrumentRateOrdinal))
+                        Dim currentExchangeRate = If(dr.IsDBNull(iCurrentExchangeRateOrdinal), 0, dr.GetFieldValue(Of Single)(iCurrentExchangeRateOrdinal))
+
                         Yield New CTransaction(id, transDate, transType, accountCode, instrumentCode, rate,
-                                                 amount, description, batch, exchangeRate)
+                                                 amount, description, batch, exchangeRate, currentInstrumentRate, currentExchangeRate)
                     End While
                 End Using
             End Using
 
         End Function
+#End Region
 
-        Friend Iterator Function AllAccounts() As IEnumerable(Of CAccount)
+#Region "ACCOUNTS"
+        Friend Shared Iterator Function AllAccounts() As IEnumerable(Of CAccount)
             If m_accountsCache Is Nothing Then
                 m_accountsCache = GetAllAccounts().ToList
             End If
@@ -109,7 +140,7 @@
             Next
         End Function
 
-        Private Iterator Function GetAllAccounts() As IEnumerable(Of CAccount)
+        Private Shared Iterator Function GetAllAccounts() As IEnumerable(Of CAccount)
             Dim sql = $"
                 SELECT
                     {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE},
@@ -156,7 +187,10 @@
 
         End Function
 
-        Friend Iterator Function AllInstruments() As IEnumerable(Of CInstrument)
+#End Region
+
+#Region "INSTRUMENTS"
+        Friend Shared Iterator Function AllInstruments() As IEnumerable(Of CInstrument)
             If m_instrumentsCache Is Nothing Then
                 m_instrumentsCache = GetAllInstruments().ToList
             End If
@@ -165,7 +199,7 @@
             Next
         End Function
 
-        Private Iterator Function GetAllInstruments() As IEnumerable(Of CInstrument)
+        Private Shared Iterator Function GetAllInstruments() As IEnumerable(Of CInstrument)
             Dim sql = $"
                 SELECT
                     {CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
@@ -224,7 +258,7 @@
 
         End Function
 
+#End Region
     End Class
 
 End Namespace
-
