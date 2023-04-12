@@ -18,9 +18,9 @@
             Me.Transactions = transactions
         End Sub
 
-        Friend Function GetCashBalance() As Decimal
+        Friend Function CashBalance() As Decimal
             ' You must Cache this if required, calling this multiple times will iterate the collection each time
-            Return Transactions.Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode)).Sum(Function(d) d.Amount)
+            Return Transactions.Sum(Function(c) c.CashBalance)
         End Function
 
     End Class

@@ -26,6 +26,12 @@
             Me.ExchangeRate = exchangeRate
         End Sub
 
+        Friend Function CashBalance() As Decimal
+            If String.IsNullOrEmpty(InstrumentCode) Then
+                Return Amount
+            End If
+            Return 0
+        End Function
 
     End Class
 

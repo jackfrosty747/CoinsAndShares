@@ -1,6 +1,4 @@
-﻿Imports CoinsAndShares.Instruments
-
-Namespace Test
+﻿Namespace Test
     Friend Class CInstrument
         Friend ReadOnly Property InstrumentCode As String
         Friend ReadOnly Property InstrumentType As Instruments.EInstrumentType
@@ -14,7 +12,10 @@ Namespace Test
         Friend ReadOnly Property HedgingGroupCode As String
         Friend ReadOnly Property Transactions As IEnumerable(Of CTransaction)
 
-        Friend Sub New(instrumentCode As String, instrumentType As EInstrumentType, description As String, rate As Decimal, providerLinkCode As String, rateUpdated As Date?, currencyCode As String, providerMultiplier As Decimal, notes As String, hedgingGroupCode As String, transactions As IEnumerable(Of CTransaction))
+        Friend Sub New(instrumentCode As String, instrumentType As Instruments.EInstrumentType, description As String,
+                       rate As Decimal, providerLinkCode As String, rateUpdated As Date?, currencyCode As String,
+                       providerMultiplier As Decimal, notes As String, hedgingGroupCode As String,
+                       transactions As IEnumerable(Of CTransaction))
             Me.InstrumentCode = instrumentCode
             Me.InstrumentType = instrumentType
             Me.Description = description

@@ -379,6 +379,12 @@
     </Compile>
     <Compile Include="Test\CInstrument.vb" />
     <Compile Include="Test\CTransaction.vb" />
+    <Compile Include="Test\FAccounts.Designer.vb">
+      <DependentUpon>FAccounts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FAccounts.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Transactions\CBatch.vb" />
     <Compile Include="Transactions\CCoinsAndShares.vb" />
     <Compile Include="Transactions\CHoldingsGridHelper.vb" />
