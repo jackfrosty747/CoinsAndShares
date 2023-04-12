@@ -3,15 +3,16 @@
 
         Private Shared instance As CCoinsAndShares
 
-        Private Shared m_commonObjects As CCommonObjects
+        Private ReadOnly m_commonObjects As CCommonObjects
 
-        Private Shared m_transactionTypeLookup As Dictionary(Of String, ETransactionType)
-        Private Shared m_accountTypeLookup As Dictionary(Of String, Accounts.EAccountType)
-        Private Shared m_instrumentTypeLookup As Dictionary(Of String, Instruments.EInstrumentType)
+        Private ReadOnly m_transactionTypeLookup As Dictionary(Of String, ETransactionType)
+        Private ReadOnly m_accountTypeLookup As Dictionary(Of String, Accounts.EAccountType)
+        Private ReadOnly m_instrumentTypeLookup As Dictionary(Of String, Instruments.EInstrumentType)
 
-        Private Shared m_transactionCache As IEnumerable(Of CTransaction)
-        Private Shared m_accountsCache As IEnumerable(Of CAccount)
-        Private Shared m_instrumentsCache As IEnumerable(Of CInstrument)
+        Private m_transactionCache As IEnumerable(Of CTransaction)
+        Private m_accountsCache As IEnumerable(Of CAccount)
+        Private m_instrumentsCache As IEnumerable(Of CInstrument)
+        Private m_networksCache As IEnumerable(Of CNetwork)
 
         Private Sub New(commonObjects As CCommonObjects)
 
@@ -43,7 +44,7 @@
         End Function
 
 #Region "TRANSACTIONS"
-        Friend Shared Iterator Function AllTransactions() As IEnumerable(Of CTransaction)
+        Friend Iterator Function AllTransactions() As IEnumerable(Of CTransaction)
             If m_transactionCache Is Nothing Then
                 m_transactionCache = GetAllTransactions().ToList
             End If
@@ -51,7 +52,7 @@
                 Yield transaction
             Next
         End Function
-        Private Shared Iterator Function GetAllTransactions() As IEnumerable(Of CTransaction)
+        Private Iterator Function GetAllTransactions() As IEnumerable(Of CTransaction)
 
             Const CURRENT_INSTRUMENT_RATE = "currentInstrumentRate"
             Const CURRENT_EXCHANGE_RATE = "currentExchangeRate"
@@ -131,7 +132,7 @@
 #End Region
 
 #Region "ACCOUNTS"
-        Friend Shared Iterator Function AllAccounts() As IEnumerable(Of CAccount)
+        Friend Iterator Function AllAccounts() As IEnumerable(Of CAccount)
             If m_accountsCache Is Nothing Then
                 m_accountsCache = GetAllAccounts().ToList
             End If
@@ -140,7 +141,7 @@
             Next
         End Function
 
-        Private Shared Iterator Function GetAllAccounts() As IEnumerable(Of CAccount)
+        Private Iterator Function GetAllAccounts() As IEnumerable(Of CAccount)
             Dim sql = $"
                 SELECT
                     {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE},
@@ -190,7 +191,7 @@
 #End Region
 
 #Region "INSTRUMENTS"
-        Friend Shared Iterator Function AllInstruments() As IEnumerable(Of CInstrument)
+        Friend Iterator Function AllInstruments() As IEnumerable(Of CInstrument)
             If m_instrumentsCache Is Nothing Then
                 m_instrumentsCache = GetAllInstruments().ToList
             End If
@@ -199,7 +200,7 @@
             Next
         End Function
 
-        Private Shared Iterator Function GetAllInstruments() As IEnumerable(Of CInstrument)
+        Private Iterator Function GetAllInstruments() As IEnumerable(Of CInstrument)
             Dim sql = $"
                 SELECT
                     {CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
@@ -258,6 +259,45 @@
 
         End Function
 
+#End Region
+
+#Region "NETWORKS"
+        Friend Iterator Function AllNetworks() As IEnumerable(Of CNetwork)
+            If m_networksCache Is Nothing Then
+                m_networksCache = GetAllNetworks().ToList
+            End If
+            For Each network In m_networksCache
+                Yield network
+            Next
+        End Function
+        Private Iterator Function GetAllNetworks() As IEnumerable(Of CNetwork)
+            Dim sql = $"
+                SELECT {CDatabase.FIELD_NETWORKS_NETWORKID}, {CDatabase.FIELD_NETWORKS_DESCRIPTION}, {CDatabase.FIELD_NETWORKS_COLOUR}
+                FROM {CDatabase.TABLE_NETWORKS}
+                ORDER BY {CDatabase.FIELD_NETWORKS_NETWORKID};"
+            Using cm = m_commonObjects.Database.GetCommand(sql)
+                Using dr = cm.ExecuteReader
+                    Dim iNetworkIdOrdinal = dr.GetOrdinal(CDatabase.FIELD_NETWORKS_NETWORKID)
+                    Dim iDescriptionOrdinal = dr.GetOrdinal(CDatabase.FIELD_NETWORKS_DESCRIPTION)
+                    Dim iColourOrdinal = dr.GetOrdinal(CDatabase.FIELD_NETWORKS_COLOUR)
+                    While dr.Read
+                        Dim networkId = dr.GetFieldValue(Of String)(iNetworkIdOrdinal)
+                        Dim description = If(dr.IsDBNull(iDescriptionOrdinal), String.Empty, dr.GetFieldValue(Of String)(iDescriptionOrdinal))
+                        Dim colour As Color? = Nothing
+                        If Not dr.IsDBNull(iColourOrdinal) Then
+                            Dim iColour = dr.GetFieldValue(Of Integer)(iColourOrdinal)
+                            Try
+                                Dim c = Color.FromArgb(iColour)
+                                colour = c
+                            Catch ignored As Exception
+                            End Try
+                        End If
+                        Yield New CNetwork(networkId, description, colour)
+                    End While
+                End Using
+            End Using
+
+        End Function
 #End Region
     End Class
 

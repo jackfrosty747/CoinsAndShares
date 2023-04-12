@@ -378,6 +378,7 @@
     </Compile>
     <Compile Include="Test\CCoinsAndShares.vb" />
     <Compile Include="Test\CInstrument.vb" />
+    <Compile Include="Test\CNetwork.vb" />
     <Compile Include="Test\CTransaction.vb" />
     <Compile Include="Test\FAccounts.Designer.vb">
       <DependentUpon>FAccounts.vb</DependentUpon>

@@ -150,7 +150,9 @@ Namespace Accounts
                 Try
                     Dim accountType As EAccountType
                     Dim fBold = DefaultableBoolean.False
+
                     If e.Row.Cells.Exists(ColumnsAccount.IsAccountBand.ToString) Then
+
                         Dim account As CAccount = GetAccountFromRow(e.Row)
                         accountType = account.AccountType
 
@@ -165,8 +167,9 @@ Namespace Accounts
                     ElseIf e.Row.Cells.Exists(ColumnsGroup.IsGroupBand.ToString) Then
                         Dim sAccountType As String = e.Row.Cells(ColumnsGroup.AccountTypeCode).Text
                         accountType = GetAccountTypeFromCode(sAccountType, True)
-                    ElseIf e.Row.Cells.Exists(ColumnsAccount.LocalCurrencyBalance.ToString) Then
+
                     End If
+
                     e.Row.CellAppearance.ForeColor = CColours.AccountType(accountType)
                     e.Row.CellAppearance.FontData.Bold = fBold
 
