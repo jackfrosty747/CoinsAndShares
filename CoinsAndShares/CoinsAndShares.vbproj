@@ -377,6 +377,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Test\CCoinsAndShares.vb" />
+    <Compile Include="Test\CDropdowns.vb" />
     <Compile Include="Test\CInstrument.vb" />
     <Compile Include="Test\CNetwork.vb" />
     <Compile Include="Test\CTransaction.vb" />
@@ -384,6 +385,12 @@
       <DependentUpon>FAccounts.vb</DependentUpon>
     </Compile>
     <Compile Include="Test\FAccounts.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\FFiatTransfer.Designer.vb">
+      <DependentUpon>FFiatTransfer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FFiatTransfer.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Transactions\CBatch.vb" />
@@ -557,6 +564,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Test\FAccounts.resx">
       <DependentUpon>FAccounts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FFiatTransfer.resx">
+      <DependentUpon>FFiatTransfer.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Transactions\FAllTransactions.resx">
       <DependentUpon>FAllTransactions.vb</DependentUpon>

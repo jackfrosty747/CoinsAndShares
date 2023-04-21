@@ -1,10 +1,9 @@
-﻿Imports CoinsAndShares.Accounts.MAccounts
-Imports CoinsAndShares.Snapshots.FSnapshots.GridHelper
+﻿Imports CoinsAndShares.Accounts
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 
 Namespace Test
-    Friend Class FAccounts
+    Friend Class FAccounts : Implements IDataRefresh
 
         Const REG_SETTING_TRUE = "1"
         Const REG_SETTING_FALSE = "0"
@@ -18,9 +17,11 @@ Namespace Test
             ' Add any initialization after the InitializeComponent() call.
             m_commonObjects = commonObjects
 
+            Icon = Icon.FromHandle(My.Resources.bank.GetHicon)
+
             ChkIncludeZero.Checked = GetSetting(Application.ProductName, Name, ChkIncludeZero.Name, REG_SETTING_TRUE) = REG_SETTING_TRUE
 
-            LoadData(ChkIncludeZero.Checked)
+            LoadData()
 
             AddHandler ChkIncludeZero.CheckedChanged, AddressOf ChkIncludeZero_CheckedChanged
         End Sub
@@ -28,7 +29,7 @@ Namespace Test
         Private Sub ChkIncludeZero_CheckedChanged(sender As Object, e As EventArgs)
             Cursor = Cursors.WaitCursor
             Try
-                LoadData(ChkIncludeZero.Checked)
+                LoadData()
                 Dim sSetting = If(ChkIncludeZero.Checked, REG_SETTING_TRUE, REG_SETTING_FALSE)
                 SaveSetting(Application.ProductName, Name, ChkIncludeZero.Name, sSetting)
             Catch ex As Exception
@@ -38,11 +39,11 @@ Namespace Test
             End Try
         End Sub
 
-        Private Sub LoadData(includeZeroBalanceAccounts As Boolean)
+        Private Sub LoadData()
 
             Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
 
-            GridHelper.LoadData(GrdAccounts, cs.AllAccounts, m_commonObjects, includeZeroBalanceAccounts)
+            GridHelper.LoadData(GrdAccounts, cs.AllAccounts, m_commonObjects, ChkIncludeZero.Checked)
 
         End Sub
 
@@ -249,7 +250,9 @@ Namespace Test
         Private Sub BtnRefresh_Click(sender As Object, e As EventArgs) Handles BtnRefresh.Click
             Cursor = Cursors.WaitCursor
             Try
-                LoadData(ChkIncludeZero.Checked)
+                Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
+                cs.ClearCache()
+                LoadData()
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             Finally
@@ -257,5 +260,22 @@ Namespace Test
             End Try
         End Sub
 
+        Private Sub BtnFiatTransfer_Click(sender As Object, e As EventArgs) Handles BtnFiatTransfer.Click
+            Try
+                Cursor = Cursors.WaitCursor
+                Using frmFiatTransfer = New FFiatTransfer(m_commonObjects)
+                    Cursor = Cursors.Default
+                    frmFiatTransfer.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            End Try
+        End Sub
+
+        Friend Sub RefreshData() Implements IDataRefresh.RefreshData
+
+            LoadData()
+
+        End Sub
     End Class
 End Namespace

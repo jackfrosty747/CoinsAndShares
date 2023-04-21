@@ -533,8 +533,10 @@ Friend Class FMdi
         '    Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
 
         'Next
+        Cursor = Cursors.WaitCursor
 
         Dim frm = New Test.FAccounts(m_commonObjects)
+        Cursor = Cursors.Default
         frm.MdiParent = Me
         frm.Show()
 

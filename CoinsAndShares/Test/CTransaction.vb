@@ -8,7 +8,7 @@
         Friend ReadOnly Property Rate As Decimal
         Friend ReadOnly Property Amount As Decimal
         Friend ReadOnly Property Description As String
-        Friend ReadOnly Property Batch As Integer
+        Friend Property Batch As Integer
         Friend ReadOnly Property ExchangeRate As Single
 
         Friend ReadOnly Property CurrentInstrumentRate As Decimal

@@ -1,4 +1,6 @@
-﻿Namespace Test
+﻿Imports System.Data.SqlServerCe
+
+Namespace Test
     Friend Class CCoinsAndShares
 
         Private Shared instance As CCoinsAndShares
@@ -42,6 +44,18 @@
             End If
             Return instance
         End Function
+
+        Private Sub ClearCachAndRefreshForms()
+            ClearCache()
+            m_commonObjects.RefreshForms()
+        End Sub
+
+        Friend Sub ClearCache()
+            m_transactionCache = Nothing
+            m_accountsCache = Nothing
+            m_instrumentsCache = Nothing
+            m_networksCache = Nothing
+        End Sub
 
 #Region "TRANSACTIONS"
         Friend Iterator Function AllTransactions() As IEnumerable(Of CTransaction)
@@ -298,6 +312,129 @@
             End Using
 
         End Function
+
+#End Region
+
+#Region "DATA"
+        Friend Sub ProcessFiatTransfer(accountCodeFrom As String, accountCodeTo As String, amount As Decimal, transactionDate As Date)
+            accountCodeFrom = accountCodeFrom.ToUpper
+            accountCodeTo = accountCodeTo.ToUpper
+            amount = Decimal.Round(amount, 2)
+
+            Dim batch = New List(Of CTransaction) From {
+                New CTransaction(0, transactionDate, ETransactionType.Transfer, accountCodeFrom, Nothing, 0, amount * -1, $"Transfer to account {accountCodeTo}", 0, 0, 0, 0),
+                New CTransaction(0, transactionDate, ETransactionType.Transfer, accountCodeTo, Nothing, 0, amount, $"Transfer from account {accountCodeFrom}", 0, 0, 0, 0)
+            }
+
+            AddBatch(batch)
+        End Sub
+
+        Private Sub AddBatch(batch As List(Of CTransaction))
+            m_commonObjects.Database.TransactionBegin()
+            Try
+                AddBatchNow(batch)
+                m_commonObjects.Database.TransactionCommit()
+                ClearCachAndRefreshForms()
+            Catch ex As Exception
+                m_commonObjects.Database.TransactionRollback()
+                Throw
+            End Try
+        End Sub
+
+        Private Sub AddBatchNow(batch As IEnumerable(Of CTransaction))
+            m_commonObjects.Database.TransactionEnsureActive()
+            Dim lBatch = GetMaxBatch() + 1
+            Dim lId = GetMaxId()
+            For Each transaction In batch
+                lId += 1
+                transaction.Id = lId
+                transaction.Batch = lBatch
+                SaveTransactionNow(transaction)
+            Next
+        End Sub
+
+        Private Sub SaveTransactionNow(transaction As CTransaction)
+            m_commonObjects.Database.TransactionEnsureActive()
+
+            If transaction.Id <= 0 OrElse transaction.Batch <= 0 Then
+                Throw New ArgumentOutOfRangeException("Transaction ID and Batch must be used when adding transactions")
+            End If
+
+            ' TODO - Write to database
+            Dim sql = $"
+                SELECT *
+                FROM {CDatabase.TABLE_TRANSACTIONS}
+                WHERE {CDatabase.FIELD_TRANSACTIONS_ID} = @id;"
+
+            Using cm = m_commonObjects.Database.GetCommand(sql)
+                cm.Parameters.AddWithValue("@id", transaction.Id)
+
+                Using da As New SqlCeDataAdapter(cm)
+                    Using dt As New DataTable
+                        da.Fill(dt)
+                        dt.PrimaryKey = New DataColumn() {dt.Columns(CDatabase.FIELD_TRANSACTIONS_ID)}
+                        Dim dr = dt.Rows.Find(transaction.Id)
+                        If dt.Rows.Count = 0 Then
+                            dr = dt.NewRow()
+                            dr(CDatabase.FIELD_TRANSACTIONS_ID) = transaction.Id
+                            dt.Rows.Add(dr)
+                        End If
+
+                        dr(CDatabase.FIELD_TRANSACTIONS_TRANSDATE) = transaction.TransactionDate
+                        dr(CDatabase.FIELD_TRANSACTIONS_TRANSTYPE) = transaction.TransactionType.Code
+                        dr(CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE) = transaction.AccountCode
+
+                        If String.IsNullOrEmpty(transaction.InstrumentCode) Then
+                            dr(CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE) = DBNull.Value
+                        Else
+                            dr(CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE) = transaction.InstrumentCode
+                        End If
+
+                        If transaction.Rate > 0 Then
+                            dr(CDatabase.FIELD_TRANSACTIONS_RATE) = transaction.Rate
+                        ElseIf transaction.Rate < 0 Then
+                            Throw New Exception(My.Resources.Error_RateNotValid)
+                        Else
+                            dr(CDatabase.FIELD_TRANSACTIONS_RATE) = DBNull.Value
+                        End If
+
+                        If String.IsNullOrEmpty(transaction.InstrumentCode) Then
+                            ' Local currency amount
+                            dr(CDatabase.FIELD_TRANSACTIONS_AMOUNT) = Math.Round(transaction.Amount, 2, MidpointRounding.AwayFromZero)
+                        Else
+                            ' Instrument
+                            dr(CDatabase.FIELD_TRANSACTIONS_AMOUNT) = transaction.Amount
+                        End If
+
+                        dr(CDatabase.FIELD_TRANSACTIONS_DESCRIPTION) = transaction.Description
+
+                        dr(CDatabase.FIELD_TRANSACTIONS_BATCH) = transaction.Batch
+                        dr(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE) = transaction.ExchangeRate
+
+                        Using cb As New SqlCeCommandBuilder(da)
+                            da.Update(dt)
+                        End Using
+                    End Using
+                End Using
+            End Using
+
+
+        End Sub
+
+        Private Function GetMaxBatch() As Integer
+            Dim sql = $"
+                SELECT Max({CDatabase.FIELD_TRANSACTIONS_BATCH})
+                FROM {CDatabase.TABLE_TRANSACTIONS};"
+            Return m_commonObjects.Database.ExecuteScalar(Of Integer)(sql)
+        End Function
+
+        Private Function GetMaxId() As Integer
+            Dim sql As String = $"
+                SELECT Max({CDatabase.FIELD_TRANSACTIONS_ID})
+                FROM {CDatabase.TABLE_TRANSACTIONS};"
+            Return m_commonObjects.Database.ExecuteScalar(Of Integer)(sql)
+        End Function
+
 #End Region
     End Class
 

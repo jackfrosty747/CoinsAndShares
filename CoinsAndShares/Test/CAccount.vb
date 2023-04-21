@@ -19,12 +19,18 @@
         End Sub
 
         Public Function GetBalance() As Decimal
-            ' You must Cache this if required, calling this multiple times will iterate the collection each time
-            Return Transactions.Sum(Function(c) c.CurrentValue)
+            Static balance As Decimal?
+            If Not balance.HasValue Then
+                balance = Transactions.Sum(Function(c) c.CurrentValue)
+            End If
+            Return balance.Value
         End Function
         Public Function GetCashBalance() As Decimal
-            ' You must Cache this if required, calling this multiple times will iterate the collection each time
-            Return Transactions.Sum(Function(c) c.CashBalance)
+            Static balance As Decimal?
+            If Not balance.HasValue Then
+                balance = Transactions.Sum(Function(c) c.CashBalance)
+            End If
+            Return balance.Value
         End Function
 
         Public Function GetPl() As Decimal

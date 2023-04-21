@@ -397,6 +397,17 @@ Friend Class CDatabase : Implements IDisposable
         Return iRet
     End Function
 
+    Friend Function ExecuteScalar(Of t)(sql As String) As t
+        Dim sqlCommand As SqlCeCommand
+        If TransactionIsActive() Then
+            sqlCommand = New SqlCeCommand(sql, m_sqlConnection, m_sqlTransaction)
+        Else
+            sqlCommand = New SqlCeCommand(sql, m_sqlConnection)
+        End If
+        Dim result = sqlCommand.ExecuteScalar()
+        Return CType(result, t)
+    End Function
+
     Friend Sub Cleardown()
         TransactionBegin()
         Try
