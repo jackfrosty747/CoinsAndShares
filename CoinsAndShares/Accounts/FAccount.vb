@@ -80,7 +80,7 @@ Namespace Accounts
             TxtNotes.Text = account.Notes
             ChkIncludeOnShortcuts.Checked = account.IncludeOnShortcuts
 
-            Dim networksInUse = all.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
+            'Dim networksInUse = all.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
 
             Dim allInstruments = m_commonObjects.Instruments.GetAll
             Dim allCurrencies = m_commonObjects.Currencies.GetAll
@@ -92,7 +92,6 @@ Namespace Accounts
             m_transactionsLoaded = account.Transactions
 
             FilterTransactions()
-
 
             CHoldingsGridHelper.LoadData(GrdHoldings, account.Transactions, m_commonObjects, analysis.Batches, allInstruments)
 

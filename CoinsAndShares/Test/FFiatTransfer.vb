@@ -4,7 +4,7 @@ Imports Infragistics.Win.UltraWinGrid
 Namespace Test
     Friend Class FFiatTransfer
         Private ReadOnly m_commonObjects As CCommonObjects
-        Friend Sub New(commonObjects As CCommonObjects)
+        Friend Sub New(commonObjects As CCommonObjects, preselectFromAccount As String)
 
             ' This call is required by the designer.
             InitializeComponent()
@@ -22,6 +22,8 @@ Namespace Test
 
             CDropdowns.AccountsDropdown.SetupDropdown(CmbAccountFrom, all, commonObjects)
             CDropdowns.AccountsDropdown.SetupDropdown(CmbAccountTo, all, commonObjects)
+
+            CmbAccountFrom.Text = preselectFromAccount
 
             AccountSelected(CmbAccountFrom)
             AccountSelected(CmbAccountTo)

@@ -381,6 +381,12 @@
     <Compile Include="Test\CInstrument.vb" />
     <Compile Include="Test\CNetwork.vb" />
     <Compile Include="Test\CTransaction.vb" />
+    <Compile Include="Test\FAccount.Designer.vb">
+      <DependentUpon>FAccount.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FAccount.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Test\FAccounts.Designer.vb">
       <DependentUpon>FAccounts.vb</DependentUpon>
     </Compile>
@@ -561,6 +567,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SQLInterface\FSqlInterface.resx">
       <DependentUpon>FSqlInterface.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FAccount.resx">
+      <DependentUpon>FAccount.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Test\FAccounts.resx">
       <DependentUpon>FAccounts.vb</DependentUpon>

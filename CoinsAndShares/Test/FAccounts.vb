@@ -1,4 +1,5 @@
-﻿Imports CoinsAndShares.Accounts
+﻿Imports System.Security.Principal
+Imports CoinsAndShares.Accounts
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 
@@ -43,7 +44,7 @@ Namespace Test
 
             Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
 
-            GridHelper.LoadData(GrdAccounts, cs.AllAccounts, m_commonObjects, ChkIncludeZero.Checked)
+            GridHelper.LoadData(GrdAccounts, cs.AllAccounts, m_commonObjects, ChkIncludeZero.Checked, Me)
 
         End Sub
 
@@ -63,11 +64,17 @@ Namespace Test
                 AccountTypeCode
                 AccountTypeDesc
             End Enum
-
+            Private Class LocalTagBits : Inherits TagBits
+                Friend ReadOnly Property HostForm As FAccounts
+                Friend Sub New(commonObjects As CCommonObjects, hostForm As FAccounts)
+                    MyBase.New(commonObjects)
+                    Me.HostForm = hostForm
+                End Sub
+            End Class
             Friend Shared Sub LoadData(grid As UltraGrid, allAccounts As IEnumerable(Of CAccount), commonObjects As CCommonObjects,
-                                       includeZeroBalanceAccounts As Boolean)
+                                       includeZeroBalanceAccounts As Boolean, hostForm As FAccounts)
 
-                grid.Tag = New TagBits(commonObjects)
+                grid.Tag = New LocalTagBits(commonObjects, hostForm)
 
                 Dim dtGroups = New DataTable
                 dtGroups.Columns.Add(ColumnsGroup.IsGroupBand.ToString)
@@ -119,6 +126,8 @@ Namespace Test
                 AddHandler grid.InitializeRow, AddressOf InitializeRow
                 RemoveHandler grid.InitializeLayout, AddressOf InitializeLayout
                 AddHandler grid.InitializeLayout, AddressOf InitializeLayout
+                RemoveHandler grid.DoubleClick, AddressOf DoubleClick
+                AddHandler grid.DoubleClick, AddressOf DoubleClick
 
                 grid.DataSource = ds
 
@@ -127,6 +136,19 @@ Namespace Test
                 Next
 
             End Sub
+
+            Private Shared Sub DoubleClick(sender As Object, e As EventArgs)
+                Dim grid As UltraGrid = CType(sender, UltraGrid)
+                Dim tagBits As LocalTagBits = CType(grid.Tag, LocalTagBits)
+                Try
+                    If WasGridRowClicked(sender) Then
+                        tagBits.HostForm.BtnOpenAccount_Click(sender, e)
+                    End If
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+
             Private Shared Sub InitializeRow(sender As Object, e As InitializeRowEventArgs)
                 If e.ReInitialize Then
                     Return
@@ -245,6 +267,16 @@ Namespace Test
                     tagBits.CommonObjects.Errors.Handle(ex)
                 End Try
             End Sub
+
+            Friend Shared Function GetSelectedAccounts(grid As UltraGrid) As IEnumerable(Of String)
+                Dim all = New List(Of String)
+                For Each row As UltraGridRow In grid.Selected.Rows
+                    If row.Cells.Exists(ColumnsAccount.IsAccountBand.ToString) Then
+                        all.Add(row.Cells(ColumnsAccount.AccountCode.ToString).Text)
+                    End If
+                Next
+                Return all
+            End Function
         End Class
 
         Private Sub BtnRefresh_Click(sender As Object, e As EventArgs) Handles BtnRefresh.Click
@@ -263,7 +295,9 @@ Namespace Test
         Private Sub BtnFiatTransfer_Click(sender As Object, e As EventArgs) Handles BtnFiatTransfer.Click
             Try
                 Cursor = Cursors.WaitCursor
-                Using frmFiatTransfer = New FFiatTransfer(m_commonObjects)
+                Dim accountsSelected As IEnumerable(Of String) = GridHelper.GetSelectedAccounts(GrdAccounts)
+                Dim sAccountSelected = If(accountsSelected.Count = 1, accountsSelected.First, String.Empty)
+                Using frmFiatTransfer = New FFiatTransfer(m_commonObjects, sAccountSelected)
                     Cursor = Cursors.Default
                     frmFiatTransfer.ShowDialog()
                 End Using
@@ -273,9 +307,41 @@ Namespace Test
         End Sub
 
         Friend Sub RefreshData() Implements IDataRefresh.RefreshData
-
             LoadData()
+        End Sub
 
+        Private Sub BtnOpenAccount_Click(sender As Object, e As EventArgs) Handles BtnOpenAccount.Click
+            Try
+                Dim accountsSelected = GridHelper.GetSelectedAccounts(GrdAccounts)
+                If Not accountsSelected.Any Then
+                    Throw New Exception(My.Resources.Error_NoRowsSelected)
+                ElseIf accountsSelected.Count > 1 Then
+                    Throw New Exception(My.Resources.Error_SelectOneItemOnly)
+                End If
+                Cursor = Cursors.WaitCursor
+                Dim sAccountCode = accountsSelected.First
+                Dim frmAccount As FAccount = Nothing
+                For Each frm As Form In m_commonObjects.FrmMdi.MdiChildren
+                    If TypeOf frm Is FAccount Then
+                        Dim fTest = CType(frm, FAccount)
+                        If fTest.AccountCode.Equals(sAccountCode, StringComparison.CurrentCultureIgnoreCase) Then
+                            frmAccount = fTest
+                            Exit For
+                        End If
+                    End If
+                Next
+                If frmAccount Is Nothing Then
+                    frmAccount = New FAccount(m_commonObjects, sAccountCode) With {
+                        .MdiParent = m_commonObjects.FrmMdi
+                    }
+                    frmAccount.Show()
+                End If
+                frmAccount.Activate()
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
         End Sub
     End Class
 End Namespace

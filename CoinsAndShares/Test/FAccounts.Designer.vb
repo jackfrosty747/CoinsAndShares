@@ -23,20 +23,22 @@
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim Appearance1 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance2 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
             Me.GrdAccounts = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.BtnRefresh = New System.Windows.Forms.Button()
             Me.ChkIncludeZero = New System.Windows.Forms.CheckBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.BtnFiatTransfer = New System.Windows.Forms.Button()
+            Me.BtnOpenAccount = New System.Windows.Forms.Button()
+            Me.Label1 = New System.Windows.Forms.Label()
             CType(Me.GrdAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
             'GrdAccounts
             '
-            Appearance1.BackColor = System.Drawing.Color.SlateGray
-            Me.GrdAccounts.DisplayLayout.Appearance = Appearance1
+            Appearance2.BackColor = System.Drawing.Color.SlateGray
+            Me.GrdAccounts.DisplayLayout.Appearance = Appearance2
             Me.GrdAccounts.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdAccounts.Location = New System.Drawing.Point(0, 38)
             Me.GrdAccounts.Name = "GrdAccounts"
@@ -74,6 +76,8 @@
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.BtnOpenAccount)
+            Me.Panel1.Controls.Add(Me.Label1)
             Me.Panel1.Controls.Add(Me.BtnFiatTransfer)
             Me.Panel1.Controls.Add(Me.ChkIncludeZero)
             Me.Panel1.Controls.Add(Me.BtnRefresh)
@@ -99,6 +103,29 @@
             Me.BtnFiatTransfer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
             Me.BtnFiatTransfer.UseVisualStyleBackColor = False
             '
+            'BtnOpenAccount
+            '
+            Me.BtnOpenAccount.AutoSize = True
+            Me.BtnOpenAccount.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnOpenAccount.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnOpenAccount.Dock = System.Windows.Forms.DockStyle.Left
+            Me.BtnOpenAccount.Image = Global.CoinsAndShares.My.Resources.Resources.blue_folder_open
+            Me.BtnOpenAccount.Location = New System.Drawing.Point(367, 5)
+            Me.BtnOpenAccount.Name = "BtnOpenAccount"
+            Me.BtnOpenAccount.Size = New System.Drawing.Size(107, 28)
+            Me.BtnOpenAccount.TabIndex = 6
+            Me.BtnOpenAccount.Text = "Open Account"
+            Me.BtnOpenAccount.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.BtnOpenAccount.UseVisualStyleBackColor = False
+            '
+            'Label1
+            '
+            Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label1.Location = New System.Drawing.Point(362, 5)
+            Me.Label1.Name = "Label1"
+            Me.Label1.Size = New System.Drawing.Size(5, 28)
+            Me.Label1.TabIndex = 7
+            '
             'FAccounts
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -121,6 +148,8 @@
         Friend WithEvents ChkIncludeZero As CheckBox
         Friend WithEvents Panel1 As Panel
         Friend WithEvents BtnFiatTransfer As Button
+        Friend WithEvents BtnOpenAccount As Button
+        Friend WithEvents Label1 As Label
     End Class
 End Namespace
 

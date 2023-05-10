@@ -45,7 +45,7 @@ Namespace Test
             Return instance
         End Function
 
-        Private Sub ClearCachAndRefreshForms()
+        Private Sub ClearCacheAndRefreshForms()
             ClearCache()
             m_commonObjects.RefreshForms()
         End Sub
@@ -202,6 +202,43 @@ Namespace Test
 
         End Function
 
+        Friend Sub UpdateAccount(account As CAccount)
+            Dim sql = $"
+                SELECT {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE},
+                    {CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME},
+                    {CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE},
+                    {CDatabase.FIELD_ACCOUNTS_NOTES},
+                    {CDatabase.FIELD_ACCOUNTS_NETWORKID},
+                    {CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS}
+                FROM {CDatabase.TABLE_ACCOUNTS}
+                WHERE {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = @accountCode;"
+            Using cm = m_commonObjects.Database.GetCommand(sql)
+                cm.Parameters.AddWithValue("@accountCode", account.AccountCode)
+                Using da = New SqlCeDataAdapter(cm)
+                    Using dt = New DataTable
+                        da.Fill(dt)
+                        Dim dr As DataRow
+                        If dt.Rows.Count = 0 Then
+                            dr = dt.NewRow()
+                            dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE) = account.AccountCode
+                            dt.Rows.Add(dr)
+                        Else
+                            dr = dt.Rows(0)
+                        End If
+                        dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME) = account.AccountName
+                        dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE) = account.AccountType.Code
+                        dr(CDatabase.FIELD_ACCOUNTS_NOTES) = account.Notes
+                        dr(CDatabase.FIELD_ACCOUNTS_NETWORKID) = account.NetworkId
+                        dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS) = account.IncludeOnShortcuts
+                        Using cb As New SqlCeCommandBuilder(da)
+                            da.Update(dt)
+                        End Using
+                    End Using
+                End Using
+            End Using
+            ClearCacheAndRefreshForms()
+        End Sub
+
 #End Region
 
 #Region "INSTRUMENTS"
@@ -334,7 +371,7 @@ Namespace Test
             Try
                 AddBatchNow(batch)
                 m_commonObjects.Database.TransactionCommit()
-                ClearCachAndRefreshForms()
+                ClearCacheAndRefreshForms()
             Catch ex As Exception
                 m_commonObjects.Database.TransactionRollback()
                 Throw
@@ -360,7 +397,6 @@ Namespace Test
                 Throw New ArgumentOutOfRangeException("Transaction ID and Batch must be used when adding transactions")
             End If
 
-            ' TODO - Write to database
             Dim sql = $"
                 SELECT *
                 FROM {CDatabase.TABLE_TRANSACTIONS}

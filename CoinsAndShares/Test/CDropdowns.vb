@@ -1,5 +1,5 @@
 ﻿Imports Infragistics.Win.UltraWinGrid
-Imports CoinsAndShares.Accounts
+
 Imports Infragistics.Win
 
 Namespace Test
@@ -40,7 +40,7 @@ Namespace Test
                 Dim tagBits = CType(cmb.Tag, TagBits)
                 Try
                     Dim accountTypeCode = e.Row.Cells(Columns.AccountTypeCode.ToString).Text
-                    Dim accountType = GetAccountTypeFromCode(accountTypeCode, True)
+                    Dim accountType = Accounts.GetAccountTypeFromCode(accountTypeCode, True)
                     e.Row.CellAppearance.ForeColor = CColours.AccountType(accountType)
                     Dim cashBalance = CDec(e.Row.Cells(Columns.CashBalance.ToString).Value)
                     Dim fBold = cashBalance <> 0
@@ -78,7 +78,78 @@ Namespace Test
                 End Try
             End Sub
         End Class
-
+        Friend Class CNetworksDropdown
+            Friend Shared Sub SetupDropdown(cmb As UltraCombo, all As IEnumerable(Of CNetwork), commonObjects As CCommonObjects)
+                cmb.Tag = New TagBits(commonObjects)
+                Dim dt = GetBlankDt()
+                For Each network In all
+                    Dim dr = dt.NewRow
+                    dr(Columns.NetworkId.ToString) = network.NetworkId
+                    dr(Columns.Description.ToString) = network.Description
+                    If network.Colour.HasValue Then
+                        dr(Columns.Colour.ToString) = network.Colour.Value.ToArgb
+                    End If
+                    dt.Rows.Add(dr)
+                Next
+                RemoveHandler cmb.InitializeLayout, AddressOf InitializeLayout
+                AddHandler cmb.InitializeLayout, AddressOf InitializeLayout
+                RemoveHandler cmb.InitializeRow, AddressOf InitializeRow
+                AddHandler cmb.InitializeRow, AddressOf InitializeRow
+                cmb.DataSource = dt
+            End Sub
+            Private Shared Function GetBlankDt() As DataTable
+                Dim dt = New DataTable
+                dt.Columns.Add(Columns.NetworkId.ToString)
+                dt.Columns.Add(Columns.Description.ToString)
+                dt.Columns.Add(Columns.Colour.ToString, GetType(Integer))
+                Return dt
+            End Function
+            Private Enum Columns
+                NetworkId
+                Description
+                Colour
+            End Enum
+            Private Shared Sub InitializeRow(sender As Object, e As InitializeRowEventArgs)
+                Dim cmb = CType(sender, UltraCombo)
+                Dim tagBits = CType(cmb.Tag, TagBits)
+                Try
+                    Dim backColour As Color = Nothing
+                    If Not IsDBNull(e.Row.Cells(Columns.Colour.ToString).Value) Then
+                        Dim iColour = CInt(e.Row.Cells(Columns.Colour.ToString).Value)
+                        Try
+                            Dim c As Color = Color.FromArgb(iColour)
+                            backColour = c
+                        Catch ex As Exception
+                        End Try
+                    End If
+                    e.Row.CellAppearance.BackColor = backColour
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+            Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
+                Dim cmb = CType(sender, UltraCombo)
+                Dim tagBits = CType(cmb.Tag, TagBits)
+                Try
+                    GridDefaults(e.Layout)
+                    For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
+                        Select Case col.Key
+                            Case Columns.NetworkId.ToString
+                                col.Header.Caption = $"Network ID"
+                                col.Width = cmb.Width
+                                col.Case = [Case].Upper
+                            Case Columns.Description.ToString
+                                col.Header.Caption = $"Network Description"
+                                col.Width = 250
+                            Case Else
+                                col.Hidden = True
+                        End Select
+                    Next
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+        End Class
     End Class
 
 End Namespace
