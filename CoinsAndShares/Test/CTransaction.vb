@@ -1,18 +1,18 @@
 ﻿Namespace Test
     Friend Class CTransaction
-        Friend Property Id As Integer
-        Friend ReadOnly Property TransactionDate As Date
-        Friend ReadOnly Property TransactionType As ETransactionType
-        Friend ReadOnly Property AccountCode As String
-        Friend ReadOnly Property InstrumentCode As String
-        Friend ReadOnly Property Rate As Decimal
-        Friend ReadOnly Property Amount As Decimal
-        Friend ReadOnly Property Description As String
-        Friend Property Batch As Integer
-        Friend ReadOnly Property ExchangeRate As Single
+        Public Property Id As Integer
+        Public ReadOnly Property TransactionDate As Date
+        Public ReadOnly Property TransactionType As ETransactionType
+        Public ReadOnly Property AccountCode As String
+        Public ReadOnly Property InstrumentCode As String
+        Public ReadOnly Property Rate As Decimal
+        Public ReadOnly Property Amount As Decimal
+        Public ReadOnly Property Description As String
+        Public Property Batch As Integer
+        Public ReadOnly Property ExchangeRate As Single
 
-        Friend ReadOnly Property CurrentInstrumentRate As Decimal
-        Friend ReadOnly Property CurrentExchangeRate As Single
+        Public ReadOnly Property CurrentInstrumentRate As Decimal
+        Public ReadOnly Property CurrentExchangeRate As Single
 
         Friend Sub New(id As Integer, transactionDate As Date, transactionType As ETransactionType, accountCode As String,
                        instrumentCode As String, rate As Decimal, amount As Decimal, description As String, batch As Integer,
@@ -43,7 +43,24 @@
         Friend Function CurrentValue() As Decimal
             Return CDec(If(String.IsNullOrEmpty(InstrumentCode), Amount, CurrentInstrumentRate * Amount / If(CurrentExchangeRate > 0, CurrentExchangeRate, 1)))
         End Function
-
+        Public ReadOnly Property Sterling() As Decimal
+            Get
+                If String.IsNullOrEmpty(InstrumentCode) Then
+                    Return Amount
+                Else
+                    Return Amount * Rate
+                End If
+            End Get
+        End Property
+        Public ReadOnly Property AmountDisplay() As String
+            Get
+                If String.IsNullOrEmpty(InstrumentCode) Then
+                    Return FormatCurrency(Amount)
+                Else
+                    Return Amount.ToString(FORMAT_QUANTITY)
+                End If
+            End Get
+        End Property
     End Class
 
 End Namespace

@@ -23,22 +23,22 @@
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim Appearance2 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance1 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
             Me.GrdAccounts = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.BtnRefresh = New System.Windows.Forms.Button()
             Me.ChkIncludeZero = New System.Windows.Forms.CheckBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
-            Me.BtnFiatTransfer = New System.Windows.Forms.Button()
             Me.BtnOpenAccount = New System.Windows.Forms.Button()
             Me.Label1 = New System.Windows.Forms.Label()
+            Me.BtnFiatTransfer = New System.Windows.Forms.Button()
             CType(Me.GrdAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
             'GrdAccounts
             '
-            Appearance2.BackColor = System.Drawing.Color.SlateGray
-            Me.GrdAccounts.DisplayLayout.Appearance = Appearance2
+            Appearance1.BackColor = System.Drawing.Color.SlateGray
+            Me.GrdAccounts.DisplayLayout.Appearance = Appearance1
             Me.GrdAccounts.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdAccounts.Location = New System.Drawing.Point(0, 38)
             Me.GrdAccounts.Name = "GrdAccounts"
@@ -88,21 +88,6 @@
             Me.Panel1.Size = New System.Drawing.Size(784, 38)
             Me.Panel1.TabIndex = 5
             '
-            'BtnFiatTransfer
-            '
-            Me.BtnFiatTransfer.AutoSize = True
-            Me.BtnFiatTransfer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnFiatTransfer.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnFiatTransfer.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnFiatTransfer.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
-            Me.BtnFiatTransfer.Location = New System.Drawing.Point(264, 5)
-            Me.BtnFiatTransfer.Name = "BtnFiatTransfer"
-            Me.BtnFiatTransfer.Size = New System.Drawing.Size(98, 28)
-            Me.BtnFiatTransfer.TabIndex = 5
-            Me.BtnFiatTransfer.Text = "FIAT Transfer"
-            Me.BtnFiatTransfer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.BtnFiatTransfer.UseVisualStyleBackColor = False
-            '
             'BtnOpenAccount
             '
             Me.BtnOpenAccount.AutoSize = True
@@ -125,6 +110,21 @@
             Me.Label1.Name = "Label1"
             Me.Label1.Size = New System.Drawing.Size(5, 28)
             Me.Label1.TabIndex = 7
+            '
+            'BtnFiatTransfer
+            '
+            Me.BtnFiatTransfer.AutoSize = True
+            Me.BtnFiatTransfer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnFiatTransfer.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnFiatTransfer.Dock = System.Windows.Forms.DockStyle.Left
+            Me.BtnFiatTransfer.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
+            Me.BtnFiatTransfer.Location = New System.Drawing.Point(264, 5)
+            Me.BtnFiatTransfer.Name = "BtnFiatTransfer"
+            Me.BtnFiatTransfer.Size = New System.Drawing.Size(98, 28)
+            Me.BtnFiatTransfer.TabIndex = 5
+            Me.BtnFiatTransfer.Text = "FIAT Transfer"
+            Me.BtnFiatTransfer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.BtnFiatTransfer.UseVisualStyleBackColor = False
             '
             'FAccounts
             '
