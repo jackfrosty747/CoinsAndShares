@@ -45,20 +45,12 @@
         End Function
         Public ReadOnly Property Sterling() As Decimal
             Get
-                If String.IsNullOrEmpty(InstrumentCode) Then
-                    Return Amount
-                Else
-                    Return Amount * Rate
-                End If
+                Return If(String.IsNullOrEmpty(InstrumentCode), Amount, Amount * Rate)
             End Get
         End Property
         Public ReadOnly Property AmountDisplay() As String
             Get
-                If String.IsNullOrEmpty(InstrumentCode) Then
-                    Return FormatCurrency(Amount)
-                Else
-                    Return Amount.ToString(FORMAT_QUANTITY)
-                End If
+                Return If(String.IsNullOrEmpty(InstrumentCode), FormatCurrency(Amount), Amount.ToString(FORMAT_QUANTITY))
             End Get
         End Property
     End Class

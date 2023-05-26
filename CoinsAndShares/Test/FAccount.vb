@@ -70,16 +70,153 @@ Namespace Test
             Dim coinsAndShares = CCoinsAndShares.GetInstance(m_commonObjects)
             Dim account = coinsAndShares.AllAccounts.SingleOrDefault(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
 
-            ' TODO
-            ' Holdings
-
-
-
             ' Load transactions
             GrdTransactions.DataSource = account.Transactions.OrderByDescending(Function(c) c.Id).ToList
 
+            HoldingsGrid.LoadData(GrdHoldings, account, m_commonObjects)
+
             ChangesMade(False)
         End Sub
+
+        Private Class HoldingsGrid
+            Private Enum Columns
+                InstrumentCode
+                Description
+                QuantityHeld
+                CurrentValue
+                Cost
+                Pl
+            End Enum
+            Friend Shared Sub LoadData(grid As UltraGrid, account As CAccount, commonObjects As CCommonObjects)
+                grid.Tag = New TagBits(commonObjects)
+                RemoveHandler grid.InitializeLayout, AddressOf InitializeLayout
+                AddHandler grid.InitializeLayout, AddressOf InitializeLayout
+                grid.DataSource = GetDatatable(account, commonObjects)
+            End Sub
+
+            Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
+                Dim grid As UltraGrid = CType(sender, UltraGrid)
+                Dim tagBits As TagBits = CType(grid.Tag, TagBits)
+                Try
+                    GridDefaults(e.Layout)
+                    With e.Layout.Override()
+                        .AllowAddNew = AllowAddNew.No
+                        .AllowDelete = DefaultableBoolean.False
+                        .AllowUpdate = DefaultableBoolean.False
+                        .RowSelectors = DefaultableBoolean.False
+                        .CellClickAction = CellClickAction.RowSelect
+                        .SelectTypeRow = SelectType.None
+                        .HeaderClickAction = HeaderClickAction.SortMulti
+                    End With
+                    e.Layout.AutoFitColumns = True
+                    For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
+                        Select Case col.Key
+                            Case Columns.InstrumentCode.ToString
+                                col.Header.Caption = "Instrument"
+                                col.Width = 50
+                            Case Columns.Description.ToString
+                                col.Header.Caption = "Description"
+                                col.Width = 85
+                            Case Columns.QuantityHeld.ToString
+                                col.Header.Caption = "Qty"
+                                col.Width = 50
+                                col.Format = FORMAT_QUANTITY
+                            Case Columns.CurrentValue.ToString
+                                col.Header.Caption = "Current"
+                                col.Width = 50
+                                col.CellAppearance.TextHAlign = HAlign.Right
+                                col.Format = "c2"
+                            Case Columns.Cost.ToString
+                                col.Header.Caption = "Cost"
+                                col.Width = 50
+                                col.CellAppearance.TextHAlign = HAlign.Right
+                                col.Format = "c2"
+                            Case Columns.Pl.ToString
+                                col.Header.Caption = "P/L"
+                                col.Width = 50
+                                col.CellAppearance.TextHAlign = HAlign.Right
+                                col.Format = "c2"
+                            Case Else
+                                col.Hidden = True
+                        End Select
+                    Next
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+
+            Private Shared Function GetDatatable(account As CAccount, commonObjects As CCommonObjects) As DataTable
+
+                Dim coinsAndShares = CCoinsAndShares.GetInstance(commonObjects)
+                Dim instruments = coinsAndShares.AllInstruments
+                Dim instrumentDict = instruments.ToDictionary(Function(i) i.InstrumentCode)
+
+                Dim transactions = From t In account.Transactions
+                                   Select Batch = t.Batch,
+                                       ID = t.Id,
+                                       InstrumentCode = t.InstrumentCode,
+                                       Amount = t.Amount,
+                                       CashValue = If(String.IsNullOrEmpty(t.InstrumentCode), t.Amount, 0),
+                                       InstrumentAmount = If(String.IsNullOrEmpty(t.InstrumentCode), 0, t.Amount)
+                                   Order By ID
+
+                Dim totalsByBatch = From t In transactions
+                                    Group t By t.Batch Into Group
+                                    Select Batch,
+                                        InstrumentCode = Group.Max(Function(c) c.InstrumentCode),
+                                        TotalCashValue = Group.Sum(Function(c) c.CashValue),
+                                        TotalInstrumentAmount = Group.Sum(Function(c) c.InstrumentAmount)
+
+                Dim holdingsByInstrument = From t In totalsByBatch
+                                           Group t By t.InstrumentCode Into Group
+                                           Order By Not String.IsNullOrEmpty(InstrumentCode), Group.Sum(Function(c) c.TotalCashValue)
+                                           Select InstrumentCode,
+                                               TotalCashValue = Group.Sum(Function(c) c.TotalCashValue),
+                                               TotalInstrumentAmount = Group.Sum(Function(c) c.TotalInstrumentAmount)
+
+
+                Dim dt = New DataTable
+                dt.Columns.Add(Columns.InstrumentCode.ToString)
+                dt.Columns.Add(Columns.Description.ToString)
+                dt.Columns.Add(Columns.QuantityHeld.ToString, GetType(Decimal))
+                dt.Columns.Add(Columns.CurrentValue.ToString, GetType(Decimal))
+                dt.Columns.Add(Columns.Cost.ToString, GetType(Decimal))
+                dt.Columns.Add(Columns.Pl.ToString, GetType(Decimal))
+
+                Dim col = New DataColumn
+                col.ColumnName = "HasCode"
+                col.DataType = GetType(Boolean)
+                col.Expression = $"{Columns.InstrumentCode} IS NULL Or {Columns.InstrumentCode} = ''"
+                dt.Columns.Add(col)
+
+                ' TODO
+                ' value on  cash row is wrong
+                '  also test foreign currency ones, like AAPL
+
+                For Each i In holdingsByInstrument
+                    Dim instrument As CInstrument = Nothing
+
+                    Dim dr = dt.NewRow()
+                    dr(Columns.InstrumentCode.ToString) = i.InstrumentCode
+                    If instrumentDict.TryGetValue(i.InstrumentCode, instrument) Then
+                        dr(Columns.Description.ToString) = instrument.Description
+                        Dim cCurrentValue = Math.Round(i.TotalInstrumentAmount * instrument.Rate, 2, MidpointRounding.AwayFromZero)
+                        dr(Columns.CurrentValue.ToString) = cCurrentValue
+                        dr(Columns.Pl.ToString) = Math.Round(cCurrentValue + i.TotalCashValue, 2, MidpointRounding.AwayFromZero)
+                    Else
+                        dr(Columns.Description.ToString) = If(String.IsNullOrEmpty(i.InstrumentCode), "CASH", "Unknown")
+                    End If
+
+                        dr(Columns.QuantityHeld.ToString) = i.TotalInstrumentAmount
+                    dr(Columns.Cost.ToString) = Math.Round(i.TotalCashValue, 2, MidpointRounding.AwayFromZero)
+                    dt.Rows.Add(dr)
+                Next
+
+                dt.DefaultView.Sort = $"HasCode DESC, {Columns.CurrentValue} DESC"
+                Return dt
+
+            End Function
+        End Class
 
         Public Sub RefreshData() Implements IDataRefresh.RefreshData
             ' Load the display data (transactions, holdings) not the editable data because that might be changed and not saved yet
