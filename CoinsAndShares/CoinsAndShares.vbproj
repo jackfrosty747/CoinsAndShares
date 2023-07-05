@@ -387,6 +387,12 @@
     <Compile Include="Test\FAccount.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\FAccountNew.Designer.vb">
+      <DependentUpon>FAccountNew.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FAccountNew.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Test\FAccounts.Designer.vb">
       <DependentUpon>FAccounts.vb</DependentUpon>
     </Compile>
@@ -570,6 +576,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Test\FAccount.resx">
       <DependentUpon>FAccount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FAccountNew.resx">
+      <DependentUpon>FAccountNew.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Test\FAccounts.resx">
       <DependentUpon>FAccounts.vb</DependentUpon>

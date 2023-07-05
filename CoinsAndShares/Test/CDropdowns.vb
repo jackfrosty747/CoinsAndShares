@@ -1,6 +1,7 @@
 ﻿Imports Infragistics.Win.UltraWinGrid
 
 Imports Infragistics.Win
+Imports CoinsAndShares.Accounts.MAccounts
 
 Namespace Test
     Friend Class CDropdowns
@@ -78,7 +79,7 @@ Namespace Test
                 End Try
             End Sub
         End Class
-        Friend Class CNetworksDropdown
+        Friend Class NetworksDropdown
             Friend Shared Sub SetupDropdown(cmb As UltraCombo, all As IEnumerable(Of CNetwork), commonObjects As CCommonObjects)
                 cmb.Tag = New TagBits(commonObjects)
                 Dim dt = GetBlankDt()
@@ -149,6 +150,80 @@ Namespace Test
                     tagBits.CommonObjects.Errors.Handle(ex)
                 End Try
             End Sub
+        End Class
+        Friend Class AccountTypesDropdown
+            Private Enum Columns
+                TypeName
+                TypeCode
+            End Enum
+            Friend Shared Sub SetupDropdown(Cmb As UltraCombo, commonObjects As CCommonObjects)
+                Cmb.Tag = New TagBits(commonObjects)
+                Dim dt As DataTable = GetBlankDt()
+                For Each e As EAccountType In [Enum].GetValues(GetType(EAccountType))
+                    Dim dr = dt.NewRow
+                    dr(Columns.TypeName.ToString) = e.ToString.Replace("_", " ")
+                    dr(Columns.TypeCode.ToString) = e.Code
+                    dt.Rows.Add(dr)
+                Next
+                RemoveHandler Cmb.TextChanged, AddressOf TextChanged
+                AddHandler Cmb.TextChanged, AddressOf TextChanged
+                RemoveHandler Cmb.InitializeLayout, AddressOf InitializeLayout
+                AddHandler Cmb.InitializeLayout, AddressOf InitializeLayout
+                RemoveHandler Cmb.InitializeRow, AddressOf InitializeRow
+                AddHandler Cmb.InitializeRow, AddressOf InitializeRow
+                Cmb.DataSource = dt
+            End Sub
+
+            Private Shared Sub TextChanged(sender As Object, e As EventArgs)
+                Dim cmb As UltraCombo = CType(sender, UltraCombo)
+                Dim tagBits As TagBits = CType(cmb.Tag, TagBits)
+                Try
+                    Dim accountType As EAccountType = GetAccountTypeFromName(cmb.Text, True)
+                    Dim c As Color = CColours.AccountType(accountType)
+                    cmb.Appearance.ForeColor = c
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+
+            Private Shared Sub InitializeRow(sender As Object, e As InitializeRowEventArgs)
+                If e.ReInitialize Then
+                    Return
+                End If
+                Dim cmb As UltraCombo = CType(sender, UltraCombo)
+                Dim tagBits As TagBits = CType(cmb.Tag, TagBits)
+                Try
+                    Dim sCode As String = e.Row.Cells(Columns.TypeCode.ToString).Text
+                    Dim accountType As EAccountType = GetAccountTypeFromCode(sCode, True)
+                    e.Row.CellAppearance.ForeColor = CColours.AccountType(accountType)
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+            Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
+                Dim cmb As UltraCombo = CType(sender, UltraCombo)
+                Dim tagBits As TagBits = CType(cmb.Tag, TagBits)
+                Try
+                    GridDefaults(e.Layout)
+                    For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
+                        Select Case col.Header.Caption
+                            Case Columns.TypeName.ToString
+                                col.Width = cmb.Width
+                                col.Header.Caption = "Type"
+                            Case Else
+                                col.Hidden = True
+                        End Select
+                    Next
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+            Private Shared Function GetBlankDt() As DataTable
+                Dim dt As New DataTable
+                dt.Columns.Add(Columns.TypeName.ToString)
+                dt.Columns.Add(Columns.TypeCode.ToString)
+                Return dt
+            End Function
         End Class
     End Class
 

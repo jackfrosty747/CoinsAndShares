@@ -239,6 +239,39 @@ Namespace Test
             ClearCacheAndRefreshForms()
         End Sub
 
+        Friend Sub CreateAccount(accountCode As String, accountName As String, accountType As Accounts.EAccountType)
+            If AllAccounts.Any(Function(c) c.AccountCode.Equals(accountCode, StringComparison.CurrentCultureIgnoreCase)) Then
+                Throw New Exception(My.Resources.Error_ItemAlreadyExists)
+            End If
+            Dim account = New CAccount(accountCode, accountName, accountType, Nothing, Nothing, Nothing, Nothing)
+            UpdateAccount(account)
+        End Sub
+
+        Friend Sub DeleteAccount(accountCode As String)
+            m_commonObjects.Database.TransactionBegin()
+            Try
+                DeleteAccountNow(accountCode)
+                m_commonObjects.Database.TransactionCommit()
+                ClearCacheAndRefreshForms()
+            Catch ex As Exception
+                m_commonObjects.Database.TransactionRollback()
+                Throw
+            End Try
+        End Sub
+        Private Sub DeleteAccountNow(accountCode As String)
+            m_commonObjects.Database.TransactionEnsureActive()
+            Dim sql = $"DELETE FROM {CDatabase.TABLE_TRANSACTIONS} WHERE {CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE} = @code;"
+            Using cmd = m_commonObjects.Database.GetCommand(sql)
+                cmd.Parameters.AddWithValue("@code", accountCode)
+                cmd.ExecuteNonQuery()
+            End Using
+            sql = $"DELETE FROM {CDatabase.TABLE_ACCOUNTS} WHERE {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = @code;"
+            Using cmd = m_commonObjects.Database.GetCommand(sql)
+                cmd.Parameters.AddWithValue("@code", accountCode)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Sub
+
 #End Region
 
 #Region "INSTRUMENTS"
@@ -453,7 +486,6 @@ Namespace Test
                     End Using
                 End Using
             End Using
-
 
         End Sub
 

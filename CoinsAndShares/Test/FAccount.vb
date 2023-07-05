@@ -21,7 +21,7 @@ Namespace Test
 
             Dim coinsAndShares = CCoinsAndShares.GetInstance(m_commonObjects)
 
-            CDropdowns.CNetworksDropdown.SetupDropdown(CmbNetworkId, coinsAndShares.AllNetworks, m_commonObjects)
+            CDropdowns.NetworksDropdown.SetupDropdown(CmbNetworkId, coinsAndShares.AllNetworks, m_commonObjects)
 
             LoadDataEntryData()
             LoadTransactionData()

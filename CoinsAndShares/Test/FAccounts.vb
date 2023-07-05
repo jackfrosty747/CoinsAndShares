@@ -344,5 +344,41 @@ Namespace Test
             End Try
         End Sub
 
+        Private Sub BtnNew_Click(sender As Object, e As EventArgs) Handles BtnNew.Click
+            Try
+                Using frmAccountNew = New FAccountNew(m_commonObjects)
+                    frmAccountNew.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            End Try
+        End Sub
+
+        Private Sub BtnDelete_Click(sender As Object, e As EventArgs) Handles BtnDelete.Click
+            Const PROMPT As String = "DELETE"
+            Try
+                Dim accountsSelected = GridHelper.GetSelectedAccounts(GrdAccounts)
+                If Not accountsSelected.Any Then
+                    Throw New Exception(My.Resources.Error_NoRowsSelected)
+                ElseIf accountsSelected.Count > 1 Then
+                    Throw New Exception(My.Resources.Error_SelectOneItemOnly)
+                End If
+                Dim accountCode = accountsSelected.First
+                Dim sRet = InputBox($"Type {PROMPT} to delete this account {accountCode}")
+                If String.IsNullOrEmpty(sRet) Then
+                    Return
+                End If
+                If Not sRet.Equals(PROMPT, StringComparison.CurrentCultureIgnoreCase) Then
+                    Throw New Exception(My.Resources.Error_IncorrectResponse)
+                End If
+                Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
+                cs.DeleteAccount(accountCode)
+                Cursor = Cursors.WaitCursor
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
     End Class
 End Namespace
