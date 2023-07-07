@@ -2,6 +2,7 @@
 Imports CoinsAndShares.Accounts
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
+Imports MaterialSkin.Controls
 
 Namespace Test
     Friend Class FAccounts : Implements IDataRefresh
@@ -20,31 +21,18 @@ Namespace Test
 
             Icon = Icon.FromHandle(My.Resources.bank.GetHicon)
 
-            ChkIncludeZero.Checked = GetSetting(Application.ProductName, Name, ChkIncludeZero.Name, REG_SETTING_TRUE) = REG_SETTING_TRUE
+            MChkZero.Checked = GetSetting(Application.ProductName, Name, MChkZero.Name, REG_SETTING_TRUE) = REG_SETTING_TRUE
 
             LoadData()
 
-            AddHandler ChkIncludeZero.CheckedChanged, AddressOf ChkIncludeZero_CheckedChanged
-        End Sub
-
-        Private Sub ChkIncludeZero_CheckedChanged(sender As Object, e As EventArgs)
-            Cursor = Cursors.WaitCursor
-            Try
-                LoadData()
-                Dim sSetting = If(ChkIncludeZero.Checked, REG_SETTING_TRUE, REG_SETTING_FALSE)
-                SaveSetting(Application.ProductName, Name, ChkIncludeZero.Name, sSetting)
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            Finally
-                Cursor = Cursors.Default
-            End Try
+            AddHandler MChkZero.CheckedChanged, AddressOf MsZero_CheckedChanged
         End Sub
 
         Private Sub LoadData()
 
             Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
 
-            GridHelper.LoadData(GrdAccounts, cs.AllAccounts, m_commonObjects, ChkIncludeZero.Checked, Me)
+            GridHelper.LoadData(GrdAccounts, cs.AllAccounts, m_commonObjects, MChkZero.Checked, Me)
 
         End Sub
 
@@ -142,7 +130,7 @@ Namespace Test
                 Dim tagBits As LocalTagBits = CType(grid.Tag, LocalTagBits)
                 Try
                     If WasGridRowClicked(sender) Then
-                        tagBits.HostForm.BtnOpenAccount_Click(sender, e)
+                        tagBits.HostForm.MbOpen_Click(sender, e)
                     End If
                 Catch ex As Exception
                     tagBits.CommonObjects.Errors.Handle(ex)
@@ -279,7 +267,11 @@ Namespace Test
             End Function
         End Class
 
-        Private Sub BtnRefresh_Click(sender As Object, e As EventArgs) Handles BtnRefresh.Click
+        Friend Sub RefreshData() Implements IDataRefresh.RefreshData
+            LoadData()
+        End Sub
+
+        Private Sub MbRefresh_Click(sender As Object, e As EventArgs) Handles MBtnRefresh.Click
             Cursor = Cursors.WaitCursor
             Try
                 Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
@@ -292,25 +284,7 @@ Namespace Test
             End Try
         End Sub
 
-        Private Sub BtnFiatTransfer_Click(sender As Object, e As EventArgs) Handles BtnFiatTransfer.Click
-            Try
-                Cursor = Cursors.WaitCursor
-                Dim accountsSelected As IEnumerable(Of String) = GridHelper.GetSelectedAccounts(GrdAccounts)
-                Dim sAccountSelected = If(accountsSelected.Count = 1, accountsSelected.First, String.Empty)
-                Using frmFiatTransfer = New FFiatTransfer(m_commonObjects, sAccountSelected)
-                    Cursor = Cursors.Default
-                    frmFiatTransfer.ShowDialog()
-                End Using
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            End Try
-        End Sub
-
-        Friend Sub RefreshData() Implements IDataRefresh.RefreshData
-            LoadData()
-        End Sub
-
-        Private Sub BtnOpenAccount_Click(sender As Object, e As EventArgs) Handles BtnOpenAccount.Click
+        Private Sub MbOpen_Click(sender As Object, e As EventArgs) Handles MBtnOpen.Click
             Try
                 Dim accountsSelected = GridHelper.GetSelectedAccounts(GrdAccounts)
                 If Not accountsSelected.Any Then
@@ -344,7 +318,21 @@ Namespace Test
             End Try
         End Sub
 
-        Private Sub BtnNew_Click(sender As Object, e As EventArgs) Handles BtnNew.Click
+        Private Sub MsZero_CheckedChanged(sender As Object, e As EventArgs)
+            Cursor = Cursors.WaitCursor
+            Try
+                LoadData()
+                Dim ms = CType(sender, MaterialSwitch)
+                Dim sSetting = If(ms.Checked, REG_SETTING_TRUE, REG_SETTING_FALSE)
+                SaveSetting(Application.ProductName, Name, ms.Name, sSetting)
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
+
+        Private Sub MbNew_Click(sender As Object, e As EventArgs) Handles MBtnNew.Click
             Try
                 Using frmAccountNew = New FAccountNew(m_commonObjects)
                     frmAccountNew.ShowDialog()
@@ -354,7 +342,7 @@ Namespace Test
             End Try
         End Sub
 
-        Private Sub BtnDelete_Click(sender As Object, e As EventArgs) Handles BtnDelete.Click
+        Private Sub MbDelete_Click(sender As Object, e As EventArgs) Handles MBtnDelete.Click
             Const PROMPT As String = "DELETE"
             Try
                 Dim accountsSelected = GridHelper.GetSelectedAccounts(GrdAccounts)
@@ -380,5 +368,38 @@ Namespace Test
                 Cursor = Cursors.Default
             End Try
         End Sub
+
+        Private Sub MbRename_Click(sender As Object, e As EventArgs) Handles MBtnRename.Click
+            Try
+                Dim accountsSelected = GridHelper.GetSelectedAccounts(GrdAccounts)
+                If Not accountsSelected.Any Then
+                    Throw New Exception(My.Resources.Error_NoRowsSelected)
+                ElseIf accountsSelected.Count > 1 Then
+                    Throw New Exception(My.Resources.Error_SelectOneItemOnly)
+                End If
+                Dim accountCode = accountsSelected.First
+                Using frmAccountRename = New FAccountRename(m_commonObjects, accountCode)
+                    frmAccountRename.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            End Try
+        End Sub
+
+        Private Sub MbFiatTransfer_Click(sender As Object, e As EventArgs) Handles MBtnFiatTransfer.Click
+            Try
+                Cursor = Cursors.WaitCursor
+                Dim accountsSelected As IEnumerable(Of String) = GridHelper.GetSelectedAccounts(GrdAccounts)
+                Dim sAccountSelected = If(accountsSelected.Count = 1, accountsSelected.First, String.Empty)
+                Using frmFiatTransfer = New FFiatTransfer(m_commonObjects, sAccountSelected)
+                    Cursor = Cursors.Default
+                    frmFiatTransfer.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            End Try
+        End Sub
+
     End Class
+
 End Namespace

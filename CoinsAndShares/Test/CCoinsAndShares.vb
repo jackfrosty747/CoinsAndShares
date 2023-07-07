@@ -272,6 +272,90 @@ Namespace Test
             End Using
         End Sub
 
+        Friend Sub RenameAccount(sFrom As String, sTo As String)
+            m_commonObjects.Database.TransactionBegin()
+            Try
+                RenameAccountNow(sFrom, sTo)
+                'm_commonObjects.Database.TransactionRollback()
+                m_commonObjects.Database.TransactionCommit()
+                ClearCacheAndRefreshForms()
+            Catch ex As Exception
+                m_commonObjects.Database.TransactionRollback()
+                Throw
+            End Try
+        End Sub
+
+        Private Sub RenameAccountNow(sFrom As String, sTo As String)
+
+            m_commonObjects.Database.TransactionEnsureActive()
+            Dim sql = $"
+                SELECT *
+                FROM {CDatabase.TABLE_ACCOUNTS}
+                WHERE {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = @Code;"
+            Using cm = m_commonObjects.Database.GetCommand(sql)
+                cm.Parameters.AddWithValue("@Code", sFrom)
+                Using da = New SqlCeDataAdapter(cm)
+                    Using dt = New DataTable()
+                        da.Fill(dt)
+                        If dt.Rows.Count = 0 Then
+                            Throw New DataException($"Cannot find account FROM {sFrom}")
+                        End If
+
+                        Dim cb = New SqlCeCommandBuilder(da)
+
+                        ' Duplicate account record
+                        Dim drExisting = dt.Rows(0)
+                        Dim drNew = dt.NewRow
+                        For i = 0 To dt.Columns.Count - 1
+                            drNew(i) = If(dt.Columns(i).ColumnName = CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE, sTo, drExisting(i))
+                        Next
+                        dt.Rows.Add(drNew)
+                        da.Update(dt)
+
+                        ' Move transactions across to new account
+                        sql = $"
+                            UPDATE {CDatabase.TABLE_TRANSACTIONS}
+                            SET {CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE} = @New WHERE {CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE} = @Old;"
+                        Using cmTrans = m_commonObjects.Database.GetCommand(sql)
+                            cmTrans.Parameters.AddWithValue("@Old", sFrom)
+                            cmTrans.Parameters.AddWithValue("@New", sTo)
+                            cmTrans.ExecuteNonQuery()
+                        End Using
+
+                        sql = $"UPDATE {CDatabase.TABLE_TRANSACTIONS} SET {CDatabase.FIELD_TRANSACTIONS_DESCRIPTION} = @New WHERE {CDatabase.FIELD_TRANSACTIONS_DESCRIPTION} LIKE @Old;"
+                        Using cmTrans = m_commonObjects.Database.GetCommand(sql)
+                            cmTrans.Parameters.Clear()
+                            cmTrans.Parameters.AddWithValue("@Old", Accounts.GetTransDescriptionTransferTo(sFrom))
+                            cmTrans.Parameters.AddWithValue("@New", Accounts.GetTransDescriptionTransferTo(sTo))
+                            cmTrans.ExecuteNonQuery()
+
+                            cmTrans.Parameters.Clear()
+                            cmTrans.Parameters.AddWithValue("@Old", Accounts.GetTransDescriptionFeeForSending(sFrom))
+                            cmTrans.Parameters.AddWithValue("@New", Accounts.GetTransDescriptionFeeForSending(sTo))
+                            cmTrans.ExecuteNonQuery()
+
+                            cmTrans.Parameters.Clear()
+                            cmTrans.Parameters.AddWithValue("@Old", Accounts.GetTransDescriptionReceiptFrom(sFrom))
+                            cmTrans.Parameters.AddWithValue("@New", Accounts.GetTransDescriptionReceiptFrom(sTo))
+                            cmTrans.ExecuteNonQuery()
+
+                            cmTrans.Parameters.Clear()
+                            cmTrans.Parameters.AddWithValue("@Old", Accounts.GetTransDescriptionFeeForReceiving(sFrom))
+                            cmTrans.Parameters.AddWithValue("@New", Accounts.GetTransDescriptionFeeForReceiving(sTo))
+                            cmTrans.ExecuteNonQuery()
+                        End Using
+
+
+
+
+                        ' Remove old account
+                        drExisting.Delete()
+                        da.Update(dt)
+                    End Using
+                End Using
+            End Using
+        End Sub
+
 #End Region
 
 #Region "INSTRUMENTS"

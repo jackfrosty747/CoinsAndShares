@@ -1,7 +1,9 @@
-﻿Namespace Test
+﻿Imports MaterialSkin.Controls
+
+Namespace Test
     <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
     Partial Class FAccounts
-        Inherits System.Windows.Forms.Form
+        Inherits MaterialForm
 
         'Form overrides dispose to clean up the component list.
         <System.Diagnostics.DebuggerNonUserCode()>
@@ -25,16 +27,20 @@
         Private Sub InitializeComponent()
             Dim Appearance2 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
             Me.GrdAccounts = New Infragistics.Win.UltraWinGrid.UltraGrid()
-            Me.BtnRefresh = New System.Windows.Forms.Button()
-            Me.ChkIncludeZero = New System.Windows.Forms.CheckBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
-            Me.BtnNew = New System.Windows.Forms.Button()
-            Me.Label2 = New System.Windows.Forms.Label()
-            Me.BtnFiatTransfer = New System.Windows.Forms.Button()
-            Me.Label1 = New System.Windows.Forms.Label()
-            Me.BtnOpenAccount = New System.Windows.Forms.Button()
+            Me.MBtnFiatTransfer = New MaterialSkin.Controls.MaterialButton()
+            Me.Label4 = New System.Windows.Forms.Label()
+            Me.MBtnRename = New MaterialSkin.Controls.MaterialButton()
             Me.Label3 = New System.Windows.Forms.Label()
-            Me.BtnDelete = New System.Windows.Forms.Button()
+            Me.MBtnDelete = New MaterialSkin.Controls.MaterialButton()
+            Me.Label1 = New System.Windows.Forms.Label()
+            Me.MBtnNew = New MaterialSkin.Controls.MaterialButton()
+            Me.Label2 = New System.Windows.Forms.Label()
+            Me.MBtnOpen = New MaterialSkin.Controls.MaterialButton()
+            Me.Label5 = New System.Windows.Forms.Label()
+            Me.MBtnRefresh = New MaterialSkin.Controls.MaterialButton()
+            Me.Label6 = New System.Windows.Forms.Label()
+            Me.MChkZero = New MaterialSkin.Controls.MaterialSwitch()
             CType(Me.GrdAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
@@ -44,141 +50,218 @@
             Appearance2.BackColor = System.Drawing.Color.SlateGray
             Me.GrdAccounts.DisplayLayout.Appearance = Appearance2
             Me.GrdAccounts.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.GrdAccounts.Location = New System.Drawing.Point(0, 38)
+            Me.GrdAccounts.Location = New System.Drawing.Point(3, 109)
             Me.GrdAccounts.Name = "GrdAccounts"
-            Me.GrdAccounts.Size = New System.Drawing.Size(784, 523)
-            Me.GrdAccounts.TabIndex = 2
+            Me.GrdAccounts.Size = New System.Drawing.Size(778, 449)
+            Me.GrdAccounts.TabIndex = 1
             Me.GrdAccounts.Text = "Accounts"
-            '
-            'BtnRefresh
-            '
-            Me.BtnRefresh.AutoSize = True
-            Me.BtnRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnRefresh.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnRefresh.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnRefresh.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_circle_double_135
-            Me.BtnRefresh.Location = New System.Drawing.Point(5, 5)
-            Me.BtnRefresh.Name = "BtnRefresh"
-            Me.BtnRefresh.Size = New System.Drawing.Size(72, 28)
-            Me.BtnRefresh.TabIndex = 3
-            Me.BtnRefresh.Text = "Refresh"
-            Me.BtnRefresh.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.BtnRefresh.UseVisualStyleBackColor = False
-            '
-            'ChkIncludeZero
-            '
-            Me.ChkIncludeZero.AutoSize = True
-            Me.ChkIncludeZero.Dock = System.Windows.Forms.DockStyle.Left
-            Me.ChkIncludeZero.Location = New System.Drawing.Point(77, 5)
-            Me.ChkIncludeZero.Name = "ChkIncludeZero"
-            Me.ChkIncludeZero.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-            Me.ChkIncludeZero.Size = New System.Drawing.Size(187, 28)
-            Me.ChkIncludeZero.TabIndex = 4
-            Me.ChkIncludeZero.Text = "Include Zero Balance Accounts"
-            Me.ChkIncludeZero.UseVisualStyleBackColor = True
             '
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
-            Me.Panel1.Controls.Add(Me.BtnDelete)
+            Me.Panel1.Controls.Add(Me.MBtnFiatTransfer)
+            Me.Panel1.Controls.Add(Me.Label4)
+            Me.Panel1.Controls.Add(Me.MBtnRename)
             Me.Panel1.Controls.Add(Me.Label3)
-            Me.Panel1.Controls.Add(Me.BtnNew)
-            Me.Panel1.Controls.Add(Me.Label2)
-            Me.Panel1.Controls.Add(Me.BtnFiatTransfer)
+            Me.Panel1.Controls.Add(Me.MBtnDelete)
             Me.Panel1.Controls.Add(Me.Label1)
-            Me.Panel1.Controls.Add(Me.BtnOpenAccount)
-            Me.Panel1.Controls.Add(Me.ChkIncludeZero)
-            Me.Panel1.Controls.Add(Me.BtnRefresh)
+            Me.Panel1.Controls.Add(Me.MBtnNew)
+            Me.Panel1.Controls.Add(Me.Label2)
+            Me.Panel1.Controls.Add(Me.MBtnOpen)
+            Me.Panel1.Controls.Add(Me.Label5)
+            Me.Panel1.Controls.Add(Me.MBtnRefresh)
+            Me.Panel1.Controls.Add(Me.Label6)
+            Me.Panel1.Controls.Add(Me.MChkZero)
             Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-            Me.Panel1.Location = New System.Drawing.Point(0, 0)
+            Me.Panel1.Location = New System.Drawing.Point(3, 64)
             Me.Panel1.Name = "Panel1"
             Me.Panel1.Padding = New System.Windows.Forms.Padding(5)
-            Me.Panel1.Size = New System.Drawing.Size(784, 38)
-            Me.Panel1.TabIndex = 5
+            Me.Panel1.Size = New System.Drawing.Size(778, 45)
+            Me.Panel1.TabIndex = 0
             '
-            'BtnNew
+            'MBtnFiatTransfer
             '
-            Me.BtnNew.AutoSize = True
-            Me.BtnNew.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnNew.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnNew.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnNew.Image = Global.CoinsAndShares.My.Resources.Resources.wand
-            Me.BtnNew.Location = New System.Drawing.Point(434, 5)
-            Me.BtnNew.Name = "BtnNew"
-            Me.BtnNew.Size = New System.Drawing.Size(56, 28)
-            Me.BtnNew.TabIndex = 9
-            Me.BtnNew.Text = "New"
-            Me.BtnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.BtnNew.UseVisualStyleBackColor = False
+            Me.MBtnFiatTransfer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnFiatTransfer.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnFiatTransfer.Depth = 0
+            Me.MBtnFiatTransfer.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnFiatTransfer.HighEmphasis = True
+            Me.MBtnFiatTransfer.Icon = Nothing
+            Me.MBtnFiatTransfer.Location = New System.Drawing.Point(585, 5)
+            Me.MBtnFiatTransfer.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnFiatTransfer.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnFiatTransfer.Name = "MBtnFiatTransfer"
+            Me.MBtnFiatTransfer.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnFiatTransfer.Size = New System.Drawing.Size(129, 35)
+            Me.MBtnFiatTransfer.TabIndex = 6
+            Me.MBtnFiatTransfer.Text = "FIAT Transfer"
+            Me.MBtnFiatTransfer.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnFiatTransfer.UseAccentColor = False
+            Me.MBtnFiatTransfer.UseVisualStyleBackColor = True
             '
-            'Label2
+            'Label4
             '
-            Me.Label2.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label2.Location = New System.Drawing.Point(429, 5)
-            Me.Label2.Name = "Label2"
-            Me.Label2.Size = New System.Drawing.Size(5, 28)
-            Me.Label2.TabIndex = 8
+            Me.Label4.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label4.Location = New System.Drawing.Point(580, 5)
+            Me.Label4.Name = "Label4"
+            Me.Label4.Size = New System.Drawing.Size(5, 35)
+            Me.Label4.TabIndex = 12
             '
-            'BtnFiatTransfer
+            'MBtnRename
             '
-            Me.BtnFiatTransfer.AutoSize = True
-            Me.BtnFiatTransfer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnFiatTransfer.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnFiatTransfer.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnFiatTransfer.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
-            Me.BtnFiatTransfer.Location = New System.Drawing.Point(331, 5)
-            Me.BtnFiatTransfer.Name = "BtnFiatTransfer"
-            Me.BtnFiatTransfer.Size = New System.Drawing.Size(98, 28)
-            Me.BtnFiatTransfer.TabIndex = 5
-            Me.BtnFiatTransfer.Text = "FIAT Transfer"
-            Me.BtnFiatTransfer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.BtnFiatTransfer.UseVisualStyleBackColor = False
-            '
-            'Label1
-            '
-            Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label1.Location = New System.Drawing.Point(326, 5)
-            Me.Label1.Name = "Label1"
-            Me.Label1.Size = New System.Drawing.Size(5, 28)
-            Me.Label1.TabIndex = 7
-            '
-            'BtnOpenAccount
-            '
-            Me.BtnOpenAccount.AutoSize = True
-            Me.BtnOpenAccount.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnOpenAccount.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnOpenAccount.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnOpenAccount.Image = Global.CoinsAndShares.My.Resources.Resources.blue_folder_open
-            Me.BtnOpenAccount.Location = New System.Drawing.Point(264, 5)
-            Me.BtnOpenAccount.Name = "BtnOpenAccount"
-            Me.BtnOpenAccount.Size = New System.Drawing.Size(62, 28)
-            Me.BtnOpenAccount.TabIndex = 6
-            Me.BtnOpenAccount.Text = "Open"
-            Me.BtnOpenAccount.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.BtnOpenAccount.UseVisualStyleBackColor = False
+            Me.MBtnRename.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnRename.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnRename.Depth = 0
+            Me.MBtnRename.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnRename.HighEmphasis = True
+            Me.MBtnRename.Icon = Nothing
+            Me.MBtnRename.Location = New System.Drawing.Point(500, 5)
+            Me.MBtnRename.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnRename.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnRename.Name = "MBtnRename"
+            Me.MBtnRename.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnRename.Size = New System.Drawing.Size(80, 35)
+            Me.MBtnRename.TabIndex = 5
+            Me.MBtnRename.Text = "Rename"
+            Me.MBtnRename.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnRename.UseAccentColor = False
+            Me.MBtnRename.UseVisualStyleBackColor = True
             '
             'Label3
             '
             Me.Label3.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label3.Location = New System.Drawing.Point(490, 5)
+            Me.Label3.Location = New System.Drawing.Point(495, 5)
             Me.Label3.Name = "Label3"
-            Me.Label3.Size = New System.Drawing.Size(5, 28)
+            Me.Label3.Size = New System.Drawing.Size(5, 35)
             Me.Label3.TabIndex = 10
             '
-            'BtnDelete
+            'MBtnDelete
             '
-            Me.BtnDelete.AutoSize = True
-            Me.BtnDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnDelete.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnDelete.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnDelete.Image = Global.CoinsAndShares.My.Resources.Resources.cross_script
-            Me.BtnDelete.Location = New System.Drawing.Point(495, 5)
-            Me.BtnDelete.Name = "BtnDelete"
-            Me.BtnDelete.Size = New System.Drawing.Size(66, 28)
-            Me.BtnDelete.TabIndex = 11
-            Me.BtnDelete.Text = "Delete"
-            Me.BtnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.BtnDelete.UseVisualStyleBackColor = False
+            Me.MBtnDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnDelete.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnDelete.Depth = 0
+            Me.MBtnDelete.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnDelete.HighEmphasis = True
+            Me.MBtnDelete.Icon = Nothing
+            Me.MBtnDelete.Location = New System.Drawing.Point(422, 5)
+            Me.MBtnDelete.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnDelete.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnDelete.Name = "MBtnDelete"
+            Me.MBtnDelete.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnDelete.Size = New System.Drawing.Size(73, 35)
+            Me.MBtnDelete.TabIndex = 4
+            Me.MBtnDelete.Text = "Delete"
+            Me.MBtnDelete.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnDelete.UseAccentColor = False
+            Me.MBtnDelete.UseVisualStyleBackColor = True
+            '
+            'Label1
+            '
+            Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label1.Location = New System.Drawing.Point(417, 5)
+            Me.Label1.Name = "Label1"
+            Me.Label1.Size = New System.Drawing.Size(5, 35)
+            Me.Label1.TabIndex = 7
+            '
+            'MBtnNew
+            '
+            Me.MBtnNew.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnNew.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnNew.Depth = 0
+            Me.MBtnNew.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnNew.HighEmphasis = True
+            Me.MBtnNew.Icon = Nothing
+            Me.MBtnNew.Location = New System.Drawing.Point(353, 5)
+            Me.MBtnNew.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnNew.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnNew.Name = "MBtnNew"
+            Me.MBtnNew.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnNew.Size = New System.Drawing.Size(64, 35)
+            Me.MBtnNew.TabIndex = 3
+            Me.MBtnNew.Text = "New"
+            Me.MBtnNew.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnNew.UseAccentColor = False
+            Me.MBtnNew.UseVisualStyleBackColor = True
+            '
+            'Label2
+            '
+            Me.Label2.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label2.Location = New System.Drawing.Point(348, 5)
+            Me.Label2.Name = "Label2"
+            Me.Label2.Size = New System.Drawing.Size(5, 35)
+            Me.Label2.TabIndex = 8
+            '
+            'MBtnOpen
+            '
+            Me.MBtnOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnOpen.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnOpen.Depth = 0
+            Me.MBtnOpen.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnOpen.HighEmphasis = True
+            Me.MBtnOpen.Icon = Nothing
+            Me.MBtnOpen.Location = New System.Drawing.Point(284, 5)
+            Me.MBtnOpen.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnOpen.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnOpen.Name = "MBtnOpen"
+            Me.MBtnOpen.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnOpen.Size = New System.Drawing.Size(64, 35)
+            Me.MBtnOpen.TabIndex = 2
+            Me.MBtnOpen.Text = "Open"
+            Me.MBtnOpen.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnOpen.UseAccentColor = False
+            Me.MBtnOpen.UseVisualStyleBackColor = True
+            '
+            'Label5
+            '
+            Me.Label5.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label5.Location = New System.Drawing.Point(279, 5)
+            Me.Label5.Name = "Label5"
+            Me.Label5.Size = New System.Drawing.Size(5, 35)
+            Me.Label5.TabIndex = 16
+            '
+            'MBtnRefresh
+            '
+            Me.MBtnRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnRefresh.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnRefresh.Depth = 0
+            Me.MBtnRefresh.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnRefresh.HighEmphasis = True
+            Me.MBtnRefresh.Icon = Nothing
+            Me.MBtnRefresh.Location = New System.Drawing.Point(195, 5)
+            Me.MBtnRefresh.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnRefresh.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnRefresh.Name = "MBtnRefresh"
+            Me.MBtnRefresh.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnRefresh.Size = New System.Drawing.Size(84, 35)
+            Me.MBtnRefresh.TabIndex = 1
+            Me.MBtnRefresh.Text = "Refresh"
+            Me.MBtnRefresh.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnRefresh.UseAccentColor = False
+            Me.MBtnRefresh.UseVisualStyleBackColor = True
+            '
+            'Label6
+            '
+            Me.Label6.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label6.Location = New System.Drawing.Point(190, 5)
+            Me.Label6.Name = "Label6"
+            Me.Label6.Size = New System.Drawing.Size(5, 35)
+            Me.Label6.TabIndex = 23
+            '
+            'MChkZero
+            '
+            Me.MChkZero.AutoSize = True
+            Me.MChkZero.Depth = 0
+            Me.MChkZero.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MChkZero.Location = New System.Drawing.Point(5, 5)
+            Me.MChkZero.Margin = New System.Windows.Forms.Padding(0)
+            Me.MChkZero.MouseLocation = New System.Drawing.Point(-1, -1)
+            Me.MChkZero.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MChkZero.Name = "MChkZero"
+            Me.MChkZero.Ripple = True
+            Me.MChkZero.Size = New System.Drawing.Size(185, 35)
+            Me.MChkZero.TabIndex = 0
+            Me.MChkZero.Text = "Inc Zero Accounts"
+            Me.MChkZero.UseVisualStyleBackColor = True
             '
             'FAccounts
             '
@@ -198,16 +281,20 @@
         End Sub
 
         Friend WithEvents GrdAccounts As Infragistics.Win.UltraWinGrid.UltraGrid
-        Friend WithEvents BtnRefresh As Button
-        Friend WithEvents ChkIncludeZero As CheckBox
         Friend WithEvents Panel1 As Panel
-        Friend WithEvents BtnFiatTransfer As Button
-        Friend WithEvents BtnOpenAccount As Button
         Friend WithEvents Label1 As Label
-        Friend WithEvents BtnNew As Button
         Friend WithEvents Label2 As Label
-        Friend WithEvents BtnDelete As Button
         Friend WithEvents Label3 As Label
+        Friend WithEvents Label4 As Label
+        Friend WithEvents MBtnRefresh As MaterialButton
+        Friend WithEvents MBtnOpen As MaterialButton
+        Friend WithEvents Label5 As Label
+        Friend WithEvents MChkZero As MaterialSwitch
+        Friend WithEvents MBtnNew As MaterialButton
+        Friend WithEvents MBtnDelete As MaterialButton
+        Friend WithEvents MBtnRename As MaterialButton
+        Friend WithEvents MBtnFiatTransfer As MaterialButton
+        Friend WithEvents Label6 As Label
     End Class
 End Namespace
 

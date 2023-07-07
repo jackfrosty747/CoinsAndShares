@@ -11,26 +11,29 @@ Namespace Test
             ' Add any initialization after the InitializeComponent() call.
             m_commonObjects = commonObjects
 
-            TxtAccountCode.MaxLength = CDatabase.LENGTH_ACCOUNTS_ACCOUNTCODE
+            Icon = Icon.FromHandle(My.Resources.wand.GetHicon)
 
-            CDropdowns.AccountTypesDropdown.SetupDropdown(CmbAccountTypeName, commonObjects)
+            MTxtAccountCode.MaxLength = CDatabase.LENGTH_ACCOUNTS_ACCOUNTCODE
+
+            CMDropdowns.AccountTypesDropdown.Setup(MCmbAccountTypeName)
 
         End Sub
 
-        Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click, BtnCancel.Click
+        Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles MBtnOk.Click, MBtnCancel.Click
             Try
-                If sender Is BtnOk Then
-                    If TxtAccountCode.Text.Length = 0 Then
+                If sender Is MBtnOk Then
+                    If MTxtAccountCode.Text.Length = 0 Then
                         Throw New Exception(My.Resources.Error_AccountCodeNotValid)
                     End If
                     Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
-                    Dim accountType As EAccountType = GetAccountTypeFromName(CmbAccountTypeName.Text, False)
-                    cs.CreateAccount(TxtAccountCode.Text, TxtAccountName.Text, accountType)
+                    Dim accountType As EAccountType = GetAccountTypeFromName(MCmbAccountTypeName.Text, False)
+                    cs.CreateAccount(MTxtAccountCode.Text, MTxtAccountName.Text, accountType)
                 End If
                 Close()
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             End Try
         End Sub
+
     End Class
 End Namespace

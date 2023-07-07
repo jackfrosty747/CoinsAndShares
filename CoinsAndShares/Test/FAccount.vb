@@ -1,10 +1,15 @@
 ﻿Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
+Imports MaterialSkin.Controls
 
 Namespace Test
     Friend Class FAccount : Implements IDataRefresh
+
         Private ReadOnly m_commonObjects As CCommonObjects
+
         Friend ReadOnly AccountCode As String
+
+        Private ReadOnly m_formTitle As String
 
         Friend Sub New(commonObjects As CCommonObjects, accountCode As String)
 
@@ -15,22 +20,51 @@ Namespace Test
             m_commonObjects = commonObjects
             Me.AccountCode = accountCode
 
-            Text = $"ACCOUNT: {accountCode}"
+            m_formTitle = $"ACCOUNT: {accountCode}"
 
             Icon = Icon.FromHandle(My.Resources.bank.GetHicon)
 
             Dim coinsAndShares = CCoinsAndShares.GetInstance(m_commonObjects)
 
-            CDropdowns.NetworksDropdown.SetupDropdown(CmbNetworkId, coinsAndShares.AllNetworks, m_commonObjects)
+            SetupNetworksCombo(coinsAndShares.AllNetworks)
 
+            AddHandler MSwEnableNetwork.CheckedChanged, Sub(sender As Object, e As EventArgs)
+                                                            Dim mSl = CType(sender, MaterialSwitch)
+                                                            MCboNetworkId.Enabled = mSl.Checked
+                                                            NetworkChanged(sender, e)
+                                                        End Sub
             LoadDataEntryData()
             LoadTransactionData()
 
-            AddHandler TxtAccountName.TextChanged, AddressOf DataEntryChanged
-            AddHandler CmbNetworkId.TextChanged, AddressOf DataEntryChanged
-            AddHandler TxtNotes.TextChanged, AddressOf DataEntryChanged
-            AddHandler ChkIncludeOnShortcuts.CheckedChanged, AddressOf DataEntryChanged
+            AddHandler MTxtAccountName.TextChanged, AddressOf DataEntryChanged
+            AddHandler MCboNetworkId.TextChanged, AddressOf DataEntryChanged
+            AddHandler MTxtNotes.TextChanged, AddressOf DataEntryChanged
+            AddHandler MSwShortcut.CheckedChanged, AddressOf DataEntryChanged
+            AddHandler MSwEnableNetwork.CheckedChanged, AddressOf DataEntryChanged
 
+            ChangesMade(False)
+
+            NetworkChanged(Nothing, Nothing)
+
+        End Sub
+
+        Private Sub SetupNetworksCombo(allNetworks As IEnumerable(Of CNetwork))
+            MCboNetworkId.Items.Clear()
+            For Each network In allNetworks
+                MCboNetworkId.Items.Add(network.NetworkId)
+            Next
+            AddHandler MCboNetworkId.SelectedIndexChanged, AddressOf NetworkChanged
+        End Sub
+
+        Private Sub NetworkChanged(sender As Object, e As EventArgs)
+            Dim colour = Color.White
+            If MSwEnableNetwork.Checked AndAlso MCboNetworkId.SelectedIndex >= 0 Then
+                Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
+                If cs.AllNetworks(MCboNetworkId.SelectedIndex).Colour.HasValue Then
+                    colour = cs.AllNetworks(MCboNetworkId.SelectedIndex).Colour.Value
+                End If
+            End If
+            PnlNetworkColour.BackColor = colour
         End Sub
 
         Private Sub DataEntryChanged(sender As Object, e As EventArgs)
@@ -38,13 +72,7 @@ Namespace Test
         End Sub
 
         Private Sub ChangesMade(f As Boolean)
-            If f Then
-                BtnSave.BackColor = Color.Red
-                BtnSave.ForeColor = Color.Yellow
-            Else
-                BtnSave.BackColor = SystemColors.ButtonFace
-                BtnSave.ForeColor = SystemColors.ControlText
-            End If
+            Text = If(f, m_formTitle & " [Changes Made]", m_formTitle)
         End Sub
 
         Private Sub LoadDataEntryData()
@@ -55,12 +83,13 @@ Namespace Test
 
             ForeColor = CColours.AccountType(account.AccountType)
 
-            TxtAccountCode.Text = account.AccountCode
-            TxtAccountType.Text = account.AccountType.ToString.Replace("_", " ")
-            TxtAccountName.Text = account.AccountName
-            CmbNetworkId.Text = account.NetworkId
-            TxtNotes.Text = account.Notes
-            ChkIncludeOnShortcuts.Checked = account.IncludeOnShortcuts
+            MLblAccountCode.Text = account.AccountCode
+            MLblAccountType.Text = account.AccountType.ToString.Replace("_", " ")
+            MTxtAccountName.Text = account.AccountName
+            MSwEnableNetwork.Checked = Not String.IsNullOrEmpty(account.NetworkId)
+            MCboNetworkId.Text = account.NetworkId
+            MTxtNotes.Text = account.Notes
+            MSwShortcut.Checked = account.IncludeOnShortcuts
 
         End Sub
 
@@ -183,10 +212,11 @@ Namespace Test
                 dt.Columns.Add(Columns.Cost.ToString, GetType(Decimal))
                 dt.Columns.Add(Columns.Pl.ToString, GetType(Decimal))
 
-                Dim col = New DataColumn
-                col.ColumnName = "HasCode"
-                col.DataType = GetType(Boolean)
-                col.Expression = $"{Columns.InstrumentCode} IS NULL Or {Columns.InstrumentCode} = ''"
+                Dim col = New DataColumn With {
+                    .ColumnName = "HasCode",
+                    .DataType = GetType(Boolean),
+                    .Expression = $"{Columns.InstrumentCode} IS NULL Or {Columns.InstrumentCode} = ''"
+                }
                 dt.Columns.Add(col)
 
                 ' TODO
@@ -207,7 +237,7 @@ Namespace Test
                         dr(Columns.Description.ToString) = If(String.IsNullOrEmpty(i.InstrumentCode), "CASH", "Unknown")
                     End If
 
-                        dr(Columns.QuantityHeld.ToString) = i.TotalInstrumentAmount
+                    dr(Columns.QuantityHeld.ToString) = i.TotalInstrumentAmount
                     dr(Columns.Cost.ToString) = Math.Round(i.TotalCashValue, 2, MidpointRounding.AwayFromZero)
                     dt.Rows.Add(dr)
                 Next
@@ -223,32 +253,7 @@ Namespace Test
             LoadTransactionData()
         End Sub
 
-        Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles BtnSave.Click
-            Try
-                Cursor = Cursors.WaitCursor
-
-                Dim coinsAndShares = CCoinsAndShares.GetInstance(m_commonObjects)
-
-                Dim account = coinsAndShares.AllAccounts.Single(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
-
-                ' Save header
-                account.AccountName = TxtAccountName.Text
-                account.Notes = TxtNotes.Text
-                account.NetworkId = CmbNetworkId.Text
-                account.IncludeOnShortcuts = ChkIncludeOnShortcuts.Checked
-
-                coinsAndShares.UpdateAccount(account)
-
-                ' Load the data entry part.  The rest will refresh by the save function
-                LoadDataEntryData()
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            Finally
-                Cursor = Cursors.Default
-            End Try
-        End Sub
-
-        Private Sub GrdTransactions_InitializeLayout(sender As Object, e As Infragistics.Win.UltraWinGrid.InitializeLayoutEventArgs) Handles GrdTransactions.InitializeLayout
+        Private Sub GrdTransactions_InitializeLayout(sender As Object, e As InitializeLayoutEventArgs) Handles GrdTransactions.InitializeLayout
             Try
                 GridDefaults(e.Layout)
                 e.Layout.Appearances.Clear()
@@ -345,6 +350,36 @@ Namespace Test
                 m_commonObjects.Errors.Handle(ex)
             End Try
         End Sub
+
+        Private Sub MBtnSave_Click(sender As Object, e As EventArgs) Handles MBtnSave.Click
+            Try
+                Cursor = Cursors.WaitCursor
+
+                Dim coinsAndShares = CCoinsAndShares.GetInstance(m_commonObjects)
+
+                Dim account = coinsAndShares.AllAccounts.Single(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
+
+                ' Save header
+                account.AccountName = MTxtAccountName.Text
+                account.Notes = MTxtNotes.Text
+                If MSwEnableNetwork.Checked Then
+                    account.NetworkId = MCboNetworkId.Text
+                Else
+                    account.NetworkId = String.Empty
+                End If
+                account.IncludeOnShortcuts = MSwShortcut.Checked
+
+                coinsAndShares.UpdateAccount(account)
+
+                ' Load the data entry part.  The rest will refresh by the save function
+                LoadDataEntryData()
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
+
     End Class
 
 End Namespace

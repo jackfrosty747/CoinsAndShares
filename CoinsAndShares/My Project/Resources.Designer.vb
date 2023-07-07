@@ -133,6 +133,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property blue_document_rename() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("blue_document_rename", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property blue_folder_open() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("blue_folder_open", resourceCulture)
@@ -141,7 +151,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to 16/02/2023 10:59:42.46 
+        '''  Looks up a localized string similar to 05/07/2023 15:00:40.30 
         '''.
         '''</summary>
         Friend ReadOnly Property BuildDate() As String

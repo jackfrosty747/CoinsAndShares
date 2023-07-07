@@ -38,5 +38,19 @@ Namespace Accounts
             Money
             Instrument
         End Enum
+
+
+        Friend Function GetTransDescriptionTransferTo(accountCode As String) As String
+            Return $"Transfer to account {accountCode}"
+        End Function
+        Friend Function GetTransDescriptionFeeForSending(accountCode As String) As String
+            Return $"Fee for sending to account {accountCode}"
+        End Function
+        Friend Function GetTransDescriptionReceiptFrom(accountCode As String) As String
+            Return $"Receipt from account {accountCode}"
+        End Function
+        Friend Function GetTransDescriptionFeeForReceiving(accountCode As String) As String
+            Return $"Fee for receiving from account {accountCode}"
+        End Function
     End Module
 End Namespace
