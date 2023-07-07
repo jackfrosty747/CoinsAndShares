@@ -416,6 +416,12 @@
     <Compile Include="Test\FFiatTransfer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\FTest.Designer.vb">
+      <DependentUpon>FTest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FTest.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Transactions\CBatch.vb" />
     <Compile Include="Transactions\CCoinsAndShares.vb" />
     <Compile Include="Transactions\CHoldingsGridHelper.vb" />
@@ -599,6 +605,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Test\FFiatTransfer.resx">
       <DependentUpon>FFiatTransfer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FTest.resx">
+      <DependentUpon>FTest.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Transactions\FAllTransactions.resx">
       <DependentUpon>FAllTransactions.vb</DependentUpon>
