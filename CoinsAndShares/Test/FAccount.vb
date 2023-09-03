@@ -373,6 +373,9 @@ Namespace Test
 
                 ' Load the data entry part.  The rest will refresh by the save function
                 LoadDataEntryData()
+
+                Dim msb = New MaterialSnackBar("Account Saved")
+                msb.Show(m_commonObjects.FrmMdi)
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             Finally

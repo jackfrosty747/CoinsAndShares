@@ -198,7 +198,6 @@ Namespace Charts
                     .AxisY.MajorGrid.LineColor = Color.LightGray
                 End With
 
-                'ChartMiningByDate.DataManipulator.FinancialFormula(FinancialFormula.MovingAverage, "3", "Series1:Y", "Series2:Y")
             Catch ex As Exception
                 Throw
             End Try

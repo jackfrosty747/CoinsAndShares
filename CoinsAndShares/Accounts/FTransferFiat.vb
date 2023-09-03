@@ -14,6 +14,9 @@
             Icon = Icon.FromHandle(My.Resources.arrow_resize.GetHicon)
 
             m_allAccounts = m_commonObjects.Accounts.GetAll
+
+            m_allAccounts = m_allAccounts.OrderByDescending(Function(c) c.AccountCode.Equals("BANK", StringComparison.CurrentCultureIgnoreCase)).ThenBy(Function(c) c.AccountCode)
+
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountFrom, m_allAccounts, commonObjects)
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountTo, m_allAccounts, commonObjects)
 

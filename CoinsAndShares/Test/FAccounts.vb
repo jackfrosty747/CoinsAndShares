@@ -1,8 +1,8 @@
-﻿Imports System.Security.Principal
-Imports CoinsAndShares.Accounts
+﻿Imports CoinsAndShares.Accounts
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 Imports MaterialSkin.Controls
+Imports MaterialSkin
 
 Namespace Test
     Friend Class FAccounts : Implements IDataRefresh
@@ -277,6 +277,8 @@ Namespace Test
                 Dim cs = CCoinsAndShares.GetInstance(m_commonObjects)
                 cs.ClearCache()
                 LoadData()
+                Dim msb = New MaterialSnackBar("Data Refreshed")
+                msb.Show(m_commonObjects.FrmMdi)
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             Finally
@@ -399,7 +401,6 @@ Namespace Test
                 m_commonObjects.Errors.Handle(ex)
             End Try
         End Sub
-
     End Class
 
 End Namespace

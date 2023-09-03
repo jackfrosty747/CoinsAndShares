@@ -78,9 +78,9 @@ Namespace Test
             End Try
         End Sub
 
-        Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click, BtnCancel.Click
+        Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles MBtnOk.Click, MBtnCancel.Click
             Try
-                If sender Is BtnOk Then
+                If sender Is MBtnOk Then
                     Dim amount As Decimal
                     If CmbAccountFrom.Text.Length = 0 Then
                         Throw New Exception("Select account FROM")

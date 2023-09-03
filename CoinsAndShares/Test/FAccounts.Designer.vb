@@ -25,7 +25,7 @@ Namespace Test
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim Appearance2 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance1 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
             Me.GrdAccounts = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.MBtnFiatTransfer = New MaterialSkin.Controls.MaterialButton()
@@ -47,8 +47,8 @@ Namespace Test
             '
             'GrdAccounts
             '
-            Appearance2.BackColor = System.Drawing.Color.SlateGray
-            Me.GrdAccounts.DisplayLayout.Appearance = Appearance2
+            Appearance1.BackColor = System.Drawing.Color.SlateGray
+            Me.GrdAccounts.DisplayLayout.Appearance = Appearance1
             Me.GrdAccounts.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdAccounts.Location = New System.Drawing.Point(3, 109)
             Me.GrdAccounts.Name = "GrdAccounts"

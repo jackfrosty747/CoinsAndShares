@@ -32,6 +32,15 @@ Namespace Accounts
 
             Dim allCryptoInstrumentsWithBalance = m_allCryptoInstruments.Where(Function(c) totalsByInstrument.Any(Function(b) b.InstrumentCode = c.Code And b.TotalQuantity > 0))
 
+            allInstruments = allInstruments.OrderByDescending(Function(c)
+                                                                  Return c.Code.Equals("USDC", StringComparison.CurrentCultureIgnoreCase)
+                                                              End Function).ThenBy(Function(c)
+                                                                                       Return c.Code.Equals("BTC", StringComparison.CurrentCultureIgnoreCase)
+                                                                                   End Function).ThenBy(Function(c)
+                                                                                                            Return c.Code
+                                                                                                        End Function)
+
+
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbFromInstrument, allCryptoInstrumentsWithBalance, commonObjects, New LocalInstrumentReader(TxtFromRate))
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbToInstrument, m_allCryptoInstruments.OrderByDescending(Function(c)
                                                                                                                         Return c.Code.Equals("USDC", StringComparison.CurrentCultureIgnoreCase)
