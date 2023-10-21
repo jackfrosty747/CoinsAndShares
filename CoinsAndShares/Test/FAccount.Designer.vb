@@ -25,8 +25,8 @@ Namespace Test
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim Appearance1 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
-            Dim Appearance2 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance3 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance4 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
             Me.MaterialLabel1 = New MaterialSkin.Controls.MaterialLabel()
             Me.MLblAccountType = New MaterialSkin.Controls.MaterialLabel()
@@ -48,6 +48,8 @@ Namespace Test
             Me.TabPage2 = New System.Windows.Forms.TabPage()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.MBtnSave = New MaterialSkin.Controls.MaterialButton()
+            Me.MBtnSwap = New MaterialSkin.Controls.MaterialButton()
+            Me.Label1 = New System.Windows.Forms.Label()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SplitContainer1.Panel1.SuspendLayout()
@@ -296,8 +298,8 @@ Namespace Test
             '
             'GrdHoldings
             '
-            Appearance1.BackColor = System.Drawing.Color.Silver
-            Me.GrdHoldings.DisplayLayout.Appearance = Appearance1
+            Appearance3.BackColor = System.Drawing.Color.Silver
+            Me.GrdHoldings.DisplayLayout.Appearance = Appearance3
             Me.GrdHoldings.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdHoldings.Location = New System.Drawing.Point(0, 0)
             Me.GrdHoldings.Name = "GrdHoldings"
@@ -347,8 +349,8 @@ Namespace Test
             '
             'GrdTransactions
             '
-            Appearance2.BackColor = System.Drawing.Color.Silver
-            Me.GrdTransactions.DisplayLayout.Appearance = Appearance2
+            Appearance4.BackColor = System.Drawing.Color.Silver
+            Me.GrdTransactions.DisplayLayout.Appearance = Appearance4
             Me.GrdTransactions.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdTransactions.Location = New System.Drawing.Point(3, 3)
             Me.GrdTransactions.Name = "GrdTransactions"
@@ -368,6 +370,8 @@ Namespace Test
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.MBtnSwap)
+            Me.Panel1.Controls.Add(Me.Label1)
             Me.Panel1.Controls.Add(Me.MBtnSave)
             Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
             Me.Panel1.Location = New System.Drawing.Point(3, 552)
@@ -395,6 +399,34 @@ Namespace Test
             Me.MBtnSave.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
             Me.MBtnSave.UseAccentColor = False
             Me.MBtnSave.UseVisualStyleBackColor = True
+            '
+            'MBtnSwap
+            '
+            Me.MBtnSwap.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnSwap.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnSwap.Depth = 0
+            Me.MBtnSwap.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnSwap.HighEmphasis = True
+            Me.MBtnSwap.Icon = Nothing
+            Me.MBtnSwap.Location = New System.Drawing.Point(74, 5)
+            Me.MBtnSwap.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnSwap.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnSwap.Name = "MBtnSwap"
+            Me.MBtnSwap.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnSwap.Size = New System.Drawing.Size(64, 35)
+            Me.MBtnSwap.TabIndex = 17
+            Me.MBtnSwap.Text = "Swap"
+            Me.MBtnSwap.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnSwap.UseAccentColor = False
+            Me.MBtnSwap.UseVisualStyleBackColor = True
+            '
+            'Label1
+            '
+            Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label1.Location = New System.Drawing.Point(69, 5)
+            Me.Label1.Name = "Label1"
+            Me.Label1.Size = New System.Drawing.Size(5, 35)
+            Me.Label1.TabIndex = 18
             '
             'FAccount
             '
@@ -448,6 +480,8 @@ Namespace Test
         Friend WithEvents TabControl1 As TabControl
         Friend WithEvents TabPage1 As TabPage
         Friend WithEvents TabPage2 As TabPage
+        Friend WithEvents MBtnSwap As MaterialButton
+        Friend WithEvents Label1 As Label
     End Class
 
 End Namespace

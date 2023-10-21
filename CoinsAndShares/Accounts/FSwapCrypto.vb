@@ -40,7 +40,6 @@ Namespace Accounts
                                                                                                             Return c.Code
                                                                                                         End Function)
 
-
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbFromInstrument, allCryptoInstrumentsWithBalance, commonObjects, New LocalInstrumentReader(TxtFromRate))
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbToInstrument, m_allCryptoInstruments.OrderByDescending(Function(c)
                                                                                                                         Return c.Code.Equals("USDC", StringComparison.CurrentCultureIgnoreCase)

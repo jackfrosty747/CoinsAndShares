@@ -416,6 +416,12 @@
     <Compile Include="Test\FFiatTransfer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Test\FSwap.Designer.vb">
+      <DependentUpon>FSwap.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Test\FSwap.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Transactions\CBatch.vb" />
     <Compile Include="Transactions\CCoinsAndShares.vb" />
     <Compile Include="Transactions\CHoldingsGridHelper.vb" />
@@ -599,6 +605,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Test\FFiatTransfer.resx">
       <DependentUpon>FFiatTransfer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Test\FSwap.resx">
+      <DependentUpon>FSwap.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Transactions\FAllTransactions.resx">
       <DependentUpon>FAllTransactions.vb</DependentUpon>

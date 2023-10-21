@@ -383,6 +383,19 @@ Namespace Test
             End Try
         End Sub
 
+        Private Sub MBtnSwap_Click(sender As Object, e As EventArgs) Handles MBtnSwap.Click
+            Try
+                Cursor = Cursors.WaitCursor
+                Using frmSwap = New FSwap(m_commonObjects, AccountCode)
+                    Cursor = Cursors.Default
+                    frmSwap.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
     End Class
 
 End Namespace
