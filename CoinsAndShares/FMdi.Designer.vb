@@ -63,6 +63,8 @@ Partial Class FMdi
         Me.MnuAccountsNetworks = New System.Windows.Forms.ToolStripMenuItem()
         Me.HistoryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuTransactionHistory = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.MnuHistoryInterestTax = New System.Windows.Forms.ToolStripMenuItem()
         Me.SnapshotsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuSnapshotsTakeSnapshot = New System.Windows.Forms.ToolStripMenuItem()
         Me.ChartsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -233,7 +235,7 @@ Partial Class FMdi
         '
         'HistoryToolStripMenuItem
         '
-        Me.HistoryToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuTransactionHistory})
+        Me.HistoryToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuTransactionHistory, Me.ToolStripMenuItem6, Me.MnuHistoryInterestTax})
         Me.HistoryToolStripMenuItem.Name = "HistoryToolStripMenuItem"
         Me.HistoryToolStripMenuItem.Size = New System.Drawing.Size(57, 20)
         Me.HistoryToolStripMenuItem.Text = "History"
@@ -241,8 +243,19 @@ Partial Class FMdi
         'MnuTransactionHistory
         '
         Me.MnuTransactionHistory.Name = "MnuTransactionHistory"
-        Me.MnuTransactionHistory.Size = New System.Drawing.Size(175, 22)
+        Me.MnuTransactionHistory.Size = New System.Drawing.Size(188, 22)
         Me.MnuTransactionHistory.Text = "Transaction History"
+        '
+        'ToolStripMenuItem6
+        '
+        Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
+        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(185, 6)
+        '
+        'MnuHistoryInterestTax
+        '
+        Me.MnuHistoryInterestTax.Name = "MnuHistoryInterestTax"
+        Me.MnuHistoryInterestTax.Size = New System.Drawing.Size(188, 22)
+        Me.MnuHistoryInterestTax.Text = "Savings Tax Summary"
         '
         'SnapshotsToolStripMenuItem
         '
@@ -392,4 +405,6 @@ Partial Class FMdi
     Friend WithEvents MnuHelpAbout As ToolStripMenuItem
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
     Friend WithEvents Button1 As Button
+    Friend WithEvents ToolStripMenuItem6 As ToolStripSeparator
+    Friend WithEvents MnuHistoryInterestTax As ToolStripMenuItem
 End Class

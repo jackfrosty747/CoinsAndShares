@@ -163,7 +163,8 @@ Namespace Test
                     {CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE},
                     {CDatabase.FIELD_ACCOUNTS_NOTES},
                     {CDatabase.FIELD_ACCOUNTS_NETWORKID},
-                    {CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS}
+                    {CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS},
+                    {CDatabase.FIELD_ACCOUNTS_NONTAXABLE}
                 FROM
                     {CDatabase.TABLE_ACCOUNTS}
                 ORDER BY
@@ -177,6 +178,7 @@ Namespace Test
                     Dim iNotesOrdinal = dr.GetOrdinal(CDatabase.FIELD_ACCOUNTS_NOTES)
                     Dim iNetworkIdOrdinal = dr.GetOrdinal(CDatabase.FIELD_ACCOUNTS_NETWORKID)
                     Dim iIncludeOnShortCutsOrdinal = dr.GetOrdinal(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS)
+                    Dim iNonTaxableOrdinal = dr.GetOrdinal(CDatabase.FIELD_ACCOUNTS_NONTAXABLE)
 
                     While dr.Read
                         Dim accountCode = dr.GetFieldValue(Of String)(iAccountCodeOrdinal)
@@ -191,10 +193,11 @@ Namespace Test
                         Dim notes = If(dr.IsDBNull(iNotesOrdinal), String.Empty, dr.GetFieldValue(Of String)(iNotesOrdinal))
                         Dim networkId = If(dr.IsDBNull(iNetworkIdOrdinal), String.Empty, dr.GetFieldValue(Of String)(iNetworkIdOrdinal))
                         Dim includeOnShortcuts = Not dr.IsDBNull(iIncludeOnShortCutsOrdinal) AndAlso dr.GetFieldValue(Of Boolean)(iIncludeOnShortCutsOrdinal)
+                        Dim nonTaxable = Not dr.IsDBNull(iNonTaxableOrdinal) AndAlso dr.GetFieldValue(Of Boolean)(iNonTaxableOrdinal)
 
                         Dim transactions = AllTransactions.Where(Function(c) c.AccountCode.Equals(accountCode, StringComparison.CurrentCultureIgnoreCase))
 
-                        Yield New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, transactions)
+                        Yield New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable, transactions)
 
                     End While
                 End Using
@@ -209,7 +212,8 @@ Namespace Test
                     {CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE},
                     {CDatabase.FIELD_ACCOUNTS_NOTES},
                     {CDatabase.FIELD_ACCOUNTS_NETWORKID},
-                    {CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS}
+                    {CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS},
+                    {CDatabase.FIELD_ACCOUNTS_NONTAXABLE}
                 FROM {CDatabase.TABLE_ACCOUNTS}
                 WHERE {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = @accountCode;"
             Using cm = m_commonObjects.Database.GetCommand(sql)
@@ -230,6 +234,7 @@ Namespace Test
                         dr(CDatabase.FIELD_ACCOUNTS_NOTES) = account.Notes
                         dr(CDatabase.FIELD_ACCOUNTS_NETWORKID) = account.NetworkId
                         dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS) = account.IncludeOnShortcuts
+                        dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE) = account.NonTaxable
                         Using cb As New SqlCeCommandBuilder(da)
                             da.Update(dt)
                         End Using
@@ -243,7 +248,7 @@ Namespace Test
             If AllAccounts.Any(Function(c) c.AccountCode.Equals(accountCode, StringComparison.CurrentCultureIgnoreCase)) Then
                 Throw New Exception(My.Resources.Error_ItemAlreadyExists)
             End If
-            Dim account = New CAccount(accountCode, accountName, accountType, Nothing, Nothing, Nothing, Nothing)
+            Dim account = New CAccount(accountCode, accountName, accountType, Nothing, Nothing, Nothing, Nothing, transactions:=Nothing)
             UpdateAccount(account)
         End Sub
 

@@ -35,8 +35,9 @@ Namespace Accounts
                         Dim notes As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NOTES))
                         Dim networkId As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NETWORKID))
                         Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
+                        Dim nonTaxable = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE))
 
-                        account = New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts)
+                        account = New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable)
                         accounts.Add(accountCode, account)
                         result.Add(account)
                     End If
@@ -143,6 +144,7 @@ Namespace Accounts
                         'End If
 
                         dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS) = account.IncludeOnShortcuts
+                        dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE) = account.NonTaxable
 
                         Using cb As New SqlCeCommandBuilder(da)
                             da.Update(dt)

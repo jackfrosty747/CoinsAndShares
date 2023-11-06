@@ -41,6 +41,7 @@ Namespace Test
             AddHandler MTxtNotes.TextChanged, AddressOf DataEntryChanged
             AddHandler MSwShortcut.CheckedChanged, AddressOf DataEntryChanged
             AddHandler MSwEnableNetwork.CheckedChanged, AddressOf DataEntryChanged
+            AddHandler MSwNonTaxable.CheckedChanged, AddressOf DataEntryChanged
 
             ChangesMade(False)
 
@@ -90,6 +91,7 @@ Namespace Test
             MCboNetworkId.Text = account.NetworkId
             MTxtNotes.Text = account.Notes
             MSwShortcut.Checked = account.IncludeOnShortcuts
+            MSwNonTaxable.Checked = account.NonTaxable
 
         End Sub
 
@@ -368,6 +370,7 @@ Namespace Test
                     account.NetworkId = String.Empty
                 End If
                 account.IncludeOnShortcuts = MSwShortcut.Checked
+                account.NonTaxable = MSwNonTaxable.Checked
 
                 coinsAndShares.UpdateAccount(account)
 

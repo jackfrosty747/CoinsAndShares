@@ -1,5 +1,6 @@
 ﻿Imports System.Deployment.Application
 Imports System.Reflection
+Imports System.Text.RegularExpressions
 Imports CoinsAndShares.Accounts
 Imports CoinsAndShares.BackupRestore
 Imports CoinsAndShares.Charts
@@ -542,4 +543,134 @@ Friend Class FMdi
 
     End Sub
 
+    Private Sub MnuHistoryInterestTax_Click(sender As Object, e As EventArgs) Handles MnuHistoryInterestTax.Click
+
+        ' Variables
+        'Dim nonTaxable = New List(Of String) From {"VANGUARD", "SANTI", "NUTMEG"}
+        Dim accountTypes = New List(Of EAccountType) From {EAccountType.Bank_Account, EAccountType.Share_Account}
+
+        Dim interestDescription = "Interest"
+
+        Try
+            Dim taxYearStartInclusive As Date
+            Try
+                ' Get the current date
+                Dim currentDate As Date = Date.Today
+                ' Calculate the tax year start date based on the current date
+                Dim taxYearStart As Date
+                If currentDate.Month > 4 Or (currentDate.Month = 4 And currentDate.Day >= 6) Then
+                    ' If the current date is on or after April 6th, use the current year's April 6th
+                    taxYearStart = New Date(currentDate.Year, 4, 6)
+                Else
+                    ' If the current date is before April 6th, use the previous year's April 6th
+                    taxYearStart = New Date(currentDate.Year - 1, 4, 6)
+                End If
+                Dim sRet = InputBox("Enter the tax year start (inclusive)", Text, taxYearStart.ToShortDateString)
+                If String.IsNullOrEmpty(sRet) Then
+                    Return
+                ElseIf Not Date.TryParse(sRet, taxYearStartInclusive) Then
+                    Throw New Exception(My.Resources.Error_NotAValidDate)
+                End If
+            Catch ex As Exception
+                Throw
+            End Try
+
+            Dim allowance As Decimal = 1000
+            Try
+                Dim sRet = InputBox("Enter tax allowace", Text, allowance.ToString("c2"))
+                If String.IsNullOrEmpty(sRet) Then
+                    Return
+                ElseIf Not Decimal.TryParse(sRet, Globalization.NumberStyles.Currency, Globalization.CultureInfo.CurrentCulture, allowance) Then
+                    Throw New Exception(My.Resources.Error_CurrencyAmountNotValid)
+                End If
+            Catch ex As Exception
+                Throw
+            End Try
+
+            Dim taxRate As Decimal = 20
+            Try
+                Dim sRet = InputBox("Enter tax rate", Text, taxRate.ToString() & "%").Replace("%", "")
+                If String.IsNullOrEmpty(sRet) Then
+                    Return
+                ElseIf Not Decimal.TryParse(sRet, taxRate) Then
+                    Throw New Exception(My.Resources.Error_IncorrectResponse)
+                End If
+            Catch ex As Exception
+                Throw
+            End Try
+
+
+            Cursor = Cursors.WaitCursor
+
+            Dim transactions = New CTransactions(m_commonObjects)
+            Dim accounts = New CAccounts(m_commonObjects)
+
+            Dim selectedAccounts = accounts.GetAll.Where(Function(c) accountTypes.Contains(c.AccountType))
+            Dim nonTaxedAccounts = accounts.GetAll.Where(Function(c) c.NonTaxable)
+
+            selectedAccounts = selectedAccounts.Where(Function(c) Not nonTaxedAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
+
+            Dim selectedAccountCodes = selectedAccounts.Select(Function(c) c.AccountCode)
+
+            Dim all = transactions.GetAll
+
+            ' Only interest records
+            all = all.Where(Function(c) c.Description.Equals(interestDescription, StringComparison.CurrentCultureIgnoreCase))
+
+            ' Only records from this tax year
+            all = all.Where(Function(c) c.TransDate > taxYearStartInclusive.Date.AddDays(1) AndAlso c.TransDate < taxYearStartInclusive.Date.AddYears(1))
+
+            ' Exclude non taxable and types we're not interested in
+            all = all.Where(Function(c) selectedAccountCodes.Any(Function(d) d.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
+
+            ' Total interest
+            Dim interest = Math.Round(all.Sum(Function(c) c.Amount), 2)
+
+            ' Taxable
+            Dim taxable = Math.Max(interest - allowance, 0)
+            Dim tax As Decimal
+            If taxable > 0 Then
+                tax = Math.Round(taxable / 100 * taxRate, 2)
+            End If
+
+            ' Progress through tax year
+            Dim totalDaysInTaxYear As Integer = CInt((taxYearStartInclusive.AddYears(1).AddDays(-1) - taxYearStartInclusive).TotalDays)
+            Dim daysPassed As Integer = CInt((Now.Date - taxYearStartInclusive).TotalDays)
+            Dim percentagePassed As Double = (daysPassed / totalDaysInTaxYear) * 100
+            percentagePassed = Math.Min(Math.Max(percentagePassed, 0), 100)
+
+            ' Projected tax
+            Dim projectedInterest = CDec(interest / percentagePassed * 100)
+            Dim projectedTaxable = Math.Max(projectedInterest - allowance, 0)
+            Dim projectedTax As Decimal
+            If projectedTaxable > 0 Then
+                projectedTax = Math.Round(projectedTaxable / 100 * taxRate, 2)
+            End If
+
+            Dim sMsg = $"Savings Tax Summary
+========================
+Tax Year: {taxYearStartInclusive.ToShortDateString} to {taxYearStartInclusive.AddYears(1).AddDays(-1).ToShortDateString} ({percentagePassed:0}% through year)
+Allowance: {allowance:c2}
+Tax Rate: {taxRate:0}%
+Account types: {String.Join(", ", accountTypes)}
+Excluding non-taxable accounts: {String.Join(", ", nonTaxedAccounts.Select(Function(c) c.AccountCode))}
+
+Total Interest: {interest:c2}
+Taxable: {taxable:c2}
+
+Tax Due: {tax:c2}
+-------------------
+Projected Interest: {projectedInterest:c2} less allowance = {projectedTaxable:c2}
+Projected Tax: {projectedTax:c2}"
+
+            MessageBox.Show(sMsg, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+
+        Finally
+            Cursor = Cursors.Default
+        End Try
+
+    End Sub
 End Class

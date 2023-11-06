@@ -6,15 +6,18 @@
         Friend Property Notes As String
         Friend Property NetworkId As String
         Friend Property IncludeOnShortcuts As Boolean
+        Friend Property NonTaxable As Boolean
         Friend ReadOnly Property Transactions As IEnumerable(Of CTransaction)
         Friend Sub New(accountCode As String, accountName As String, accountType As Accounts.EAccountType, notes As String,
-                       networkId As String, includeOnShortcuts As Boolean, transactions As IEnumerable(Of CTransaction))
+            networkId As String, includeOnShortcuts As Boolean, nonTaxable As Boolean,
+            transactions As IEnumerable(Of CTransaction))
             Me.AccountCode = accountCode
             Me.AccountName = accountName
             Me.AccountType = accountType
             Me.Notes = notes
             Me.NetworkId = networkId
             Me.IncludeOnShortcuts = includeOnShortcuts
+            Me.NonTaxable = nonTaxable
             Me.Transactions = transactions
         End Sub
 

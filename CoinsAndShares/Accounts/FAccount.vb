@@ -49,6 +49,7 @@ Namespace Accounts
             AddHandler TxtNotes.TextChanged, AddressOf DataChanged
             AddHandler CmbNetworkId.TextChanged, AddressOf DataChanged
             AddHandler ChkIncludeOnShortcuts.CheckedChanged, AddressOf DataChanged
+            AddHandler ChkNonTaxable.CheckedChanged, AddressOf DataChanged
 
             SelectChanged(0, 0, 0)
 
@@ -79,6 +80,7 @@ Namespace Accounts
             CmbNetworkId.Text = account.NetworkId
             TxtNotes.Text = account.Notes
             ChkIncludeOnShortcuts.Checked = account.IncludeOnShortcuts
+            ChkNonTaxable.Checked = account.NonTaxable
 
             'Dim networksInUse = all.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
 
@@ -161,7 +163,7 @@ Namespace Accounts
                 sNetworkId = sNetworkId.Substring(0, CDatabase.LENGTH_ACCOUNTS_NETWORKID)
             End If
             Dim account = New CAccount(AccountCode, TxtAccountName.Text, existing.AccountType, TxtNotes.Text,
-                sNetworkId, ChkIncludeOnShortcuts.Checked)
+                sNetworkId, ChkIncludeOnShortcuts.Checked, ChkNonTaxable.Checked)
             m_commonObjects.Accounts.Update(account)
         End Sub
 

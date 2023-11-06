@@ -5,7 +5,7 @@ Imports System.IO
 
 Friend Class CDatabase : Implements IDisposable
 
-    Private Const DB_VERSION As Integer = 25
+    Private Const DB_VERSION As Integer = 26
 
     Friend Const DATABASE_PASSWORD = "1234"
 
@@ -34,6 +34,7 @@ Friend Class CDatabase : Implements IDisposable
     Friend Const FIELD_ACCOUNTS_NETWORKID As String = "networkId"
     Friend Const FIELD_ACCOUNTS_BACKGROUNDCOLOUR__DEPRECATED As String = "backgroundColour"
     Friend Const FIELD_ACCOUNTS_INCLUDEONSHORTCUTS As String = "includeOnShortcuts"
+    Friend Const FIELD_ACCOUNTS_NONTAXABLE As String = "nonTaxable"
 
     Friend Const FIELD_CURRENCIES_CURRENCYCODE As String = "currencyCode"
     Friend Const FIELD_CURRENCIES_CURRENCYRATE As String = "currencyRate"
@@ -290,6 +291,10 @@ Friend Class CDatabase : Implements IDisposable
                 CreateTable(TABLE_NETWORKS, FIELD_NETWORKS_NETWORKID, EFieldType.NVarChar, LENGTH_NETWORKS_NETWORKID)
                 AddField(FIELD_NETWORKS_DESCRIPTION, TABLE_NETWORKS, EFieldType.NText, 0)
                 AddField(FIELD_NETWORKS_COLOUR, TABLE_NETWORKS, EFieldType.Int, 0)
+            End If
+
+            If iCurrentVersion < 26 Then
+                AddField(FIELD_ACCOUNTS_NONTAXABLE, TABLE_ACCOUNTS, EFieldType.Bit, 0)
             End If
 
             If iCurrentVersion < DB_VERSION Then

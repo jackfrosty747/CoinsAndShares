@@ -160,7 +160,7 @@ Namespace Transactions
                 SELECT *
                 FROM {CDatabase.TABLE_TRANSACTIONS}
                 ORDER BY {CDatabase.FIELD_TRANSACTIONS_ID};"
-            Dim col As New Collection(Of CTransaction)
+            Dim col As New List(Of CTransaction)
             Using dt = m_commonObjects.Database.GetDatatable(sql)
                 For Each dr As DataRow In dt.Rows
                     Dim transaction = GetTransactionFromDr(dr)

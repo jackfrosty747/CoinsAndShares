@@ -92,6 +92,7 @@
             Me.LblMining = New System.Windows.Forms.Label()
             Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+            Me.ChkNonTaxable = New System.Windows.Forms.CheckBox()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -121,6 +122,7 @@
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+            Me.TableLayoutPanel1.Controls.Add(Me.ChkNonTaxable, 4, 3)
             Me.TableLayoutPanel1.Controls.Add(Me.Label16, 1, 5)
             Me.TableLayoutPanel1.Controls.Add(Me.Label3, 1, 3)
             Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 2)
@@ -155,7 +157,7 @@
             Me.Label16.Name = "Label16"
             Me.Label16.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.Label16.Size = New System.Drawing.Size(37, 16)
-            Me.Label16.TabIndex = 10
+            Me.Label16.TabIndex = 12
             Me.Label16.Text = "Notes"
             '
             'Label3
@@ -237,7 +239,7 @@
             Me.TxtNotes.Name = "TxtNotes"
             Me.TxtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
             Me.TxtNotes.Size = New System.Drawing.Size(204, 80)
-            Me.TxtNotes.TabIndex = 11
+            Me.TxtNotes.TabIndex = 13
             Me.TxtNotes.Text = "TxtNotes"
             '
             'Label19
@@ -247,7 +249,7 @@
             Me.Label19.Name = "Label19"
             Me.Label19.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
             Me.Label19.Size = New System.Drawing.Size(65, 21)
-            Me.Label19.TabIndex = 8
+            Me.Label19.TabIndex = 9
             Me.Label19.Text = "Network ID"
             '
             'CmbNetworkId
@@ -259,7 +261,7 @@
             Me.CmbNetworkId.Location = New System.Drawing.Point(108, 92)
             Me.CmbNetworkId.Name = "CmbNetworkId"
             Me.CmbNetworkId.Size = New System.Drawing.Size(79, 22)
-            Me.CmbNetworkId.TabIndex = 9
+            Me.CmbNetworkId.TabIndex = 10
             Me.CmbNetworkId.ValueMember = ""
             '
             'Label5
@@ -289,7 +291,7 @@
             Me.ChkIncludeOnShortcuts.Location = New System.Drawing.Point(233, 92)
             Me.ChkIncludeOnShortcuts.Name = "ChkIncludeOnShortcuts"
             Me.ChkIncludeOnShortcuts.Size = New System.Drawing.Size(70, 17)
-            Me.ChkIncludeOnShortcuts.TabIndex = 14
+            Me.ChkIncludeOnShortcuts.TabIndex = 11
             Me.ChkIncludeOnShortcuts.Text = "Shortcut"
             Me.ToolTip1.SetToolTip(Me.ChkIncludeOnShortcuts, "Create a shortcut button to this account on the left panel")
             Me.ChkIncludeOnShortcuts.UseVisualStyleBackColor = True
@@ -913,6 +915,17 @@
             Me.SplitContainer1.SplitterDistance = 203
             Me.SplitContainer1.TabIndex = 6
             '
+            'ChkNonTaxable
+            '
+            Me.ChkNonTaxable.AutoSize = True
+            Me.ChkNonTaxable.Location = New System.Drawing.Point(233, 64)
+            Me.ChkNonTaxable.Name = "ChkNonTaxable"
+            Me.ChkNonTaxable.Size = New System.Drawing.Size(68, 17)
+            Me.ChkNonTaxable.TabIndex = 8
+            Me.ChkNonTaxable.Text = "Non-Tax"
+            Me.ToolTip1.SetToolTip(Me.ChkNonTaxable, "Non-taxable account.  Interest is not taxed, e.g. ISA")
+            Me.ChkNonTaxable.UseVisualStyleBackColor = True
+            '
             'FAccount
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1015,6 +1028,7 @@
         Friend WithEvents BtnNexo As Button
         Friend WithEvents ToolTip1 As ToolTip
         Friend WithEvents Label13 As Label
+        Friend WithEvents ChkNonTaxable As CheckBox
     End Class
 
 End Namespace

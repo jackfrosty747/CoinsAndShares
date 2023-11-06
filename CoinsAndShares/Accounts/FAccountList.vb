@@ -61,6 +61,7 @@ Namespace Accounts
                 Pl
                 Notes
                 IncludeOnShortcuts
+                NonTaxable
             End Enum
             Friend Shared Sub LoadData(grid As UltraGrid, accounts As IEnumerable(Of CAccount), commonObjects As CCommonObjects,
                                        frmAccountList As FAccountList, allInstruments As IEnumerable(Of CInstrument),
@@ -90,6 +91,7 @@ Namespace Accounts
                         dr(ColumnsAccount.Notes.ToString) = account.Notes
 
                         dr(ColumnsAccount.IncludeOnShortcuts.ToString) = account.IncludeOnShortcuts
+                        dr(ColumnsAccount.NonTaxable.ToString) = account.NonTaxable
 
                         dtAccounts.Rows.Add(dr)
                     End If
@@ -198,8 +200,9 @@ Namespace Accounts
                 'End If
 
                 Dim includeOnShortcuts = CDatabase.DbToBool(row.Cells(ColumnsAccount.IncludeOnShortcuts.ToString).Value)
+                Dim nonTaxable = CDatabase.DbToBool(row.Cells(ColumnsAccount.NonTaxable.ToString).Value)
 
-                Dim account As New CAccount(sAccountCode, sAccountName, accountType, sNotes, sNetworkId, includeOnShortcuts)
+                Dim account As New CAccount(sAccountCode, sAccountName, accountType, sNotes, sNetworkId, includeOnShortcuts, nonTaxable)
                 Return account
             End Function
 
@@ -214,6 +217,7 @@ Namespace Accounts
                 dt.Columns.Add(ColumnsAccount.Pl.ToString, GetType(Decimal))
                 dt.Columns.Add(ColumnsAccount.Notes.ToString)
                 dt.Columns.Add(ColumnsAccount.IncludeOnShortcuts.ToString, GetType(Boolean))
+                dt.Columns.Add(ColumnsAccount.NonTaxable.ToString, GetType(Boolean))
                 Return dt
             End Function
             Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
