@@ -38,6 +38,7 @@
             Me.GroupBox4 = New System.Windows.Forms.GroupBox()
             Me.CmbType = New Infragistics.Win.UltraWinGrid.UltraCombo()
             Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+            Me.ChkTaxable = New System.Windows.Forms.CheckBox()
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
             Me.PnlAccountSingle = New System.Windows.Forms.Panel()
             Me.CmbAccount = New Infragistics.Win.UltraWinGrid.UltraCombo()
@@ -146,10 +147,10 @@
             '
             Me.GroupBox3.Controls.Add(Me.TlpDates)
             Me.GroupBox3.Controls.Add(Me.ChkAllDates)
-            Me.GroupBox3.Location = New System.Drawing.Point(359, 141)
+            Me.GroupBox3.Location = New System.Drawing.Point(359, 160)
             Me.GroupBox3.Name = "GroupBox3"
             Me.GroupBox3.Padding = New System.Windows.Forms.Padding(5)
-            Me.GroupBox3.Size = New System.Drawing.Size(341, 118)
+            Me.GroupBox3.Size = New System.Drawing.Size(341, 107)
             Me.GroupBox3.TabIndex = 13
             Me.GroupBox3.TabStop = False
             Me.GroupBox3.Text = "Date Range"
@@ -243,13 +244,27 @@
             '
             'GroupBox2
             '
+            Me.GroupBox2.Controls.Add(Me.ChkTaxable)
             Me.GroupBox2.Controls.Add(Me.TableLayoutPanel1)
             Me.GroupBox2.Location = New System.Drawing.Point(359, 12)
             Me.GroupBox2.Name = "GroupBox2"
-            Me.GroupBox2.Size = New System.Drawing.Size(341, 123)
+            Me.GroupBox2.Size = New System.Drawing.Size(341, 142)
             Me.GroupBox2.TabIndex = 12
             Me.GroupBox2.TabStop = False
             Me.GroupBox2.Text = "Account"
+            '
+            'ChkTaxable
+            '
+            Me.ChkTaxable.AutoSize = True
+            Me.ChkTaxable.Checked = True
+            Me.ChkTaxable.CheckState = System.Windows.Forms.CheckState.Indeterminate
+            Me.ChkTaxable.Location = New System.Drawing.Point(6, 109)
+            Me.ChkTaxable.Name = "ChkTaxable"
+            Me.ChkTaxable.Size = New System.Drawing.Size(64, 17)
+            Me.ChkTaxable.TabIndex = 14
+            Me.ChkTaxable.Text = "Taxable"
+            Me.ChkTaxable.ThreeState = True
+            Me.ChkTaxable.UseVisualStyleBackColor = True
             '
             'TableLayoutPanel1
             '
@@ -728,6 +743,7 @@
         Friend WithEvents CmbType As Infragistics.Win.UltraWinGrid.UltraCombo
         Friend WithEvents LblSelected As Label
         Friend WithEvents Label3 As Label
+        Friend WithEvents ChkTaxable As CheckBox
     End Class
 
 End Namespace

@@ -54,6 +54,7 @@ Namespace Transactions
             AddHandler OptInstrumentSingle.CheckedChanged, AddressOf Filter_ValueChanged
             AddHandler ChkAllDates.CheckedChanged, AddressOf Filter_ValueChanged
             AddHandler CmbType.TextChanged, AddressOf Filter_ValueChanged
+            AddHandler ChkTaxable.CheckedChanged, AddressOf Filter_ValueChanged
 
             SelectChanged(0, 0, 0)
         End Sub
@@ -127,6 +128,11 @@ Namespace Transactions
             If CmbType.Text.Length > 0 Then
                 Dim transactionType As ETransactionType = GetTransactionTypeFromDesc(CmbType.Text, False)
                 rowsToShow = rowsToShow.Where(Function(c) c.TransactionType = transactionType)
+            End If
+
+            If ChkTaxable.CheckState <> CheckState.Indeterminate Then
+                Dim accounts = m_accounts.GetAll.Where(Function(c) c.NonTaxable = (ChkTaxable.CheckState = CheckState.Unchecked))
+                rowsToShow = rowsToShow.Where(Function(c) accounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
             End If
 
             Return rowsToShow

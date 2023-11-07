@@ -543,13 +543,10 @@ Friend Class FMdi
 
     End Sub
 
-    Private Sub MnuHistoryInterestTax_Click(sender As Object, e As EventArgs) Handles MnuHistoryInterestTax.Click
-
-        ' Variables
-        'Dim nonTaxable = New List(Of String) From {"VANGUARD", "SANTI", "NUTMEG"}
+    Private Sub MnuReportsSavingsTax_Click(sender As Object, e As EventArgs) Handles MnuReportsSavingsTax.Click
         Dim accountTypes = New List(Of EAccountType) From {EAccountType.Bank_Account, EAccountType.Share_Account}
 
-        Dim interestDescription = "Interest"
+        Dim interestDescription = EDescriptionPresets.Interest.ToString.Replace("_", " ")
 
         Try
             Dim taxYearStartInclusive As Date
@@ -614,11 +611,15 @@ Friend Class FMdi
 
             Dim all = transactions.GetAll
 
+            'MsgBox($"testing: {all.Where(Function(c) c.Description.ToUpper = interestDescription.ToUpper And
+            '                                 c.TransDate > taxYearStartInclusive.Date.AddDays(-1) AndAlso c.TransDate < taxYearStartInclusive.Date.AddYears(1) And
+            '                                 selectedAccountCodes.Any(Function(d) d.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase))).Sum(Function(c) c.Amount)}")
+
             ' Only interest records
             all = all.Where(Function(c) c.Description.Equals(interestDescription, StringComparison.CurrentCultureIgnoreCase))
 
             ' Only records from this tax year
-            all = all.Where(Function(c) c.TransDate > taxYearStartInclusive.Date.AddDays(1) AndAlso c.TransDate < taxYearStartInclusive.Date.AddYears(1))
+            all = all.Where(Function(c) c.TransDate > taxYearStartInclusive.Date.AddDays(-1) AndAlso c.TransDate < taxYearStartInclusive.Date.AddYears(1))
 
             ' Exclude non taxable and types we're not interested in
             all = all.Where(Function(c) selectedAccountCodes.Any(Function(d) d.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
@@ -656,6 +657,7 @@ Account types: {String.Join(", ", accountTypes)}
 Excluding non-taxable accounts: {String.Join(", ", nonTaxedAccounts.Select(Function(c) c.AccountCode))}
 
 Total Interest: {interest:c2}
+    less {allowance:c2} allowance
 Taxable: {taxable:c2}
 
 Tax Due: {tax:c2}
@@ -671,6 +673,5 @@ Projected Tax: {projectedTax:c2}"
         Finally
             Cursor = Cursors.Default
         End Try
-
     End Sub
 End Class

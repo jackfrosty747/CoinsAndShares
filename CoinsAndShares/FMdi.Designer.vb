@@ -71,6 +71,7 @@ Partial Class FMdi
         Me.MnuReports = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuAssets = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuInterest = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuReportsSavingsTax = New System.Windows.Forms.ToolStripMenuItem()
         Me.NoptesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -272,7 +273,7 @@ Partial Class FMdi
         '
         'ChartsToolStripMenuItem
         '
-        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest})
+        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax})
         Me.ChartsToolStripMenuItem.Name = "ChartsToolStripMenuItem"
         Me.ChartsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ChartsToolStripMenuItem.Text = "Reports"
@@ -280,20 +281,26 @@ Partial Class FMdi
         'MnuReports
         '
         Me.MnuReports.Name = "MnuReports"
-        Me.MnuReports.Size = New System.Drawing.Size(114, 22)
+        Me.MnuReports.Size = New System.Drawing.Size(188, 22)
         Me.MnuReports.Text = "Reports"
         '
         'MnuAssets
         '
         Me.MnuAssets.Name = "MnuAssets"
-        Me.MnuAssets.Size = New System.Drawing.Size(114, 22)
+        Me.MnuAssets.Size = New System.Drawing.Size(188, 22)
         Me.MnuAssets.Text = "Assets"
         '
         'MnuInterest
         '
         Me.MnuInterest.Name = "MnuInterest"
-        Me.MnuInterest.Size = New System.Drawing.Size(114, 22)
+        Me.MnuInterest.Size = New System.Drawing.Size(188, 22)
         Me.MnuInterest.Text = "Interest"
+        '
+        'MnuReportsSavingsTax
+        '
+        Me.MnuReportsSavingsTax.Name = "MnuReportsSavingsTax"
+        Me.MnuReportsSavingsTax.Size = New System.Drawing.Size(188, 22)
+        Me.MnuReportsSavingsTax.Text = "Savings Tax Summary"
         '
         'NoptesToolStripMenuItem
         '
@@ -407,4 +414,5 @@ Partial Class FMdi
     Friend WithEvents Button1 As Button
     Friend WithEvents ToolStripMenuItem6 As ToolStripSeparator
     Friend WithEvents MnuHistoryInterestTax As ToolStripMenuItem
+    Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
 End Class
