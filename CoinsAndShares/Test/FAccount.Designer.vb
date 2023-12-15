@@ -25,9 +25,10 @@ Namespace Test
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim Appearance1 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
-            Dim Appearance2 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance3 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
+            Dim Appearance4 As Infragistics.Win.Appearance = New Infragistics.Win.Appearance()
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+            Me.MSwNonTaxable = New MaterialSkin.Controls.MaterialSwitch()
             Me.MaterialLabel1 = New MaterialSkin.Controls.MaterialLabel()
             Me.MLblAccountType = New MaterialSkin.Controls.MaterialLabel()
             Me.MLblAccountCode = New MaterialSkin.Controls.MaterialLabel()
@@ -50,7 +51,8 @@ Namespace Test
             Me.MBtnSwap = New MaterialSkin.Controls.MaterialButton()
             Me.Label1 = New System.Windows.Forms.Label()
             Me.MBtnSave = New MaterialSkin.Controls.MaterialButton()
-            Me.MSwNonTaxable = New MaterialSkin.Controls.MaterialSwitch()
+            Me.Label2 = New System.Windows.Forms.Label()
+            Me.MBtnAdjust = New MaterialSkin.Controls.MaterialButton()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SplitContainer1.Panel1.SuspendLayout()
@@ -97,6 +99,21 @@ Namespace Test
             Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
             Me.TableLayoutPanel1.Size = New System.Drawing.Size(416, 213)
             Me.TableLayoutPanel1.TabIndex = 17
+            '
+            'MSwNonTaxable
+            '
+            Me.MSwNonTaxable.AutoSize = True
+            Me.MSwNonTaxable.Depth = 0
+            Me.MSwNonTaxable.Location = New System.Drawing.Point(266, 113)
+            Me.MSwNonTaxable.Margin = New System.Windows.Forms.Padding(0)
+            Me.MSwNonTaxable.MouseLocation = New System.Drawing.Point(-1, -1)
+            Me.MSwNonTaxable.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MSwNonTaxable.Name = "MSwNonTaxable"
+            Me.MSwNonTaxable.Ripple = True
+            Me.MSwNonTaxable.Size = New System.Drawing.Size(148, 37)
+            Me.MSwNonTaxable.TabIndex = 30
+            Me.MSwNonTaxable.Text = "Non Taxable"
+            Me.MSwNonTaxable.UseVisualStyleBackColor = True
             '
             'MaterialLabel1
             '
@@ -300,8 +317,8 @@ Namespace Test
             '
             'GrdHoldings
             '
-            Appearance1.BackColor = System.Drawing.Color.Silver
-            Me.GrdHoldings.DisplayLayout.Appearance = Appearance1
+            Appearance3.BackColor = System.Drawing.Color.Silver
+            Me.GrdHoldings.DisplayLayout.Appearance = Appearance3
             Me.GrdHoldings.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdHoldings.Location = New System.Drawing.Point(0, 0)
             Me.GrdHoldings.Name = "GrdHoldings"
@@ -351,8 +368,8 @@ Namespace Test
             '
             'GrdTransactions
             '
-            Appearance2.BackColor = System.Drawing.Color.Silver
-            Me.GrdTransactions.DisplayLayout.Appearance = Appearance2
+            Appearance4.BackColor = System.Drawing.Color.Silver
+            Me.GrdTransactions.DisplayLayout.Appearance = Appearance4
             Me.GrdTransactions.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdTransactions.Location = New System.Drawing.Point(3, 3)
             Me.GrdTransactions.Name = "GrdTransactions"
@@ -372,6 +389,8 @@ Namespace Test
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.MBtnAdjust)
+            Me.Panel1.Controls.Add(Me.Label2)
             Me.Panel1.Controls.Add(Me.MBtnSwap)
             Me.Panel1.Controls.Add(Me.Label1)
             Me.Panel1.Controls.Add(Me.MBtnSave)
@@ -430,20 +449,33 @@ Namespace Test
             Me.MBtnSave.UseAccentColor = False
             Me.MBtnSave.UseVisualStyleBackColor = True
             '
-            'MSwNonTaxable
+            'Label2
             '
-            Me.MSwNonTaxable.AutoSize = True
-            Me.MSwNonTaxable.Depth = 0
-            Me.MSwNonTaxable.Location = New System.Drawing.Point(266, 113)
-            Me.MSwNonTaxable.Margin = New System.Windows.Forms.Padding(0)
-            Me.MSwNonTaxable.MouseLocation = New System.Drawing.Point(-1, -1)
-            Me.MSwNonTaxable.MouseState = MaterialSkin.MouseState.HOVER
-            Me.MSwNonTaxable.Name = "MSwNonTaxable"
-            Me.MSwNonTaxable.Ripple = True
-            Me.MSwNonTaxable.Size = New System.Drawing.Size(148, 37)
-            Me.MSwNonTaxable.TabIndex = 30
-            Me.MSwNonTaxable.Text = "Non Taxable"
-            Me.MSwNonTaxable.UseVisualStyleBackColor = True
+            Me.Label2.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label2.Location = New System.Drawing.Point(138, 5)
+            Me.Label2.Name = "Label2"
+            Me.Label2.Size = New System.Drawing.Size(5, 35)
+            Me.Label2.TabIndex = 19
+            '
+            'MBtnAdjust
+            '
+            Me.MBtnAdjust.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.MBtnAdjust.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.[Default]
+            Me.MBtnAdjust.Depth = 0
+            Me.MBtnAdjust.Dock = System.Windows.Forms.DockStyle.Left
+            Me.MBtnAdjust.HighEmphasis = True
+            Me.MBtnAdjust.Icon = Nothing
+            Me.MBtnAdjust.Location = New System.Drawing.Point(143, 5)
+            Me.MBtnAdjust.Margin = New System.Windows.Forms.Padding(4, 6, 4, 6)
+            Me.MBtnAdjust.MouseState = MaterialSkin.MouseState.HOVER
+            Me.MBtnAdjust.Name = "MBtnAdjust"
+            Me.MBtnAdjust.NoAccentTextColor = System.Drawing.Color.Empty
+            Me.MBtnAdjust.Size = New System.Drawing.Size(216, 35)
+            Me.MBtnAdjust.TabIndex = 20
+            Me.MBtnAdjust.Text = "Post Transaction (TODO)"
+            Me.MBtnAdjust.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained
+            Me.MBtnAdjust.UseAccentColor = False
+            Me.MBtnAdjust.UseVisualStyleBackColor = True
             '
             'FAccount
             '
@@ -500,6 +532,8 @@ Namespace Test
         Friend WithEvents MBtnSwap As MaterialButton
         Friend WithEvents Label1 As Label
         Friend WithEvents MSwNonTaxable As MaterialSwitch
+        Friend WithEvents MBtnAdjust As MaterialButton
+        Friend WithEvents Label2 As Label
     End Class
 
 End Namespace

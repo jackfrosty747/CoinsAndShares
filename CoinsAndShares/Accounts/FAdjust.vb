@@ -154,7 +154,6 @@ Namespace Accounts
             Try
                 If opt.Checked Then
                     TlpInstrument.Enabled = OptAdjustTypeInstrument.Checked
-
                 End If
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)

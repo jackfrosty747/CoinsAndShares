@@ -399,6 +399,20 @@ Namespace Test
                 Cursor = Cursors.Default
             End Try
         End Sub
+
+        Private Sub MBtnAdjust_Click(sender As Object, e As EventArgs) Handles MBtnAdjust.Click
+            Try
+                Cursor = Cursors.WaitCursor
+                Using frmAccountAdjust = New FAccountAdjust(m_commonObjects, AccountCode)
+                    Cursor = Cursors.Default
+                    frmAccountAdjust.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
     End Class
 
 End Namespace

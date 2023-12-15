@@ -2,9 +2,74 @@
 
 Imports Infragistics.Win
 Imports CoinsAndShares.Accounts.MAccounts
+Imports CoinsAndShares.Instruments.MInstuments
 
 Namespace Test
     Friend Class CDropdowns
+        Friend Class InstrumentsDropdown
+            Private Enum Columns
+                InstrumentCode
+                Description
+                InstrumentTypeCode
+            End Enum
+            Friend Shared Sub SetupDropdown(cmb As UltraCombo, all As IEnumerable(Of CInstrument), commonObjects As CCommonObjects)
+                cmb.Tag = New TagBits(commonObjects)
+                Dim dt = GetDt()
+                For Each instrument In all.OrderBy(Function(c) c.InstrumentCode)
+                    Dim dr = dt.NewRow
+                    dr(Columns.InstrumentCode.ToString) = instrument.InstrumentCode
+                    dr(Columns.Description.ToString) = instrument.Description
+                    dr(Columns.InstrumentTypeCode.ToString) = instrument.InstrumentType.Code
+                    dt.Rows.Add(dr)
+                Next
+                RemoveHandler cmb.InitializeLayout, AddressOf InitializeLayout
+                AddHandler cmb.InitializeLayout, AddressOf InitializeLayout
+                RemoveHandler cmb.InitializeRow, AddressOf InitializeRow
+                AddHandler cmb.InitializeRow, AddressOf InitializeRow
+                cmb.DataSource = dt
+            End Sub
+            Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
+                Dim cmb = DirectCast(sender, UltraCombo)
+                Dim tagbits = DirectCast(cmb.Tag, TagBits)
+                Try
+                    GridDefaults(e.Layout)
+                    For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
+                        Select Case col.Key
+                            Case Columns.InstrumentCode.ToString
+                                col.Header.Caption = "Code"
+                                col.Width = cmb.Width
+                            Case Columns.Description.ToString
+                                col.Header.Caption = "Description"
+                                col.Width = cmb.Width * 3
+                            Case Else
+                                col.Hidden = True
+                        End Select
+                    Next
+                Catch ex As Exception
+                    tagbits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+            Private Shared Sub InitializeRow(sender As Object, e As InitializeRowEventArgs)
+                If e.ReInitialize Then
+                    Return
+                End If
+                Dim cmb As UltraDropDownBase = CType(sender, UltraDropDownBase)
+                Dim tagBits As TagBits = CType(cmb.Tag, TagBits)
+                Try
+                    Dim instrumentType = GetInstrumentTypeFromCode(e.Row.Cells(Columns.InstrumentTypeCode.ToString).Text, True)
+                    e.Row.CellAppearance.ForeColor = CColours.InstrumentType(instrumentType)
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+            Private Shared Function GetDt() As DataTable
+                Dim dt = New DataTable
+                dt.Columns.Add(Columns.InstrumentCode.ToString)
+                dt.Columns.Add(Columns.Description.ToString)
+                dt.Columns.Add(Columns.InstrumentTypeCode.ToString)
+                Return dt
+            End Function
+        End Class
         Friend Class AccountsDropdown
             Private Enum Columns
                 AccountCode

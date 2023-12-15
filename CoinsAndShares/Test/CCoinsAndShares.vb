@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlServerCe
+Imports CoinsAndShares.Accounts
 
 Namespace Test
     Friend Class CCoinsAndShares
@@ -475,6 +476,36 @@ Namespace Test
 #End Region
 
 #Region "DATA"
+
+        Friend Sub ProcessAdjustment(transactionType As ETransactionType, transactionDate As Date, accountCode As String,
+                                     instrumentCode As String, rate As Decimal, quantity As Decimal, amount As Decimal,
+                                     description As String)
+
+            accountCode = accountCode.ToUpper
+            instrumentCode = instrumentCode.ToUpper
+
+            Dim amountToUse As Decimal
+            Dim rateToUse As Decimal
+            If String.IsNullOrEmpty(instrumentCode) Then
+                ' Cash
+                amountToUse = Math.Round(amount, 2, MidpointRounding.AwayFromZero)
+                rateToUse = 0
+            Else
+                ' Instrument
+                amountToUse = quantity
+                rateToUse = rate
+            End If
+
+            Dim transaction = New CTransaction(0, transactionDate, transactionType, accountCode, instrumentCode, rateToUse,
+                                               amountToUse, description, 0, 0, 0, 0)
+
+            Dim batch = New List(Of CTransaction) From {
+                transaction
+            }
+
+            AddBatch(batch)
+        End Sub
+
         Friend Sub ProcessFiatTransfer(accountCodeFrom As String, accountCodeTo As String, amount As Decimal, transactionDate As Date)
             accountCodeFrom = accountCodeFrom.ToUpper
             accountCodeTo = accountCodeTo.ToUpper

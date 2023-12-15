@@ -23,9 +23,9 @@
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Me.components = New System.ComponentModel.Container()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FAccount))
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+            Me.ChkNonTaxable = New System.Windows.Forms.CheckBox()
             Me.Label16 = New System.Windows.Forms.Label()
             Me.Label3 = New System.Windows.Forms.Label()
             Me.Label2 = New System.Windows.Forms.Label()
@@ -91,8 +91,7 @@
             Me.LblMiningCaption = New System.Windows.Forms.Label()
             Me.LblMining = New System.Windows.Forms.Label()
             Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-            Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-            Me.ChkNonTaxable = New System.Windows.Forms.CheckBox()
+            Me.ToolTip1 = New System.Windows.Forms.ToolTip()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -149,6 +148,17 @@
             Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
             Me.TableLayoutPanel1.Size = New System.Drawing.Size(784, 203)
             Me.TableLayoutPanel1.TabIndex = 0
+            '
+            'ChkNonTaxable
+            '
+            Me.ChkNonTaxable.AutoSize = True
+            Me.ChkNonTaxable.Location = New System.Drawing.Point(233, 64)
+            Me.ChkNonTaxable.Name = "ChkNonTaxable"
+            Me.ChkNonTaxable.Size = New System.Drawing.Size(68, 17)
+            Me.ChkNonTaxable.TabIndex = 8
+            Me.ChkNonTaxable.Text = "Non-Tax"
+            Me.ToolTip1.SetToolTip(Me.ChkNonTaxable, "Non-taxable account.  Interest is not taxed, e.g. ISA")
+            Me.ChkNonTaxable.UseVisualStyleBackColor = True
             '
             'Label16
             '
@@ -914,17 +924,6 @@
             Me.SplitContainer1.Size = New System.Drawing.Size(784, 523)
             Me.SplitContainer1.SplitterDistance = 203
             Me.SplitContainer1.TabIndex = 6
-            '
-            'ChkNonTaxable
-            '
-            Me.ChkNonTaxable.AutoSize = True
-            Me.ChkNonTaxable.Location = New System.Drawing.Point(233, 64)
-            Me.ChkNonTaxable.Name = "ChkNonTaxable"
-            Me.ChkNonTaxable.Size = New System.Drawing.Size(68, 17)
-            Me.ChkNonTaxable.TabIndex = 8
-            Me.ChkNonTaxable.Text = "Non-Tax"
-            Me.ToolTip1.SetToolTip(Me.ChkNonTaxable, "Non-taxable account.  Interest is not taxed, e.g. ISA")
-            Me.ChkNonTaxable.UseVisualStyleBackColor = True
             '
             'FAccount
             '
