@@ -242,7 +242,7 @@ Partial Class FMdi
         'MnuTransactionHistory
         '
         Me.MnuTransactionHistory.Name = "MnuTransactionHistory"
-        Me.MnuTransactionHistory.Size = New System.Drawing.Size(180, 22)
+        Me.MnuTransactionHistory.Size = New System.Drawing.Size(175, 22)
         Me.MnuTransactionHistory.Text = "Transaction History"
         '
         'SnapshotsToolStripMenuItem

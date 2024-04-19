@@ -1,5 +1,4 @@
-﻿
-Imports CoinsAndShares.Instruments.MInstuments
+﻿Imports CoinsAndShares.Instruments.MInstuments
 
 Namespace Rates
     Module MRates
@@ -9,7 +8,11 @@ Namespace Rates
                 Return New CoinGecko.CCoinGecko
             Else
                 'Return New MarketWatch.CMarketWatch
-                Return New YahooFinance.CYahooFinance
+                'Return New YahooFinance.CYahooFinance
+                'Return New MorningStar.CMorningStar
+                'Return New CNBC.CCnbc
+                'Return New GoogleFinance.CGoogleFinance
+                Return New FMP.CFMP
             End If
         End Function
     End Module

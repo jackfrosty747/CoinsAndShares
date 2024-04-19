@@ -423,21 +423,26 @@ Namespace Rates
                     m_fStop = False
                     Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
 
-                    For Each sLinkCode In linkCodes
-                        Application.DoEvents()
-
-                        If m_fStop Then
-                            Exit For
-                        End If
-
-                        Dim codes As New List(Of String) From {
-                            sLinkCode
-                        }
-                        Dim newRates = rateProvider.GetNewRates(codes)
-                        If newRates IsNot Nothing AndAlso newRates.Any Then
-                            GridHelper.SetScrapedRate(GrdInstruments, sLinkCode, newRates.First.Rate)
-                        End If
+                    Dim newRates = rateProvider.GetNewRates(linkCodes)
+                    For Each newRate In newRates
+                        GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
                     Next
+
+                    'For Each sLinkCode In linkCodes
+                    '    Application.DoEvents()
+
+                    '    If m_fStop Then
+                    '        Exit For
+                    '    End If
+
+                    '    Dim codes As New List(Of String) From {
+                    '        sLinkCode
+                    '    }
+                    '    Dim newRates = rateProvider.GetNewRates(codes)
+                    '    If newRates IsNot Nothing AndAlso newRates.Any Then
+                    '        GridHelper.SetScrapedRate(GrdInstruments, sLinkCode, newRates.First.Rate)
+                    '    End If
+                    'Next
 
                     If m_fStop Then
                         MessageBox.Show("Process stopped", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)

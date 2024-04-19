@@ -515,34 +515,6 @@ Friend Class FMdi
         End Try
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
-        'Dim cs = Test.CCoinsAndShares.GetInstance(m_commonObjects)
-
-        'Dim all = cs.AllTransactions
-
-        'Dim accounts = cs.AllAccounts
-
-        'Dim instruments = cs.AllInstruments
-
-        'For Each account In accounts
-        '    Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
-
-        'Next
-
-        'For Each account In accounts
-        '    Debug.WriteLine(account.Transactions.Sum(Function(c) c.Amount).ToString)
-
-        'Next
-        Cursor = Cursors.WaitCursor
-
-        Dim frm = New Test.FAccounts(m_commonObjects)
-        Cursor = Cursors.Default
-        frm.MdiParent = Me
-        frm.Show()
-
-    End Sub
-
     Private Sub MnuReportsSavingsTax_Click(sender As Object, e As EventArgs) Handles MnuReportsSavingsTax.Click
         Dim accountTypes = New List(Of EAccountType) From {EAccountType.Bank_Account, EAccountType.Share_Account}
 
@@ -674,4 +646,20 @@ Projected Tax: {projectedTax:c2}"
             Cursor = Cursors.Default
         End Try
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        Try
+            Dim fmp = New FMP.CFMP
+
+            Dim rate = fmp.GetNewRates(New List(Of String) From {"AAPL", "MSFT"})
+            MsgBox(rate.First.Rate.ToString)
+
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+
+        End Try
+
+    End Sub
+
 End Class
