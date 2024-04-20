@@ -290,6 +290,7 @@ Friend Class CDropdowns
         Friend Enum Columns
             Code
             Description
+            RateProvider
             InstrumentTypeCode
             Rate
             RateUpdated
@@ -307,6 +308,9 @@ Friend Class CDropdowns
                 Dim dr = dt.NewRow
                 dr(Columns.Code.ToString) = instrument.Code
                 dr(Columns.Description.ToString) = instrument.Description
+                If instrument.RateProvider > 0 Then
+                    dr(Columns.RateProvider.ToString) = instrument.RateProvider
+                End If
                 dr(Columns.InstrumentTypeCode.ToString) = instrument.InstrumentType.Code
                 dr(Columns.Rate.ToString) = instrument.Rate
                 If instrument.RateUpdated.HasValue Then
@@ -376,6 +380,10 @@ Friend Class CDropdowns
             Dim sCode As String = row.Cells(Columns.Code.ToString).Text
             Dim sInstrumentType As String = row.Cells(Columns.InstrumentTypeCode.ToString).Text
             Dim instrumentType As EInstrumentType = GetInstrumentTypeFromCode(sInstrumentType, True)
+            Dim iRateProvider As Integer = 0
+            If Not IsDBNull(row.Cells(Columns.RateProvider.ToString).Value) Then
+                iRateProvider = CInt(row.Cells(Columns.RateProvider.ToString).Value)
+            End If
             Dim sDesc As String = row.Cells(Columns.Description.ToString).Text
             Dim rRate As Decimal = CDatabase.DbToDecimal(row.Cells(Columns.Rate.ToString).Value)
             Dim rateUpdated As Date? = Nothing
@@ -388,7 +396,7 @@ Friend Class CDropdowns
             Dim sNotes = row.Cells(Columns.Notes.ToString).Text
             Dim sHedgingGroupCode = row.Cells(Columns.HedgingGroupCode.ToString).Text
             Dim instrument As New CInstrument(sCode, instrumentType, sDesc, rRate, rateUpdated, sProviderLinkCode,
-                                              sCurrencyCode, rProviderMultiplier, sNotes, sHedgingGroupCode)
+                                              sCurrencyCode, rProviderMultiplier, sNotes, sHedgingGroupCode, iRateProvider)
             Return instrument
         End Function
 
@@ -418,6 +426,7 @@ Friend Class CDropdowns
             Dim dt As New DataTable
             dt.Columns.Add(Columns.Code.ToString)
             dt.Columns.Add(Columns.Description.ToString)
+            dt.Columns.Add(Columns.RateProvider.ToString, GetType(Integer))
             dt.Columns.Add(Columns.InstrumentTypeCode.ToString)
             dt.Columns.Add(Columns.Rate.ToString, GetType(Decimal))
             dt.Columns.Add(Columns.RateUpdated.ToString, GetType(Date))
@@ -605,6 +614,41 @@ Friend Class CDropdowns
             dt.Columns.Add(Columns.Favourite.ToString, GetType(Boolean))
             Return dt
         End Function
+    End Class
+
+    Friend NotInheritable Class CRateProvidersDropdown
+        Const COL_CODE = "code"
+        Const COL_NAME = "name"
+        Friend Shared Sub SetupDropdown(cmb As UltraCombo)
+            Dim dt = New DataTable
+            dt.Columns.Add(COL_CODE, GetType(Integer))
+            dt.Columns.Add(COL_NAME, GetType(String))
+            For Each e As Rates.MRates.ERateProvider In [Enum].GetValues(GetType(Rates.MRates.ERateProvider))
+                Dim dr = dt.NewRow()
+                dr(COL_CODE) = e
+                dr(COL_NAME) = [Enum].GetName(GetType(Rates.MRates.ERateProvider), e)
+                dt.Rows.Add(dr)
+            Next
+            RemoveHandler cmb.InitializeLayout, AddressOf InitializeLayout
+            AddHandler cmb.InitializeLayout, AddressOf InitializeLayout
+            cmb.DataSource = dt
+        End Sub
+
+        Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
+            GridDefaults(e.Layout)
+            For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
+                Select Case col.Key
+                    Case COL_CODE
+                        col.Header.Caption = "Code"
+                        col.Width = 100
+                    Case COL_NAME
+                        col.Header.Caption = "Provider Name"
+                        col.Width = 300
+                    Case Else
+                        col.Hidden = True
+                End Select
+            Next
+        End Sub
     End Class
 
     Friend NotInheritable Class CNetworksDropdown

@@ -109,6 +109,7 @@ Namespace Rates.CoinGecko
             Return filtered
 
         End Function
+
     End Class
 
 End Namespace

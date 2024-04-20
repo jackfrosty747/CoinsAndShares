@@ -59,6 +59,8 @@
             Me.TabPage2 = New System.Windows.Forms.TabPage()
             Me.GrdHoldings = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+            Me.CmbRateProvider = New Infragistics.Win.UltraWinGrid.UltraCombo()
+            Me.Label11 = New System.Windows.Forms.Label()
             Me.Panel1.SuspendLayout()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.CmbCurrencyCode, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -69,6 +71,7 @@
             Me.Panel2.SuspendLayout()
             Me.TabPage2.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.CmbRateProvider, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'Panel1
@@ -110,6 +113,8 @@
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+            Me.TableLayoutPanel1.Controls.Add(Me.Label11, 4, 8)
+            Me.TableLayoutPanel1.Controls.Add(Me.CmbRateProvider, 5, 8)
             Me.TableLayoutPanel1.Controls.Add(Me.TxtProviderLinkCode, 2, 7)
             Me.TableLayoutPanel1.Controls.Add(Me.Label3, 1, 3)
             Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 2)
@@ -240,7 +245,7 @@
             '
             Me.LblQuantityHeld.AutoSize = True
             Me.LblQuantityHeld.ForeColor = System.Drawing.Color.Blue
-            Me.LblQuantityHeld.Location = New System.Drawing.Point(420, 20)
+            Me.LblQuantityHeld.Location = New System.Drawing.Point(438, 20)
             Me.LblQuantityHeld.Name = "LblQuantityHeld"
             Me.LblQuantityHeld.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.LblQuantityHeld.Size = New System.Drawing.Size(90, 16)
@@ -315,7 +320,7 @@
             '
             'TxtProviderMultiplier
             '
-            Me.TxtProviderMultiplier.Location = New System.Drawing.Point(420, 180)
+            Me.TxtProviderMultiplier.Location = New System.Drawing.Point(438, 180)
             Me.TxtProviderMultiplier.Name = "TxtProviderMultiplier"
             Me.TxtProviderMultiplier.Size = New System.Drawing.Size(94, 22)
             Me.TxtProviderMultiplier.TabIndex = 20
@@ -361,12 +366,12 @@
             '
             Me.TableLayoutPanel1.SetColumnSpan(Me.TxtNotes, 2)
             Me.TxtNotes.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.TxtNotes.Location = New System.Drawing.Point(420, 51)
+            Me.TxtNotes.Location = New System.Drawing.Point(438, 51)
             Me.TxtNotes.Multiline = True
             Me.TxtNotes.Name = "TxtNotes"
             Me.TableLayoutPanel1.SetRowSpan(Me.TxtNotes, 5)
             Me.TxtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-            Me.TxtNotes.Size = New System.Drawing.Size(181, 123)
+            Me.TxtNotes.Size = New System.Drawing.Size(163, 123)
             Me.TxtNotes.TabIndex = 18
             Me.TxtNotes.Text = "TxtNotes"
             '
@@ -486,6 +491,28 @@
             Me.GrdHoldings.TabIndex = 5
             Me.GrdHoldings.Text = "Holdings"
             '
+            'CmbRateProvider
+            '
+            Me.CmbRateProvider.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid
+            Me.CmbRateProvider.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal
+            Me.CmbRateProvider.DisplayMember = ""
+            Me.CmbRateProvider.Dock = System.Windows.Forms.DockStyle.Top
+            Me.CmbRateProvider.Location = New System.Drawing.Point(438, 209)
+            Me.CmbRateProvider.Name = "CmbRateProvider"
+            Me.CmbRateProvider.Size = New System.Drawing.Size(94, 22)
+            Me.CmbRateProvider.TabIndex = 23
+            Me.CmbRateProvider.ValueMember = ""
+            '
+            'Label11
+            '
+            Me.Label11.AutoSize = True
+            Me.Label11.Location = New System.Drawing.Point(357, 206)
+            Me.Label11.Name = "Label11"
+            Me.Label11.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
+            Me.Label11.Size = New System.Drawing.Size(75, 16)
+            Me.Label11.TabIndex = 24
+            Me.Label11.Text = "Rate Provider"
+            '
             'FInstrument
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -510,6 +537,7 @@
             Me.Panel2.PerformLayout()
             Me.TabPage2.ResumeLayout(False)
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.CmbRateProvider, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
             Me.PerformLayout()
 
@@ -550,6 +578,8 @@
         Friend WithEvents GrdHoldings As Infragistics.Win.UltraWinGrid.UltraGrid
         Friend WithEvents Label10 As Label
         Friend WithEvents CmbHedgingGroupCode As Infragistics.Win.UltraWinGrid.UltraCombo
+        Friend WithEvents Label11 As Label
+        Friend WithEvents CmbRateProvider As Infragistics.Win.UltraWinGrid.UltraCombo
     End Class
 
 End Namespace

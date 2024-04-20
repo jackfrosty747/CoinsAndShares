@@ -2,6 +2,7 @@
 
 Namespace Rates.GoogleFinance
     Friend Class CGoogleFinance : Implements IRateProvider
+
         Friend Function GetAllRateTypes() As IEnumerable(Of CRateType) Implements IRateProvider.GetAllRateTypes
             Throw New NotImplementedException($"Not available from {GetName()}")
         End Function

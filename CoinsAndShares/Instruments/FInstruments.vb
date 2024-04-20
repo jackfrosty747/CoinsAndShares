@@ -78,6 +78,7 @@ Namespace Instruments
                 Code
                 InstrumentTypeCode
                 InstrumentTypeDesc
+                RateProvider
                 Description
                 Rate
                 RateUpdated
@@ -107,6 +108,7 @@ Namespace Instruments
                     dr(Columns.InstrumentTypeCode.ToString) = instrument.InstrumentType.Code
                     dr(Columns.InstrumentTypeDesc.ToString) = instrument.InstrumentType.ToString.Replace("_", " ")
                     dr(Columns.Description.ToString) = instrument.Description
+                    dr(Columns.RateProvider.ToString) = instrument.RateProvider
                     dr(Columns.Rate.ToString) = instrument.Rate
                     If instrument.RateUpdated.HasValue Then
                         dr(Columns.RateUpdated.ToString) = instrument.RateUpdated.Value
@@ -164,6 +166,10 @@ Namespace Instruments
                 Dim sType As String = row.Cells(Columns.InstrumentTypeCode.ToString).Text
                 Dim instrumentType As EInstrumentType = GetInstrumentTypeFromCode(sType, True)
                 Dim sDesc As String = row.Cells(Columns.Description.ToString).Text
+                Dim iRateProvider As Integer
+                If Not IsDBNull(row.Cells(Columns.RateProvider.ToString).Value) Then
+                    iRateProvider = CInt(row.Cells(Columns.RateProvider.ToString).Value)
+                End If
                 Dim rRate As Decimal = CDec(row.Cells(Columns.Rate.ToString).Value)
                 Dim rateUpdated As Date? = Nothing
                 If Not IsDBNull(row.Cells(Columns.RateUpdated.ToString).Value) Then
@@ -175,7 +181,7 @@ Namespace Instruments
                 Dim sNotes = row.Cells(Columns.Notes.ToString).Text
                 Dim sHedgingGroupCode = row.Cells(Columns.HedgingGroupCode.ToString).Text
                 Dim instrument As New CInstrument(sCode, instrumentType, sDesc, rRate, rateUpdated, sLinkSymbol,
-                                                  sCurrencyCode, rProviderMultiplier, sNotes, sHedgingGroupCode)
+                                                  sCurrencyCode, rProviderMultiplier, sNotes, sHedgingGroupCode, iRateProvider)
                 Return instrument
             End Function
 
@@ -187,7 +193,7 @@ Namespace Instruments
                     With e.Layout.Override
                         .AllowAddNew = AllowAddNew.No
                         .HeaderClickAction = HeaderClickAction.SortMulti
-                        .RowSelectors = Infragistics.Win.DefaultableBoolean.False
+                        .RowSelectors = DefaultableBoolean.False
                         .CellClickAction = CellClickAction.RowSelect
                         .SelectTypeCol = SelectType.None
                         .SelectTypeRow = SelectType.Extended
@@ -210,6 +216,10 @@ Namespace Instruments
                             Case Columns.Description.ToString
                                 col.Header.Caption = "Description"
                                 col.Width = 200
+                            Case Columns.RateProvider.ToString
+                                col.Header.Caption = "R"
+                                col.Width = 30
+                                col.CellAppearance.TextHAlign = HAlign.Center
                             Case Columns.InstrumentTypeDesc.ToString
                                 col.Header.Caption = "Type"
                                 col.Width = 100
@@ -253,6 +263,7 @@ Namespace Instruments
                 dt.Columns.Add(Columns.Code.ToString)
                 dt.Columns.Add(Columns.InstrumentTypeCode.ToString)
                 dt.Columns.Add(Columns.InstrumentTypeDesc.ToString)
+                dt.Columns.Add(Columns.RateProvider.ToString, GetType(Integer))
                 dt.Columns.Add(Columns.Description.ToString)
                 dt.Columns.Add(Columns.AmountHeld.ToString, GetType(Decimal))
                 dt.Columns.Add(Columns.Rate.ToString, GetType(Decimal))
@@ -356,5 +367,7 @@ Namespace Instruments
         Private Sub RefreshData() Implements IDataRefresh.RefreshData
             LoadData()
         End Sub
+
     End Class
+
 End Namespace

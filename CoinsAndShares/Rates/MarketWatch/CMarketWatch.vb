@@ -1,5 +1,6 @@
 ﻿Namespace Rates.MarketWatch
     Friend Class CMarketWatch : Implements IRateProvider
+
         Friend Function GetAllRateTypes() As IEnumerable(Of CRateType) Implements IRateProvider.GetAllRateTypes
             Throw New NotImplementedException($"Not available from {GetName()}")
         End Function

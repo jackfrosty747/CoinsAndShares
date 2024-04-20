@@ -1,5 +1,6 @@
 ﻿Namespace BackupRestore.JSon
     Public Class JSonInstrument
+
         Public Property InstrumentCode As String
         Public Property InstrumentType As String
         Public Property Description As String
@@ -10,9 +11,11 @@
         Public Property ProviderMultiplier As Decimal?
         Public Property Notes As String
         Public Property HedgingGroupCode As String
+        Public Property RateProvider As Integer
+
         Friend Sub Fill(instrumentCode As String, instrumentType As String, description As String, rate As Decimal?,
                         providerLinkCode As String, rateUpdated As Date?, currencyCode As String, providerMultiplier As Decimal?,
-                        notes As String, hedgingGroupCode As String)
+                        notes As String, hedgingGroupCode As String, rateProvider As Integer)
             Me.InstrumentCode = instrumentCode
             Me.InstrumentType = instrumentType
             Me.Description = description
@@ -23,7 +26,9 @@
             Me.ProviderMultiplier = providerMultiplier
             Me.Notes = notes
             Me.HedgingGroupCode = hedgingGroupCode
+            Me.RateProvider = rateProvider
         End Sub
 
     End Class
+
 End Namespace

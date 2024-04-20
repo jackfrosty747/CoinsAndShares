@@ -14,10 +14,11 @@ Namespace Instruments
         Friend ReadOnly Property CurrencyCode As String
         Friend ReadOnly Property Notes As String
         Friend ReadOnly Property HedgingGroupCode As String
+        Friend ReadOnly Property RateProvider As Integer
         Friend Property Transactions As Collection(Of CTransaction)
         Friend Sub New(code As String, instrumentType As EInstrumentType, description As String, rate As Decimal, rateUpdated As Date?,
                        providerLinkCode As String, currencyCode As String, providerMultiplier As Decimal, notes As String,
-                       hedgingGroupCode As String)
+                       hedgingGroupCode As String, rateProvider As Integer)
             Me.Code = code
             Me.InstrumentType = instrumentType
             Me.Description = description
@@ -28,6 +29,7 @@ Namespace Instruments
             Me.CurrencyCode = currencyCode
             Me.Notes = notes
             Me.HedgingGroupCode = hedgingGroupCode
+            Me.RateProvider = rateProvider
             Transactions = New Collection(Of CTransaction)
         End Sub
         Friend Function GetLocalCurrencyBalance(instruments As IEnumerable(Of CInstrument), currencies As IEnumerable(Of CCurrencyDetail)) As Decimal

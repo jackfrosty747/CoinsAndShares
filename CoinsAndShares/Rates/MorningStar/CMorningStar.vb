@@ -2,6 +2,7 @@
 
 Namespace Rates.MorningStar
     Friend Class CMorningStar : Implements IRateProvider
+
         Friend Function GetAllRateTypes() As IEnumerable(Of CRateType) Implements IRateProvider.GetAllRateTypes
             Throw New NotImplementedException($"Not available from {GetName()}")
         End Function

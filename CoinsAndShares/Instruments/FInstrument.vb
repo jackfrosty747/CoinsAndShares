@@ -26,6 +26,7 @@ Namespace Instruments
 
             CDropdowns.CCurrenciesDropdown.SetupDropdown(CmbCurrencyCode, commonObjects, commonObjects.Currencies.GetAll())
             CDropdowns.CHedgingGroupsGropdown.SetupDropdown(CmbHedgingGroupCode, commonObjects.Instruments.GetAll())
+            CDropdowns.CRateProvidersDropdown.SetupDropdown(CmbRateProvider)
 
             LoadData()
 
@@ -34,6 +35,8 @@ Namespace Instruments
             AddHandler TxtProviderLinkCode.TextChanged, AddressOf ScreenUpdated
             AddHandler TxtNotes.TextChanged, AddressOf ScreenUpdated
             AddHandler CmbHedgingGroupCode.TextChanged, AddressOf ScreenUpdated
+            AddHandler CmbRateProvider.TextChanged, AddressOf ScreenUpdated
+
         End Sub
 
         Friend Shared Sub Launch(commonObjects As CCommonObjects, sInstrumentCode As String)
@@ -90,6 +93,7 @@ Namespace Instruments
             CmbCurrencyCode.Text = instrument.CurrencyCode
             TxtNotes.Text = instrument.Notes
             CmbHedgingGroupCode.Text = instrument.HedgingGroupCode
+            CmbRateProvider.Text = If(instrument.RateProvider > 0, instrument.RateProvider.ToString, String.Empty)
 
             Select Case instrument.ProviderMultiplier
                 Case 0, 1
@@ -290,9 +294,18 @@ Namespace Instruments
             If TxtProviderMultiplier.Text.Length > 0 AndAlso Not Decimal.TryParse(TxtProviderMultiplier.Text, rProviderMultiplier) Then
                 Throw New Exception("Provider multiplier is not valid")
             End If
+            Dim iRateProvider As Integer = 0
+            If CmbRateProvider.Text.Length > 0 Then
+                If Not Integer.TryParse(CmbRateProvider.Text, iRateProvider) Then
+                    Throw New Exception("Rate provider should be a number")
+                End If
+                If Not [Enum].IsDefined(GetType(ERateProvider), iRateProvider) Then
+                    Throw New Exception("Rate provider code not valid")
+                End If
+            End If
             Dim instrument = New CInstrument(m_sInstrumentCode, instrumentType, TxtDescription.Text, rRate, Nothing,
                                              TxtProviderLinkCode.Text, CmbCurrencyCode.Text, rProviderMultiplier, TxtNotes.Text,
-                                             CmbHedgingGroupCode.Text)
+                                             CmbHedgingGroupCode.Text, iRateProvider)
             m_commonObjects.Instruments.Update(instrument)
             ChangesMade(False)
         End Sub

@@ -17,6 +17,7 @@
 
         ' Return the name of the provider for use on screens, etc
         Function GetName() As String
+
     End Interface
 
 End Namespace

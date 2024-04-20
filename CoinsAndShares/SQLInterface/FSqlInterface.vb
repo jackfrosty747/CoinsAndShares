@@ -39,7 +39,9 @@
             Try
                 If TxtSql.Text.ToUpper.Contains("UPDATE".ToUpper) Or TxtSql.Text.ToUpper.Contains("DELETE".ToUpper) Or
                     TxtSql.Text.ToUpper.Contains("INTO".ToUpper) Then
-                    Throw New InvalidOperationException("Cannot update database")
+
+                    m_commonObjects.Database.ExecuteQuery(TxtSql.Text)
+                    'Throw New InvalidOperationException("Cannot update database")
                 End If
 
                 If TxtSql.Text.ToUpper.Contains("SELECT".ToUpper) Then

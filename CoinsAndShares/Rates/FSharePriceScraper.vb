@@ -1,4 +1,5 @@
 ﻿Imports CoinsAndShares.Instruments
+Imports CoinsAndShares.Rates.MRates
 Imports CoinsAndShares.Transactions
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
@@ -28,12 +29,10 @@ Namespace Rates
 
             For Each instrumentAnalysis In analysis.InstrumentAnalysis().Where(Function(c) c.CurrentHolding > 0)
                 Dim instrument = allInstruments.FirstOrDefault(Function(c) c.Code.Equals(instrumentAnalysis.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
-                If instrument IsNot Nothing AndAlso instrument.InstrumentType = EInstrumentType.Share Then
-
-                    Dim rateToUpdate = New RateToUpdate(instrument, instrumentAnalysis)
-                    ratesToUpdate.Add(rateToUpdate)
-
-                End If
+                'If instrument IsNot Nothing AndAlso (instrument.InstrumentType = EInstrumentType.Share or instrument.InstrumentType = EInstrumentType.Crypto)Then
+                Dim rateToUpdate = New RateToUpdate(instrument, instrumentAnalysis)
+                ratesToUpdate.Add(rateToUpdate)
+                'End If
             Next
 
             ' Sort
@@ -54,16 +53,18 @@ Namespace Rates
         Friend Class RateToUpdate
             Friend Sub New(instrument As CInstrument, instrumentAnalysis As CInstrumentAnalysis)
                 Me.Instrument = instrument
-                Me.instrumentAnalysis = instrumentAnalysis
+                Me.InstrumentAnalysis = instrumentAnalysis
             End Sub
-            Friend Property Instrument As CInstrument
-            Friend Property InstrumentAnalysis As CInstrumentAnalysis
+            Friend ReadOnly Property Instrument As CInstrument
+            Friend ReadOnly Property InstrumentAnalysis As CInstrumentAnalysis
         End Class
 
         Friend Class GridHelper
             Private Enum Columns
                 Code
                 Description
+                RateProvider
+                InstrumentTypeCode
                 ProviderMultiplier
                 ProviderLinkCode
                 CurrentHolding
@@ -89,10 +90,17 @@ Namespace Rates
                 Dim dt = GetBlankDt()
                 RemoveHandler grid.InitializeRow, AddressOf InitializeRow
                 AddHandler grid.InitializeRow, AddressOf InitializeRow
-                For Each rateToUpdate In ratesToUpdate
+                For Each rateToUpdate In ratesToUpdate.OrderBy(Function(c) c.Instrument.InstrumentType)
                     Dim dr = dt.NewRow
                     dr(Columns.Code.ToString) = rateToUpdate.Instrument.Code
                     dr(Columns.Description.ToString) = rateToUpdate.Instrument.Description
+
+                    If rateToUpdate.Instrument.RateProvider > 0 Then
+                        dr(Columns.RateProvider.ToString) = rateToUpdate.Instrument.RateProvider
+                    End If
+
+                    dr(Columns.InstrumentTypeCode.ToString) = rateToUpdate.Instrument.InstrumentType.Code
+
                     dr(Columns.ProviderMultiplier.ToString) = rateToUpdate.Instrument.ProviderMultiplier
                     dr(Columns.ProviderLinkCode.ToString) = rateToUpdate.Instrument.ProviderLinkCode
                     dr(Columns.CurrentHolding.ToString) = rateToUpdate.InstrumentAnalysis.CurrentHolding
@@ -111,6 +119,8 @@ Namespace Rates
                 AddHandler grid.ClickCellButton, AddressOf ClickCellButton
                 RemoveHandler grid.AfterCellUpdate, AddressOf AfterCellUpdate
                 AddHandler grid.AfterCellUpdate, AddressOf AfterCellUpdate
+                RemoveHandler grid.ClickCellButton, AddressOf ClickCellButton
+                AddHandler grid.ClickCellButton, AddressOf ClickCellButton
                 grid.DataSource = dt
             End Sub
 
@@ -128,25 +138,50 @@ Namespace Rates
                 Dim grid As UltraGrid = CType(sender, UltraGrid)
                 Dim tagBits As TagBits = CType(grid.Tag, TagBits)
                 Try
-                    Dim sSymbol = e.Cell.Row.Cells(Columns.ProviderLinkCode.ToString).Text
-                    If String.IsNullOrEmpty(sSymbol) Then
-                        Throw New Exception(My.Resources.Error_InstrumentContainsNoSymbol)
-                    End If
-                    Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
-                    Dim symbols As New List(Of String) From {
-                        sSymbol
-                    }
-                    tagBits.CommonObjects.FrmMdi.Cursor = Cursors.WaitCursor
-                    Dim rates = rateProvider.GetNewRates(symbols)
-                    If rates IsNot Nothing AndAlso rates.Any Then
-                        Dim cNewPrice = rates.First.Rate
-                        Dim rMult = CDec(e.Cell.Row.Cells(Columns.ProviderMultiplier.ToString).Value)
-                        If rMult > 0 Then
-                            cNewPrice *= rMult
-                        End If
-                        e.Cell.Row.Cells(Columns.NewPrice.ToString).Value = cNewPrice
-                        e.Cell.Row.Update()
-                    End If
+                    Select Case e.Cell.Column.Key
+                        Case Columns.UpdateButton.ToString
+                            Dim sSymbol = e.Cell.Row.Cells(Columns.ProviderLinkCode.ToString).Text
+                            If String.IsNullOrEmpty(sSymbol) Then
+                                Throw New Exception(My.Resources.Error_InstrumentContainsNoSymbol)
+                            End If
+                            Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
+                            Dim symbols As New List(Of String) From {
+                                sSymbol
+                            }
+                            tagBits.CommonObjects.FrmMdi.Cursor = Cursors.WaitCursor
+                            Dim rates = rateProvider.GetNewRates(symbols)
+                            If rates IsNot Nothing AndAlso rates.Any Then
+                                Dim cNewPrice = rates.First.Rate
+                                Dim rMult = CDec(e.Cell.Row.Cells(Columns.ProviderMultiplier.ToString).Value)
+                                If rMult > 0 Then
+                                    cNewPrice *= rMult
+                                End If
+                                e.Cell.Row.Cells(Columns.NewPrice.ToString).Value = cNewPrice
+                                e.Cell.Row.Update()
+                            End If
+
+                        Case Columns.Code.ToString
+                            Dim instrumentCode = e.Cell.Text
+
+                            Dim frmInstrument As FInstrument = Nothing
+                            For Each frm As Form In tagBits.CommonObjects.FrmMdi.MdiChildren
+                                If TypeOf frm Is FInstrument Then
+                                    Dim fTest = CType(frm, FInstrument)
+                                    If fTest.InstrumentCode.Equals(instrumentCode, StringComparison.CurrentCultureIgnoreCase) Then
+                                        frmInstrument = fTest
+                                        Exit For
+                                    End If
+                                End If
+                            Next
+                            If frmInstrument Is Nothing Then
+                                frmInstrument = New FInstrument(tagBits.CommonObjects, instrumentCode) With {
+                                    .MdiParent = tagBits.CommonObjects.FrmMdi
+                                }
+                                frmInstrument.Show()
+                            End If
+                            frmInstrument.Activate()
+
+                    End Select
                 Catch ex As Exception
                     tagBits.CommonObjects.Errors.Handle(ex)
                 Finally
@@ -168,6 +203,13 @@ Namespace Rates
                 Dim grid As UltraGrid = CType(sender, UltraGrid)
                 Dim tagBits As TagBits = CType(grid.Tag, TagBits)
                 Try
+                    Dim isCrypto = e.Row.Cells(Columns.InstrumentTypeCode.ToString).Text.Equals(EInstrumentType.Crypto.Code, StringComparison.CurrentCultureIgnoreCase)
+
+                    e.Row.Cells(Columns.Code.ToString).Appearance.ForeColor = CColours.InstrumentType(If(isCrypto, EInstrumentType.Crypto, EInstrumentType.Share))
+                    e.Row.Cells(Columns.Description.ToString).Appearance.ForeColor = CColours.InstrumentType(If(isCrypto, EInstrumentType.Crypto, EInstrumentType.Share))
+
+                    e.Row.Cells(Columns.InstrumentTypeCode.ToString).ToolTipText = If(isCrypto, EInstrumentType.Crypto.ToString, EInstrumentType.Share.ToString)
+
                     Dim rHolding = CDec(e.Row.Cells(Columns.CurrentHolding.ToString).Value)
                     Dim cOldPrice = CDec(e.Row.Cells(Columns.ExistingPrice.ToString).Value)
                     Dim cOldValue = rHolding * cOldPrice
@@ -218,17 +260,32 @@ Namespace Rates
                         .RowSelectors = DefaultableBoolean.False
                     End With
 
+                    e.Layout.AutoFitColumns = True
+
                     For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
                         Dim a As Activation = Activation.NoEdit
                         Select Case col.Key
                             Case Columns.Code.ToString
                                 col.Header.Caption = "Instrument"
                                 col.Width = 75
-                                col.CellAppearance.ForeColor = CColours.InstrumentType(EInstrumentType.Share)
-                                col.Header.Appearance.ForeColor = CColours.InstrumentType(EInstrumentType.Share)
+                                col.Style = ColumnStyle.Button
+                                col.ButtonDisplayStyle = UltraWinGrid.ButtonDisplayStyle.OnMouseEnter
+
                             Case Columns.Description.ToString
                                 col.Header.Caption = "Description"
                                 col.Width = 150
+
+                            Case Columns.RateProvider.ToString
+                                col.Header.Caption = "R"
+                                col.MinWidth = 20
+                                col.MaxWidth = 20
+
+                            Case Columns.InstrumentTypeCode.ToString
+                                col.Header.Caption = "T"
+                                col.MinWidth = 20
+                                col.MaxWidth = 20
+                                col.CellAppearance.TextHAlign = HAlign.Center
+
                             Case Columns.ProviderLinkCode.ToString
                                 col.Header.Caption = "Symbol"
                                 col.Width = 50
@@ -307,6 +364,11 @@ Namespace Rates
                 Dim dt = New DataTable
                 dt.Columns.Add(Columns.Code.ToString)
                 dt.Columns.Add(Columns.Description.ToString)
+
+                dt.Columns.Add(Columns.RateProvider.ToString)
+
+                dt.Columns.Add(Columns.InstrumentTypeCode.ToString)
+
                 dt.Columns.Add(Columns.ProviderMultiplier.ToString, GetType(Decimal))
                 dt.Columns.Add(Columns.ProviderLinkCode.ToString)
                 dt.Columns.Add(Columns.CurrentHolding.ToString, GetType(Decimal))
@@ -341,22 +403,26 @@ Namespace Rates
                 Return updates
             End Function
 
-            Friend Shared Function GetScrapesRequired(grid As UltraGrid) As IEnumerable(Of String)
+            Friend Shared Function GetScrapesRequired(grid As UltraGrid) As IEnumerable(Of ScrapeRequired)
                 ' Get the list of link codes in order of oldest updated to newest
-                Dim all As New List(Of Tuple(Of String, Date))
+                Dim all As New List(Of ScrapeRequired)
                 For Each row As UltraGridRow In grid.Rows
-                    If row.Cells(Columns.ProviderLinkCode.ToString).Text.Length > 0 Then
+                    Dim rateProvider As Integer = 0
+                    If Not IsDBNull(row.Cells(Columns.RateProvider.ToString).Value) Then
+                        rateProvider = CInt(row.Cells(Columns.RateProvider.ToString).Value)
+                    End If
+
+                    If row.Cells(Columns.ProviderLinkCode.ToString).Text.Length > 0 AndAlso rateProvider > 0 Then
                         Dim dt As Date
                         If IsDBNull(row.Cells(Columns.RateUpdated.ToString).Value) Then
                             dt = CDate("1/1/1900")
                         Else
                             dt = CDate(row.Cells(Columns.RateUpdated.ToString).Value)
                         End If
-                        all.Add(New Tuple(Of String, Date)(row.Cells(Columns.ProviderLinkCode.ToString).Text, dt))
+                        all.Add(New ScrapeRequired(rateProvider, row.Cells(Columns.Code.ToString).Text, row.Cells(Columns.ProviderLinkCode.ToString).Text))
                     End If
                 Next
-                Dim codes = all.OrderBy(Function(c) c.Item2).Select(Function(c) c.Item1).Distinct
-                Return codes
+                Return all
             End Function
 
             Friend Shared Sub SetScrapedRate(grid As UltraGrid, sLinkCode As String, rate As Decimal)
@@ -414,19 +480,40 @@ Namespace Rates
             End Try
         End Sub
 
+        Friend Class ScrapeRequired
+            Public RateProvider As Integer
+            Public InstrumentCode As String
+            Public LinkCode As String
+
+            Public Sub New(rateProvider As Integer, instrumentCode As String, linkCode As String)
+                Me.RateProvider = rateProvider
+                Me.InstrumentCode = instrumentCode
+                Me.LinkCode = linkCode
+            End Sub
+        End Class
+
         Private Sub BtnScrape_Click(sender As Object, e As EventArgs) Handles BtnScrape.Click
             Try
-                Dim linkCodes = GridHelper.GetScrapesRequired(GrdInstruments)
+                Dim scrapes = GridHelper.GetScrapesRequired(GrdInstruments)
 
-                Dim sMsg = $"Begin scraping {linkCodes.Count} instrument{IIf(linkCodes.Count > 1, "s", String.Empty)} from oldest update to newest?"
+                Dim sMsg = $"Begin updating {scrapes.Count} instrument{IIf(scrapes.Count > 1, "s", String.Empty)}?"
                 If MessageBox.Show(sMsg, Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                     m_fStop = False
-                    Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
 
-                    Dim newRates = rateProvider.GetNewRates(linkCodes)
-                    For Each newRate In newRates
-                        GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
+                    For Each rateProviderCode In scrapes.Select(Function(c) c.RateProvider).Distinct
+                        Dim rateProvider = GetRateProvider(m_commonObjects, CType(rateProviderCode, ERateProvider))
+                        Dim newRates = rateProvider.GetNewRates(scrapes.Where(Function(c) c.RateProvider = rateProviderCode).Select(Function(c) c.LinkCode))
+                        For Each newRate In newRates
+                            GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
+                        Next
                     Next
+
+                    'Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
+
+                    'Dim newRates = rateProvider.GetNewRates(linkCodes)
+                    'For Each newRate In newRates
+                    '    GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
+                    'Next
 
                     'For Each sLinkCode In linkCodes
                     '    Application.DoEvents()

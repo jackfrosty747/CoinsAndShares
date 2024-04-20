@@ -2,6 +2,7 @@
 
 Namespace Rates.CNBC
     Friend Class CCnbc : Implements IRateProvider
+
         Friend Function GetAllRateTypes() As IEnumerable(Of CRateType) Implements IRateProvider.GetAllRateTypes
             Throw New NotImplementedException($"Not available from {GetName()}")
         End Function
@@ -87,6 +88,7 @@ Namespace Rates.CNBC
         Friend Function GetName() As String Implements IRateProvider.GetName
             Return "CNBC"
         End Function
+
     End Class
 
 End Namespace

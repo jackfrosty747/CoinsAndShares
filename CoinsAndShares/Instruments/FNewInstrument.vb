@@ -43,7 +43,7 @@ Namespace Instruments
                         Throw New Exception(My.Resources.Error_CurrencyCodeNotValid)
                     End If
                     Dim instrument = New CInstrument(TxtInstrumentCode.Text.ToUpper, instrumentType, TxtDescription.Text, 0, Nothing,
-                                                     TxtLinkCode.Text, CmbCurrencyCode.Text, 0, String.Empty, String.Empty)
+                                                     TxtLinkCode.Text, CmbCurrencyCode.Text, 0, String.Empty, String.Empty, 0)
                     m_commonObjects.Instruments.CreateNew(instrument)
                     m_sInstrumentCodeCreated = instrument.Code
                     m_fOkPressed = True

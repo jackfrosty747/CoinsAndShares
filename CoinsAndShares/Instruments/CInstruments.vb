@@ -83,6 +83,7 @@ Namespace Instruments
             i.{CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER},
             i.{CDatabase.FIELD_INSTRUMENT_NOTES},
             i.{CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE},
+            i.{CDatabase.FIELD_INSTRUMENT_RATEPROVIDER},
             t.*
         FROM {CDatabase.TABLE_INSTRUMENT} i LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
             i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE}
@@ -106,8 +107,10 @@ Namespace Instruments
                         Dim providerMultiplier As Decimal = CDatabase.DbToDecimal(dr(CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER))
                         Dim sNotes As String = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_NOTES))
                         Dim sHedgingGroupCode = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE))
+                        Dim iRateProvider = CDatabase.DbToInt(dr(CDatabase.FIELD_INSTRUMENT_RATEPROVIDER))
                         instrument = New CInstrument(sInstrumentCode, instrumentType, sDescription, rRate,
-                                                     rateUpdated, sProviderLinkCode, sCurrencyCode, providerMultiplier, sNotes, sHedgingGroupCode)
+                                                     rateUpdated, sProviderLinkCode, sCurrencyCode, providerMultiplier, sNotes,
+                                                     sHedgingGroupCode, iRateProvider)
                         col.Add(sInstrumentCode, instrument)
                     End If
                     If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_ID)) Then
@@ -233,6 +236,8 @@ Namespace Instruments
                         dr(CDatabase.FIELD_INSTRUMENT_NOTES) = instrument.Notes
 
                         dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE) = instrument.HedgingGroupCode
+
+                        dr(CDatabase.FIELD_INSTRUMENT_RATEPROVIDER) = instrument.RateProvider
 
                         Using cb As New SqlCeCommandBuilder(da)
                             da.Update(dt)

@@ -173,9 +173,10 @@ Namespace BackupRestore
                     End If
                     Dim sNotes = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_NOTES))
                     Dim sHedgingGroupCode = CDatabase.DbToString(dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE))
+                    Dim iRateProvider = CDatabase.DbToInt(dr(CDatabase.FIELD_INSTRUMENT_RATEPROVIDER))
                     Dim instrument As New JSonInstrument()
                     instrument.Fill(sInstrumentCode, sInstrumentType, sDescription, rRate, sProviderLinkCode,
-                                    dtRateUpdated, sCurrencyCode, rProviderMultiplier, sNotes, sHedgingGroupCode)
+                                    dtRateUpdated, sCurrencyCode, rProviderMultiplier, sNotes, sHedgingGroupCode, iRateProvider)
 
                     instruments.Add(instrument)
                 Next
@@ -411,6 +412,7 @@ Namespace BackupRestore
                             End If
                             dr(CDatabase.FIELD_INSTRUMENT_NOTES) = i.Notes
                             dr(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE) = i.HedgingGroupCode
+                            dr(CDatabase.FIELD_INSTRUMENT_RATEPROVIDER) = i.RateProvider
                             dt.Rows.Add(dr)
                         Next
                         Using cb = New SqlCeCommandBuilder(da)
