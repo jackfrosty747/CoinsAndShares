@@ -365,7 +365,7 @@ Namespace Instruments
                     Throw New Exception(My.Resources.Error_ItemNotFound)
                 End If
 
-                Dim rateProvider As IRateProvider = GetRateProviderToUse(instrument.InstrumentType)
+                Dim rateProvider = GetRateProvider(m_commonObjects, instrument.RateProvider)
 
                 Using frmSelectProviderLinkCode As New FSelectProviderLinkCode(m_commonObjects, rateProvider, TxtDescription.Text)
                     Cursor = Cursors.WaitCursor
@@ -408,7 +408,7 @@ Namespace Instruments
                     Throw New Exception("No link code entered")
                 End If
 
-                Dim rateProvider = GetRateProviderToUse(i.InstrumentType)
+                Dim rateProvider = GetRateProvider(m_commonObjects, i.RateProvider)
 
                 Dim newRates = rateProvider.GetNewRates(New List(Of String)({i.ProviderLinkCode}))
                 If newRates Is Nothing OrElse Not newRates.Any Then

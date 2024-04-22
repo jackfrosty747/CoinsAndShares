@@ -36,15 +36,8 @@ Namespace Dashboard
 
             m_commonObjects = commonObjects
 
-            ' Add any initialization after the InitializeComponent() call.
-            Call SetUpdateButton(BtnUpdateCryptoRates, EInstrumentType.Crypto)
-
             LoadData()
 
-        End Sub
-
-        Private Shared Sub SetUpdateButton(btn As Button, instrumentType As EInstrumentType)
-            btn.Text = $"{GetRateProviderToUse(instrumentType).GetName()} {instrumentType}"
         End Sub
 
         Private Sub LoadData()
@@ -75,7 +68,7 @@ Namespace Dashboard
                 Using blackBrush As New SolidBrush(Color.Black)
 
                     Dim szf = e.Graphics.MeasureString(HEADING, boldFont)
-                    Dim r = New RectangleF(New PointF(_PADDING, _PADDING + PnlHeader.Height), szf)
+                    Dim r = New RectangleF(New PointF(_PADDING, _PADDING), szf)
                     e.Graphics.DrawString(HEADING, boldFont, blackBrush, r)
 
                     Dim y As Single = r.Bottom + _PADDING
@@ -271,26 +264,6 @@ Namespace Dashboard
 
         End Function
 
-        Private Sub BtnUpdateCryptoRates_Click(sender As Object, e As EventArgs) Handles BtnUpdateCryptoRates.Click
-            Try
-                Cursor = Cursors.WaitCursor
-
-                Dim instrumentType As EInstrumentType
-                If sender Is BtnUpdateCryptoRates Then
-                    instrumentType = EInstrumentType.Crypto
-                Else
-                    instrumentType = EInstrumentType.Share
-                End If
-
-                m_commonObjects.Instruments.UpdateRates(instrumentType)
-
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            Finally
-                Cursor = Cursors.Default
-            End Try
-        End Sub
-
         Private Sub UHoldings_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
             Try
                 Dim m = m_mouseClickAreas.Where(Function(c) c.Item1.Contains(e.Location)).FirstOrDefault
@@ -327,71 +300,6 @@ Namespace Dashboard
             End Try
         End Sub
 
-        Private Sub MnuSetRate_Click(sender As Object, e As EventArgs) Handles MnuSetRate.Click
-            Try
-                If m_contextMenuItem IsNot Nothing Then
-                    Cursor = Cursors.WaitCursor
-
-                    Dim instrument = m_contextMenuItem.Item2
-
-                    Dim rExistingRate = instrument.Rate
-
-                    Dim rateProvider = GetRateProviderToUse(instrument.InstrumentType)
-
-                    Dim newPrice As Decimal?
-
-                    If Not String.IsNullOrEmpty(instrument.ProviderLinkCode) Then
-                        Try
-                            Dim providerIds = New List(Of String) From {
-                                instrument.ProviderLinkCode
-                            }
-                            Dim rates = rateProvider.GetNewRates(providerIds)
-                            If rates.Any Then
-                                newPrice = rates.First.Rate
-                            End If
-                            If instrument.ProviderMultiplier > 0 Then
-                                newPrice *= instrument.ProviderMultiplier
-                            End If
-                        Catch ex As Exception
-                            MsgBox($"Error occurred getting price {instrument.ProviderLinkCode} price from {rateProvider.GetName}")
-                        End Try
-                    End If
-
-                    Dim sMsg = $"Enter a new rate for {instrument.Description} (currently {rExistingRate:0.00})"
-                    If Not newPrice.HasValue Then
-                        newPrice = instrument.Rate
-                        If Not String.IsNullOrEmpty(instrument.ProviderLinkCode) Then
-                            sMsg &= vbNewLine & vbNewLine & $"Could not scrape symbol {instrument.ProviderLinkCode} from {rateProvider.GetName}"
-                        End If
-                    Else
-                        sMsg &= vbNewLine & vbNewLine & $"Scraped {newPrice.Value.ToString(FORMAT_RATE, CultureInfo.CurrentCulture)} from {rateProvider.GetName}"
-                    End If
-
-                    Dim sRet = InputBox(sMsg, $"New Rate {instrument.ProviderLinkCode}", newPrice.Value.ToString(FORMAT_RATE, CultureInfo.CurrentCulture))
-                    Dim d As Decimal
-                    If String.IsNullOrEmpty(sRet) Then
-                        Return
-                    ElseIf Not Decimal.TryParse(sRet, d) OrElse d <= 0 Then
-                        Throw New Exception(My.Resources.Error_RateNotValid)
-                    End If
-
-                    ' Probably wrong decimal point
-                    If d / rExistingRate > 2 OrElse d / rExistingRate < 0.5 Then
-                        Throw New Exception(My.Resources.Error_RateNotValid)
-                    End If
-
-                    instrument.Rate = d
-
-                    m_commonObjects.Instruments.Update(instrument)
-
-                End If
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            Finally
-                Cursor = Cursors.Default
-            End Try
-        End Sub
-
         Private Sub MnuEditInstrument_Click(sender As Object, e As EventArgs) Handles MnuEditInstrument.Click
             Try
                 If m_contextMenuItem IsNot Nothing Then
@@ -405,9 +313,6 @@ Namespace Dashboard
             End Try
         End Sub
 
-        Private Sub Cms_Opening(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Cms.Opening
-
-        End Sub
     End Class
 
 End Namespace

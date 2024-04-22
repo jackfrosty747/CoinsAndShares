@@ -32,11 +32,8 @@
             Me.Label2 = New System.Windows.Forms.Label()
             Me.CmbInstrumentTypeName = New Infragistics.Win.UltraWinGrid.UltraCombo()
             Me.Label3 = New System.Windows.Forms.Label()
-            Me.TxtLinkCode = New System.Windows.Forms.TextBox()
-            Me.Label4 = New System.Windows.Forms.Label()
             Me.CmbCurrencyCode = New Infragistics.Win.UltraWinGrid.UltraCombo()
             Me.Label5 = New System.Windows.Forms.Label()
-            Me.BtnLinkCodeSearch = New System.Windows.Forms.Button()
             Me.Panel1.SuspendLayout()
             CType(Me.CmbInstrumentTypeName, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbCurrencyCode, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -136,22 +133,6 @@
             Me.Label3.TabIndex = 4
             Me.Label3.Text = "Type"
             '
-            'TxtLinkCode
-            '
-            Me.TxtLinkCode.Location = New System.Drawing.Point(131, 137)
-            Me.TxtLinkCode.Name = "TxtLinkCode"
-            Me.TxtLinkCode.Size = New System.Drawing.Size(114, 22)
-            Me.TxtLinkCode.TabIndex = 7
-            '
-            'Label4
-            '
-            Me.Label4.AutoSize = True
-            Me.Label4.Location = New System.Drawing.Point(59, 140)
-            Me.Label4.Name = "Label4"
-            Me.Label4.Size = New System.Drawing.Size(58, 13)
-            Me.Label4.TabIndex = 6
-            Me.Label4.Text = "Link Code"
-            '
             'CmbCurrencyCode
             '
             Me.CmbCurrencyCode.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid
@@ -172,27 +153,13 @@
             Me.Label5.TabIndex = 10
             Me.Label5.Text = "Currency"
             '
-            'BtnLinkCodeSearch
-            '
-            Me.BtnLinkCodeSearch.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnLinkCodeSearch.Image = Global.CoinsAndShares.My.Resources.Resources.chain
-            Me.BtnLinkCodeSearch.Location = New System.Drawing.Point(251, 137)
-            Me.BtnLinkCodeSearch.Name = "BtnLinkCodeSearch"
-            Me.BtnLinkCodeSearch.Size = New System.Drawing.Size(31, 22)
-            Me.BtnLinkCodeSearch.TabIndex = 11
-            Me.BtnLinkCodeSearch.TabStop = False
-            Me.BtnLinkCodeSearch.UseVisualStyleBackColor = False
-            '
             'FNewInstrument
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
             Me.ClientSize = New System.Drawing.Size(384, 261)
-            Me.Controls.Add(Me.BtnLinkCodeSearch)
             Me.Controls.Add(Me.Label5)
             Me.Controls.Add(Me.CmbCurrencyCode)
-            Me.Controls.Add(Me.Label4)
-            Me.Controls.Add(Me.TxtLinkCode)
             Me.Controls.Add(Me.Label3)
             Me.Controls.Add(Me.CmbInstrumentTypeName)
             Me.Controls.Add(Me.Label2)
@@ -224,11 +191,8 @@
         Friend WithEvents Label2 As Label
         Friend WithEvents CmbInstrumentTypeName As Infragistics.Win.UltraWinGrid.UltraCombo
         Friend WithEvents Label3 As Label
-        Friend WithEvents TxtLinkCode As TextBox
-        Friend WithEvents Label4 As Label
         Friend WithEvents CmbCurrencyCode As Infragistics.Win.UltraWinGrid.UltraCombo
         Friend WithEvents Label5 As Label
-        Friend WithEvents BtnLinkCodeSearch As Button
     End Class
 
 End Namespace

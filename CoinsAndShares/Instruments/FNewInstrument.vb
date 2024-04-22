@@ -43,7 +43,7 @@ Namespace Instruments
                         Throw New Exception(My.Resources.Error_CurrencyCodeNotValid)
                     End If
                     Dim instrument = New CInstrument(TxtInstrumentCode.Text.ToUpper, instrumentType, TxtDescription.Text, 0, Nothing,
-                                                     TxtLinkCode.Text, CmbCurrencyCode.Text, 0, String.Empty, String.Empty, 0)
+                                                     String.Empty, CmbCurrencyCode.Text, 0, String.Empty, String.Empty, 0)
                     m_commonObjects.Instruments.CreateNew(instrument)
                     m_sInstrumentCodeCreated = instrument.Code
                     m_fOkPressed = True
@@ -54,20 +54,6 @@ Namespace Instruments
             End Try
         End Sub
 
-        Private Sub BtnLinkCodeSearch_Click(sender As Object, e As EventArgs) Handles BtnLinkCodeSearch.Click
-            Try
-                Dim instrumentType As EInstrumentType = GetInstrumentTypeFromName(CmbInstrumentTypeName.Text, False)
-                Dim rateProvider As IRateProvider = GetRateProviderToUse(instrumentType)
-                Using frmSelectProviderLinkCode As New FSelectProviderLinkCode(m_commonObjects, rateProvider, TxtDescription.Text)
-                    frmSelectProviderLinkCode.ShowDialog()
-                    If frmSelectProviderLinkCode.OkPressed Then
-                        TxtLinkCode.Text = frmSelectProviderLinkCode.ProviderLinkCode
-                    End If
-                End Using
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            End Try
-        End Sub
-
     End Class
+
 End Namespace

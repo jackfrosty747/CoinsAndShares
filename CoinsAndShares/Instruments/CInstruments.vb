@@ -122,60 +122,60 @@ Namespace Instruments
             Return col.Values
         End Function
 
-        Friend Sub UpdateRates(instrumentType As EInstrumentType)
+        'Friend Sub UpdateRates(instrumentType As EInstrumentType)
 
-            Dim rateProvider = GetRateProviderToUse(instrumentType)
-            m_commonObjects.Database.TransactionBegin()
-            Try
-                UpdateRatesNow(instrumentType)
-                m_commonObjects.Database.TransactionCommit()
-                DataChanged()
-            Catch ex As Exception
-                m_commonObjects.Database.TransactionRollback()
-                Throw
-            End Try
+        '    Dim rateProvider = GetRateProviderToUse(instrumentType)
+        '    m_commonObjects.Database.TransactionBegin()
+        '    Try
+        '        UpdateRatesNow(instrumentType)
+        '        m_commonObjects.Database.TransactionCommit()
+        '        DataChanged()
+        '    Catch ex As Exception
+        '        m_commonObjects.Database.TransactionRollback()
+        '        Throw
+        '    End Try
 
-        End Sub
-        Friend Sub UpdateRatesNow(instrumentType As EInstrumentType)
-            m_commonObjects.Database.TransactionEnsureActive()
+        'End Sub
+        'Friend Sub UpdateRatesNow(instrumentType As EInstrumentType)
+        '    m_commonObjects.Database.TransactionEnsureActive()
 
-            Dim rateProvider = GetRateProviderToUse(instrumentType)
+        '    Dim rateProvider = GetRateProviderToUse(instrumentType)
 
-            Dim instruments = GetAll().Where(Function(c)
-                                                 Return c.InstrumentType = instrumentType AndAlso
-                                                    Not String.IsNullOrEmpty(c.ProviderLinkCode)
-                                             End Function)
+        '    Dim instruments = GetAll().Where(Function(c)
+        '                                         Return c.InstrumentType = instrumentType AndAlso
+        '                                            Not String.IsNullOrEmpty(c.ProviderLinkCode)
+        '                                     End Function)
 
-            instruments = instruments.OrderBy(Function(c)
-                                                  If c.RateUpdated.HasValue Then
-                                                      Return c.RateUpdated.Value
-                                                  Else
-                                                      Return CDate("1/1/1900")
-                                                  End If
-                                              End Function)
+        '    instruments = instruments.OrderBy(Function(c)
+        '                                          If c.RateUpdated.HasValue Then
+        '                                              Return c.RateUpdated.Value
+        '                                          Else
+        '                                              Return CDate("1/1/1900")
+        '                                          End If
+        '                                      End Function)
 
-            ' Get the provider's codes we've set on all instruments.  E.g. will return BTC,ETH,etc..
-            Dim providerLinkCodes = instruments.Select(Function(c) c.ProviderLinkCode).Distinct
+        '    ' Get the provider's codes we've set on all instruments.  E.g. will return BTC,ETH,etc..
+        '    Dim providerLinkCodes = instruments.Select(Function(c) c.ProviderLinkCode).Distinct
 
-            ' Get a collection of those codes with their new codes
-            Dim newRates As IEnumerable(Of CRate) = rateProvider.GetNewRates(providerLinkCodes)
+        '    ' Get a collection of those codes with their new codes
+        '    Dim newRates As IEnumerable(Of CRate) = rateProvider.GetNewRates(providerLinkCodes)
 
-            For Each instrument In instruments
-                If Not String.IsNullOrEmpty(instrument.ProviderLinkCode) Then
-                    Dim newRate = newRates.Where(Function(c) c.ID.Equals(instrument.ProviderLinkCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                    If newRate IsNot Nothing Then
-                        instrument.Rate = newRate.Rate
-                        Select Case instrument.ProviderMultiplier
-                            Case 0, 1
-                            Case Else
-                                instrument.Rate *= instrument.ProviderMultiplier
-                        End Select
-                        AddUpdateNow(instrument)
-                    End If
-                End If
-            Next
+        '    For Each instrument In instruments
+        '        If Not String.IsNullOrEmpty(instrument.ProviderLinkCode) Then
+        '            Dim newRate = newRates.Where(Function(c) c.ID.Equals(instrument.ProviderLinkCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+        '            If newRate IsNot Nothing Then
+        '                instrument.Rate = newRate.Rate
+        '                Select Case instrument.ProviderMultiplier
+        '                    Case 0, 1
+        '                    Case Else
+        '                        instrument.Rate *= instrument.ProviderMultiplier
+        '                End Select
+        '                AddUpdateNow(instrument)
+        '            End If
+        '        End If
+        '    Next
 
-        End Sub
+        'End Sub
 
         Friend Sub CreateNew(instrument As CInstrument)
             m_commonObjects.Database.TransactionBegin()

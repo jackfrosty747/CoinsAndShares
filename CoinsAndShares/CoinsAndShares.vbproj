@@ -236,6 +236,7 @@
     <Compile Include="Charts\FReports.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Rates\GoldPrice\CGoldPrice.vb" />
     <Compile Include="Rates\CNBC\CCnbc.vb" />
     <Compile Include="Rates\FMP\CFmp.vb" />
     <Compile Include="Rates\GoogleFinance\CGoogleFinance.vb" />

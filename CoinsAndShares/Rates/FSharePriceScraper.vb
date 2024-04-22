@@ -144,7 +144,11 @@ Namespace Rates
                             If String.IsNullOrEmpty(sSymbol) Then
                                 Throw New Exception(My.Resources.Error_InstrumentContainsNoSymbol)
                             End If
-                            Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
+                            Dim iRateProviderCode As Integer = 0
+                            If Not IsDBNull(e.Cell.Row.Cells(Columns.RateProvider.ToString).Value) Then
+                                iRateProviderCode = CInt(e.Cell.Row.Cells(Columns.RateProvider.ToString).Value)
+                            End If
+                            Dim rateProvider = GetRateProvider(tagBits.CommonObjects, iRateProviderCode)
                             Dim symbols As New List(Of String) From {
                                 sSymbol
                             }
