@@ -8,15 +8,31 @@ Namespace Accounts
             <Description("S")> Share_Account
         End Enum
         Friend Function GetAccountTypeFromCode(sCode As String, fSilent As Boolean) As EAccountType
-            For Each t As EAccountType In [Enum].GetValues(GetType(EAccountType))
-                If t.Code.Equals(sCode, StringComparison.CurrentCultureIgnoreCase) Then
-                    Return t
-                End If
-            Next
-            If fSilent Then
-                Return EAccountType.Bank_Account
+            Static dicAccountTypes As Dictionary(Of String, EAccountType)
+            If dicAccountTypes Is Nothing Then
+                dicAccountTypes = New Dictionary(Of String, EAccountType)
+                For Each t As EAccountType In [Enum].GetValues(GetType(EAccountType))
+                    dicAccountTypes.Add(t.Code.ToUpper, t)
+                Next
             End If
-            Throw New Exception($"{sCode} is not a valid account type")
+            Dim result As EAccountType
+            If Not dicAccountTypes.TryGetValue(sCode.ToUpper, result) Then
+                If fSilent Then
+                    Return EAccountType.Bank_Account
+                End If
+                Throw New Exception($"{sCode} is not a valid account type")
+            End If
+            Return result
+
+            'For Each t As EAccountType In [Enum].GetValues(GetType(EAccountType))
+            '    If t.Code.Equals(sCode, StringComparison.CurrentCultureIgnoreCase) Then
+            '        Return t
+            '    End If
+            'Next
+            'If fSilent Then
+            '    Return EAccountType.Bank_Account
+            'End If
+            'Throw New Exception($"{sCode} is not a valid account type")
         End Function
         Friend Function GetAccountTypeFromName(sName As String, fSilent As Boolean) As EAccountType
             For Each t As EAccountType In [Enum].GetValues(GetType(EAccountType))

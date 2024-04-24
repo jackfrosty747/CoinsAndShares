@@ -15,15 +15,33 @@ Module MTransactions
         <Description("M")> Mining
     End Enum
     Friend Function GetTransactionTypeFromCode(sCode As String, fSilent As Boolean) As ETransactionType
-        For Each transactionType As ETransactionType In [Enum].GetValues(GetType(ETransactionType))
-            If transactionType.Code.Equals(sCode, StringComparison.CurrentCultureIgnoreCase) Then
-                Return transactionType
-            End If
-        Next
-        If fSilent Then
-            Return ETransactionType.Unknown
+        Static dicTransactionTypes As Dictionary(Of String, ETransactionType)
+        If dicTransactionTypes Is Nothing Then
+            dicTransactionTypes = New Dictionary(Of String, ETransactionType)
+            For Each transactionType As ETransactionType In [Enum].GetValues(GetType(ETransactionType))
+                dicTransactionTypes.Add(transactionType.Code.ToUpper, transactionType)
+            Next
         End If
-        Throw New Exception($"{sCode} is not a valid transaction type")
+        Dim result As ETransactionType
+        If Not dicTransactionTypes.TryGetValue(sCode.ToUpper, result) Then
+            If fSilent Then
+                Return ETransactionType.Unknown
+            Else
+                Throw New Exception($"{sCode} is not a valid transaction type")
+            End If
+        End If
+        Return result
+
+
+        'For Each transactionType As ETransactionType In [Enum].GetValues(GetType(ETransactionType))
+        '    If transactionType.Code.Equals(sCode, StringComparison.CurrentCultureIgnoreCase) Then
+        '        Return transactionType
+        '    End If
+        'Next
+        'If fSilent Then
+        '    Return ETransactionType.Unknown
+        'End If
+        'Throw New Exception($"{sCode} is not a valid transaction type")
     End Function
     Friend Function GetTransactionTypeFromDesc(sDesc As String, fSilent As Boolean) As ETransactionType
         For Each transactionType As ETransactionType In [Enum].GetValues(GetType(ETransactionType))

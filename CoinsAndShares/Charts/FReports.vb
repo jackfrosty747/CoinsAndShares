@@ -84,7 +84,7 @@ Namespace Charts
                 Dim cNetworkTransfers As Decimal = 0
                 Dim cNetworkAssets As Decimal = 0
                 For Each account In allAccounts.Where(Function(c) c.NetworkId.Equals(sNetworkId, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(c) c.AccountCode)
-                    Dim accountTransactions = allTransactions.Where(Function(c) c.AccountCode.Equals(account.AccountCode, StringComparison.CurrentCultureIgnoreCase))
+                    Dim accountTransactions = allTransactions.Where(Function(c) c.AccountCode.Equals(account.AccountCode, StringComparison.CurrentCultureIgnoreCase)).ToList
 
                     Dim cAccountTransfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer).Sum(Function(c) c.Amount)
 
@@ -252,6 +252,8 @@ Namespace Charts
             If ChkMiningDateRange.Checked Then
                 miningTrans = miningTrans.Where(Function(c) c.TransDate.Date >= DtpMiningDateFrom.Value.Date And c.TransDate.Date <= DtpMiningDateTo.Value.Date)
             End If
+
+            miningTrans = miningTrans.ToList
 
             If Not miningTrans.Any Then
                 Return

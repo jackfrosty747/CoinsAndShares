@@ -1,7 +1,5 @@
-﻿Imports System.Globalization
-Imports CoinsAndShares.Instruments
+﻿Imports CoinsAndShares.Instruments
 Imports CoinsAndShares.Instruments.MInstuments
-Imports CoinsAndShares.Rates
 Imports CoinsAndShares.Settings
 Imports CoinsAndShares.Transactions
 
@@ -42,9 +40,9 @@ Namespace Dashboard
 
         Private Sub LoadData()
 
-            Dim allTransactions = m_commonObjects.Transactions.GetAll()
-            m_allInstruments = m_commonObjects.Instruments.GetAll()
-            Dim allCurrencies = m_commonObjects.Currencies.GetAll()
+            Dim allTransactions = m_commonObjects.Transactions.GetAll().ToList
+            m_allInstruments = m_commonObjects.Instruments.GetAll().ToList
+            Dim allCurrencies = m_commonObjects.Currencies.GetAll().ToList
             m_settings = New CSettings(m_commonObjects)
             m_analysis = CTransactions.Analyse(allTransactions, m_allInstruments, allCurrencies)
 

@@ -31,7 +31,7 @@ Namespace Accounts
         End Sub
         Private Sub LoadData()
             Dim allInstruments = m_commonObjects.Instruments.GetAll()
-            Dim allAccounts = m_commonObjects.Accounts.GetAll()
+            Dim allAccounts = m_commonObjects.Accounts.GetAll().ToList
             Dim allCurrencies = m_commonObjects.Currencies.GetAll()
             GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstruments, allCurrencies, ChkShowZero.Checked, m_commonObjects.Networks)
             LblGrandTotal.Text = FormatCurrency(allAccounts.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies)))

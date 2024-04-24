@@ -647,19 +647,4 @@ Projected Tax: {projectedTax:c2}"
         End Try
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
-        Try
-            Dim fmp = New FMP.CFMP
-
-            Dim rate = fmp.GetNewRates(New List(Of String) From {"AAPL", "MSFT"})
-            MsgBox(rate.First.Rate.ToString)
-
-        Catch ex As Exception
-            m_commonObjects.Errors.Handle(ex)
-
-        End Try
-
-    End Sub
-
 End Class

@@ -30,7 +30,8 @@ Namespace Accounts
                                      Select InstrumentCode, TotalQuantity = Group.Sum(Function(c) c.Amount),
                                          LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
 
-            Dim allCryptoInstrumentsWithBalance = m_allCryptoInstruments.Where(Function(c) totalsByInstrument.Any(Function(b) b.InstrumentCode = c.Code And b.TotalQuantity > 0))
+            Dim allCryptoInstrumentsWithBalance = m_allCryptoInstruments.Where(Function(c) totalsByInstrument.Any(Function(b) b.InstrumentCode = c.Code And b.TotalQuantity > 0)).ToList
+
 
             allInstruments = allInstruments.OrderByDescending(Function(c)
                                                                   Return c.Code.Equals("USDC", StringComparison.CurrentCultureIgnoreCase)

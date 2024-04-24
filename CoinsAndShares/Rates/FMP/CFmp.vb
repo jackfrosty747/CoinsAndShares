@@ -8,6 +8,7 @@ Namespace Rates.FMP
         Const API_KEY = "5mn8kKFkQXhmOuZHGa4vq8OhfxbmwpZQ"
 
         Friend Function GetAllRateTypes() As IEnumerable(Of CRateType) Implements IRateProvider.GetAllRateTypes
+
             Dim reqUrl As String = $"https://financialmodelingprep.com/api/v3/stock/list?apikey={API_KEY}"
             Dim req As HttpWebRequest = CType(WebRequest.Create(reqUrl), HttpWebRequest)
             req.Method = "GET"
@@ -29,7 +30,6 @@ Namespace Rates.FMP
 
             Return out
 
-            'Throw New NotImplementedException($"Not available from {GetName()}")
         End Function
 
         Public Class AllStockInfo
@@ -45,7 +45,9 @@ Namespace Rates.FMP
             Dim all = GetAllRateTypes()
 
             all = all.Where(Function(c) c.Symbol.ToUpper.Contains(searchText.ToUpper) OrElse (c.Name IsNot Nothing AndAlso c.Name.ToUpper.Contains(searchText.ToUpper)))
+
             Return all
+
         End Function
 
         'Friend Function GetNewRates(providerIds As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
@@ -108,13 +110,6 @@ Namespace Rates.FMP
         Friend Function GetName() As String Implements IRateProvider.GetName
             Return "Financial Modeling Prep"
         End Function
-
-        Public Class StockInfo
-            Public Property Symbol As String
-            Public Property Price As Double
-            Public Property Volume As Integer
-        End Class
-
 
 
     End Class

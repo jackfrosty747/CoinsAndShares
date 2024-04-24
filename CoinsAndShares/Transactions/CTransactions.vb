@@ -301,7 +301,7 @@ Namespace Transactions
                                              InstrumentCode,
                                              TotalQuantity = Group.Sum(Function(c) c.Amount),
                                              LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
-                For Each t In totalsByInstrument
+                For Each t In totalsByInstrument.ToList
                     Dim netCash = batches.Where(Function(c)
                                                     If String.IsNullOrEmpty(c.InstrumentCode) Then
                                                         Return String.IsNullOrEmpty(t.InstrumentCode)
