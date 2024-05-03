@@ -9,6 +9,7 @@ Imports Newtonsoft.Json
 
 Namespace BackupRestore
     Friend Class CBackupRestore
+
         Friend Shared Sub Backup(commonObjects As CCommonObjects, fileName As String)
             Dim jsonDatabase = GetJSonDatabase(commonObjects)
 
@@ -16,6 +17,7 @@ Namespace BackupRestore
 
             File.WriteAllText(fileName, sOut)
         End Sub
+
         Private Shared Function GetJSonDatabase(commonObjects As CCommonObjects) As JSonDatabase
 
             Dim accounts = GetJsonAccounts(commonObjects.Database)
@@ -34,6 +36,7 @@ Namespace BackupRestore
                      noteItems, networksItems)
 
             Return db
+
         End Function
 
         Private Shared Function GetJsonSnapshots(database As CDatabase) As List(Of JSonSnapshot)
@@ -116,9 +119,10 @@ Namespace BackupRestore
                     '    iBackgroundColour = CDatabase.DbToInt(dr(CDatabase.FIELD_ACCOUNTS_BACKGROUNDCOLOUR__DEPRECATED))
                     'End If
                     Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
+                    Dim nonTaxable = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE))
 
                     Dim jsonAccount As New JSonAccount
-                    jsonAccount.Fill(sAccountCode, sAccountName, sAccountType, sNotes, sNetworkId, includeOnShortcuts)
+                    jsonAccount.Fill(sAccountCode, sAccountName, sAccountType, sNotes, sNetworkId, includeOnShortcuts, nonTaxable)
                     accounts.Add(jsonAccount)
                 Next
             End Using
@@ -446,6 +450,7 @@ Namespace BackupRestore
                             End If
 
                             dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS) = a.IncludeOnShortcuts
+                            dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE) = a.NonTaxable
 
                             dt.Rows.Add(dr)
                         Next

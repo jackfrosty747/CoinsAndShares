@@ -99,7 +99,7 @@ Namespace Transactions
             Dim rowsToShow = m_allTransactions
 
             If Not ChkAllDates.Checked Then
-                rowsToShow = rowsToShow.Where(Function(c) c.TransDate >= DtpFrom.Value And c.TransDate <= DtpTo.Value)
+                rowsToShow = rowsToShow.Where(Function(c) c.TransDate.Date >= DtpFrom.Value.Date And c.TransDate.Date <= DtpTo.Value.Date)
             End If
 
             If TxtDescription.Text.Length > 0 Then

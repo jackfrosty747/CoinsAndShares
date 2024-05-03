@@ -596,6 +596,17 @@ Friend Class FMdi
             ' Exclude non taxable and types we're not interested in
             all = all.Where(Function(c) selectedAccountCodes.Any(Function(d) d.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
 
+
+            '' DEBUG
+            'Dim accountCodes = all.Select(Function(c) c.AccountCode.ToUpper).Distinct.OrderBy(Function(c) c)
+            'For Each accountCode In accountCodes
+            '    Dim a = all.Where(Function(c) c.AccountCode.ToUpper = accountCode)
+            '    MsgBox($"Account {accountCode}: {a.Sum(Function(c) c.Amount):c2}")
+            'Next
+
+
+
+
             ' Total interest
             Dim interest = Math.Round(all.Sum(Function(c) c.Amount), 2)
 
