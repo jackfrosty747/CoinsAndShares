@@ -503,6 +503,7 @@ Namespace Rates
                 Dim sMsg = $"Begin updating {scrapes.Count} instrument{IIf(scrapes.Count > 1, "s", String.Empty)}?"
                 If MessageBox.Show(sMsg, Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                     m_fStop = False
+                    m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
 
                     For Each rateProviderCode In scrapes.Select(Function(c) c.RateProvider).Distinct
                         Dim rateProvider = GetRateProvider(m_commonObjects, CType(rateProviderCode, ERateProvider))
@@ -512,29 +513,6 @@ Namespace Rates
                         Next
                     Next
 
-                    'Dim rateProvider = GetRateProviderToUse(EInstrumentType.Share)
-
-                    'Dim newRates = rateProvider.GetNewRates(linkCodes)
-                    'For Each newRate In newRates
-                    '    GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
-                    'Next
-
-                    'For Each sLinkCode In linkCodes
-                    '    Application.DoEvents()
-
-                    '    If m_fStop Then
-                    '        Exit For
-                    '    End If
-
-                    '    Dim codes As New List(Of String) From {
-                    '        sLinkCode
-                    '    }
-                    '    Dim newRates = rateProvider.GetNewRates(codes)
-                    '    If newRates IsNot Nothing AndAlso newRates.Any Then
-                    '        GridHelper.SetScrapedRate(GrdInstruments, sLinkCode, newRates.First.Rate)
-                    '    End If
-                    'Next
-
                     If m_fStop Then
                         MessageBox.Show("Process stopped", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Else
@@ -543,6 +521,8 @@ Namespace Rates
                 End If
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
+            Finally
+                m_commonObjects.FrmMdi.Cursor = Cursors.Default
             End Try
         End Sub
 
