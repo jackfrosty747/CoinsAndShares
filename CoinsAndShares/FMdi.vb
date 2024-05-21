@@ -2,6 +2,7 @@
 Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports CoinsAndShares.Accounts
+Imports CoinsAndShares.Accounts.MAccounts
 Imports CoinsAndShares.BackupRestore
 Imports CoinsAndShares.Charts
 Imports CoinsAndShares.Currencies
@@ -658,4 +659,57 @@ Projected Tax: {projectedTax:c2}"
         End Try
     End Sub
 
+    Private Sub MnuReportsIsaTransfers_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfers.Click
+        Try
+            Dim taxYearStartInclusive As Date
+            Try
+                ' Get the current date
+                Dim currentDate As Date = Date.Today
+                ' Calculate the tax year start date based on the current date
+                Dim taxYearStart As Date
+                If currentDate.Month > 4 Or (currentDate.Month = 4 And currentDate.Day >= 6) Then
+                    ' If the current date is on or after April 6th, use the current year's April 6th
+                    taxYearStart = New Date(currentDate.Year, 4, 6)
+                Else
+                    ' If the current date is before April 6th, use the previous year's April 6th
+                    taxYearStart = New Date(currentDate.Year - 1, 4, 6)
+                End If
+                Dim sRet = InputBox("Enter the tax year start (inclusive)", Text, taxYearStart.ToShortDateString)
+                If String.IsNullOrEmpty(sRet) Then
+                    Return
+                ElseIf Not Date.TryParse(sRet, taxYearStartInclusive) Then
+                    Throw New Exception(My.Resources.Error_NotAValidDate)
+                End If
+            Catch ex As Exception
+                Throw
+            End Try
+
+            Cursor = Cursors.WaitCursor
+
+            Dim transactions = New CTransactions(m_commonObjects)
+            Dim accounts = New CAccounts(m_commonObjects)
+
+            Dim selectedAccounts = accounts.GetAll.Where(Function(c) c.AccountType = EAccountType.Bank_Account And c.AccountName.ToUpper.Contains("ISA"))
+            Dim accountTransactions = transactions.GetAll().Where(Function(c) selectedAccounts.Select(Function(d) d.AccountCode.ToUpper).Contains(c.AccountCode.ToUpper))
+            accountTransactions = accountTransactions.Where(Function(c) c.TransDate >= taxYearStartInclusive AndAlso c.TransDate < taxYearStartInclusive.AddYears(1))
+            Dim transfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer)
+
+            Dim sMsg = $"Accounts of: BANK ACCOUNT TYPE containing ISA in the name.
+TRANSFER type transactions greater or equal to {taxYearStartInclusive:d} and before {taxYearStartInclusive.AddYears(1):d}.
+
+Transfers: {transfers.Sum(Function(c) c.Amount):c}
+"
+
+            For Each i In transfers.OrderBy(Function(c) c.AccountCode.ToUpper)
+                sMsg &= $"{vbNewLine}{i.AccountCode}       {i.Amount:c}"
+            Next
+
+            MessageBox.Show(sMsg, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        Finally
+            Cursor = Cursors.Default
+        End Try
+    End Sub
 End Class

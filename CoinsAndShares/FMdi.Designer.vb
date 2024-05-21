@@ -70,6 +70,7 @@ Partial Class FMdi
         Me.MnuAssets = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuInterest = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuReportsSavingsTax = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuReportsIsaTransfers = New System.Windows.Forms.ToolStripMenuItem()
         Me.NoptesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -259,7 +260,7 @@ Partial Class FMdi
         '
         'ChartsToolStripMenuItem
         '
-        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax})
+        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsIsaTransfers})
         Me.ChartsToolStripMenuItem.Name = "ChartsToolStripMenuItem"
         Me.ChartsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ChartsToolStripMenuItem.Text = "Reports"
@@ -287,6 +288,12 @@ Partial Class FMdi
         Me.MnuReportsSavingsTax.Name = "MnuReportsSavingsTax"
         Me.MnuReportsSavingsTax.Size = New System.Drawing.Size(188, 22)
         Me.MnuReportsSavingsTax.Text = "Savings Tax Summary"
+        '
+        'MnuReportsIsaTransfers
+        '
+        Me.MnuReportsIsaTransfers.Name = "MnuReportsIsaTransfers"
+        Me.MnuReportsIsaTransfers.Size = New System.Drawing.Size(188, 22)
+        Me.MnuReportsIsaTransfers.Text = "ISA Transfers"
         '
         'NoptesToolStripMenuItem
         '
@@ -388,4 +395,5 @@ Partial Class FMdi
     Friend WithEvents MnuHelpAbout As ToolStripMenuItem
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
+    Friend WithEvents MnuReportsIsaTransfers As ToolStripMenuItem
 End Class
