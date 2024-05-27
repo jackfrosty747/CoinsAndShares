@@ -107,9 +107,9 @@ Namespace Accounts
             LblAccountValue.Text = FormatCurrency(analysis.CurrentValue)
             LblProfitLoss.Text = FormatCurrency(analysis.ProfitLoss)
 
-            BtnNicehash.Visible = account.AccountName.ToUpper.Contains(NICEHASH_ACCOUNT_CODE)
+            Btn212.Visible = account.AccountName.ToUpper.Contains(TRADING212_ACCOUNT_CODE)
             BtnNexo.Visible = account.AccountName.ToUpper.Contains(NEXO_ACCOUNT_CODE)
-            LblCustomImportSep.Visible = BtnNicehash.Visible
+            LblCustomImportSep.Visible = account.AccountName.ToUpper.Contains(TRADING212_ACCOUNT_CODE) Or account.AccountName.ToUpper.Contains(NEXO_ACCOUNT_CODE)
             BtnSwapCrypto.Visible = account.AccountType = EAccountType.Crypto
             LblBtnSwapCryptoSep.Visible = account.AccountType = EAccountType.Crypto
 
@@ -245,70 +245,6 @@ Namespace Accounts
                 End If
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
-            End Try
-        End Sub
-
-        Private Sub BtnCustomImport_Click(sender As Object, e As EventArgs) Handles BtnNicehash.Click
-            Try
-                Using ofd = New OpenFileDialog()
-                    ofd.Filter = "CSV Files|*.csv"
-                    If ofd.ShowDialog = DialogResult.OK Then
-                        m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
-                        Dim dt = CCsv.ReadCsvToDt(ofd.FileName)
-
-                        Dim allAccounts = m_commonObjects.Accounts.GetAll
-                        Dim account = allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
-                        Dim allTrans = account.Transactions
-
-                        Dim adjustments As New List(Of CAdjustment)
-
-                        For Each dr As DataRow In dt.Rows
-                            Dim transDate As Date
-                            Dim sDate = CDatabase.DbToString(dr(0)).Trim
-                            If Not Date.TryParse(sDate, transDate) Then
-                                'Throw New Exception($"Failed to parse {sDate} into a date")
-                            Else
-                                Dim transactionType As ETransactionType? = Nothing
-                                Dim sPurpose = CDatabase.DbToString(dr(1)).Trim
-                                Select Case sPurpose.ToUpper
-                                    Case "Hashpower mining".ToUpper
-                                        transactionType = ETransactionType.Mining
-                                    Case "Hashpower mining fee".ToUpper
-                                        transactionType = ETransactionType.Fee
-                                End Select
-                                Dim sQty = CDatabase.DbToString(dr(2))
-                                Dim rQty As Decimal
-                                If Not Decimal.TryParse(sQty, rQty) Then
-                                    Throw New Exception($"Failed to parse {sQty} into a quantity")
-                                End If
-                                Dim sRate As String = CDatabase.DbToString(dr(3))
-                                Dim rRate As Decimal
-                                If Not Decimal.TryParse(sRate, rRate) Then
-                                    Throw New Exception($"Failed to parse {sRate} into a rate")
-                                End If
-                                Dim sAmount As String = CDatabase.DbToString(dr(3))
-                                Dim cAmount As Decimal
-                                If Not Decimal.TryParse(sAmount, cAmount) Then
-                                    Throw New Exception($"Failed to parse {sAmount} into a rate")
-                                End If
-                                If transactionType.HasValue Then
-                                    ' This row is OK to import.  Now we check if it already exists
-                                    Dim adjustment = New CAdjustment(transactionType.Value, AccountCode, transDate, EAdjustType.Instrument, "BTC", rQty, rRate, cAmount, sPurpose)
-                                    If allTrans.Any(Function(c) c.TransDate = transDate AndAlso c.Description.Equals(adjustment.Description, StringComparison.InvariantCultureIgnoreCase)) Then
-                                        ' Already exists
-                                    Else
-                                        adjustments.Add(adjustment)
-                                    End If
-                                End If
-                            End If
-                        Next
-                        m_commonObjects.Accounts.ProcessAdjustments(adjustments)
-                    End If
-                End Using
-            Catch ex As Exception
-                m_commonObjects.Errors.Handle(ex)
-            Finally
-                m_commonObjects.FrmMdi.Cursor = Cursors.Default
             End Try
         End Sub
 
@@ -477,5 +413,97 @@ Namespace Accounts
             End Try
         End Sub
 
+        Private Sub Btn212_Click(sender As Object, e As EventArgs) Handles Btn212.Click
+
+            ' Import Interest, Dividend and Cashback from Trading 212 CSV import.  Transfers are not included.
+            Const COL_ACTION = "Action"
+            Const COL_TIME = "Time"
+            Const COL_TICKER = "Ticker"
+            'Const COL_NAME = "Name"
+            Const COL_TOTAL = "Total"
+
+            Try
+                Using ofd = New OpenFileDialog()
+                    ofd.Filter = "CSV Files|*.csv"
+                    If ofd.ShowDialog = DialogResult.OK Then
+                        m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
+                        Dim dt = CCsv.ReadCsvToDt(ofd.FileName)
+
+                        Dim allAccounts = m_commonObjects.Accounts.GetAll
+                        Dim account = allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
+                        Dim allTrans = account.Transactions
+
+                        Dim importAfterDate As Date
+                        Try
+                            Dim sMsg = "Enter the date all dividend, cashback and interest has already been included up to (inclusive).  Only records in the CSV AFTER this date will be imported."
+                            Dim t = allTrans.Where(Function(c) c.TransactionType = ETransactionType.Bonus).OrderBy(Function(c) c.TransDate)
+                            Dim sRet = String.Empty
+                            If t.Any Then
+                                sRet = t.Last.TransDate.ToShortDateString
+                            End If
+                            sRet = InputBox(sMsg, "Trading 212 Import", sRet)
+                            If Not Date.TryParse(sRet, importAfterDate) Then
+                                Throw New Exception(My.Resources.Error_NotAValidDate)
+                            End If
+                        Catch ex As Exception
+                            Throw
+                        End Try
+
+                        Dim adjustments As New List(Of CAdjustment)
+
+                        For Each dr As DataRow In dt.Rows
+                            Dim sAction = CDatabase.DbToString(dr(COL_ACTION))
+                            Dim sDate = CDatabase.DbToString(dr(COL_TIME))
+                            Dim sTicker = CDatabase.DbToString(dr(COL_TICKER))
+                            Dim transDate As Date
+                            If Not Date.TryParse(sDate, transDate) Then
+                                Throw New Exception($"{sDate} is not a valid date")
+                            End If
+
+                            transDate = transDate.Date
+
+                            If transDate.Date > importAfterDate.Date Then
+
+                                Dim sTotal = CDatabase.DbToString(dr(COL_TOTAL))
+                                Dim cTotal As Decimal
+                                If Not Decimal.TryParse(sTotal, cTotal) Then
+                                    Throw New Exception($"{sTotal} is not a valid decimal amount for column {COL_TOTAL}")
+                                End If
+
+                                Dim sDescription = String.Empty
+
+                                If sAction.ToUpper.Contains("Dividend".ToUpper) Then
+                                    sDescription = $"{sTicker} Dividend"
+                                ElseIf sAction.ToUpper.Contains("Interest".ToUpper) Then
+                                    sDescription = EDescriptionPresets.Interest.ToString
+                                ElseIf sAction.ToUpper.Contains("Spending cashback".ToUpper) Then
+                                    sDescription = EDescriptionPresets.Cashback.ToString
+                                End If
+
+                                If Not String.IsNullOrEmpty(sDescription) Then
+                                    Dim adjustment = New CAdjustment(ETransactionType.Bonus, AccountCode, transDate, EAdjustType.Money, String.Empty,
+                                                                     1, 1, cTotal, sDescription)
+                                    adjustments.Add(adjustment)
+                                End If
+                            End If
+                        Next
+
+                        If Not adjustments.Any Then
+                            Throw New Exception("No transactions to import")
+                        End If
+
+                        m_commonObjects.Accounts.ProcessAdjustments(adjustments)
+
+                    End If
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                m_commonObjects.FrmMdi.Cursor = Cursors.Default
+            End Try
+
+        End Sub
+
     End Class
+
 End Namespace

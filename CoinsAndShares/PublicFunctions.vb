@@ -14,7 +14,7 @@ Module PublicFunctions
     Friend Const FORMAT_QUANTITY As String = "#,###,###,##0.##########"
     Friend Const FORMAT_RATE As String = "#,###,###,##0.##########"
 
-    Friend Const NICEHASH_ACCOUNT_CODE = "NICEHASH" ' Add this to a setting in future if required
+    Friend Const TRADING212_ACCOUNT_CODE = "212" ' Add this to a setting in future if required
     Friend Const NEXO_ACCOUNT_CODE = "NEXO" ' Add this to a setting in future if required
 
     Friend Enum EDescriptionPresets

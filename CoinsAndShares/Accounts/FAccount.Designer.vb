@@ -23,6 +23,7 @@
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
+            Me.components = New System.ComponentModel.Container()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FAccount))
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
             Me.ChkNonTaxable = New System.Windows.Forms.CheckBox()
@@ -47,8 +48,8 @@
             Me.LblTransCount = New System.Windows.Forms.Label()
             Me.BtnSave = New System.Windows.Forms.Button()
             Me.Label13 = New System.Windows.Forms.Label()
+            Me.Btn212 = New System.Windows.Forms.Button()
             Me.BtnNexo = New System.Windows.Forms.Button()
-            Me.BtnNicehash = New System.Windows.Forms.Button()
             Me.LblCustomImportSep = New System.Windows.Forms.Label()
             Me.BtnRefresh = New System.Windows.Forms.Button()
             Me.Label14 = New System.Windows.Forms.Label()
@@ -91,7 +92,7 @@
             Me.LblMiningCaption = New System.Windows.Forms.Label()
             Me.LblMining = New System.Windows.Forms.Label()
             Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-            Me.ToolTip1 = New System.Windows.Forms.ToolTip()
+            Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -315,8 +316,8 @@
             Me.Panel1.Controls.Add(Me.LblTransCount)
             Me.Panel1.Controls.Add(Me.BtnSave)
             Me.Panel1.Controls.Add(Me.Label13)
+            Me.Panel1.Controls.Add(Me.Btn212)
             Me.Panel1.Controls.Add(Me.BtnNexo)
-            Me.Panel1.Controls.Add(Me.BtnNicehash)
             Me.Panel1.Controls.Add(Me.LblCustomImportSep)
             Me.Panel1.Controls.Add(Me.BtnRefresh)
             Me.Panel1.Controls.Add(Me.Label14)
@@ -336,7 +337,7 @@
             '
             Me.LblSelected.AutoSize = True
             Me.LblSelected.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblSelected.Location = New System.Drawing.Point(724, 5)
+            Me.LblSelected.Location = New System.Drawing.Point(695, 5)
             Me.LblSelected.Name = "LblSelected"
             Me.LblSelected.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
             Me.LblSelected.Size = New System.Drawing.Size(70, 18)
@@ -348,7 +349,7 @@
             Me.Label15.AutoSize = True
             Me.Label15.Dock = System.Windows.Forms.DockStyle.Left
             Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label15.Location = New System.Drawing.Point(658, 5)
+            Me.Label15.Location = New System.Drawing.Point(629, 5)
             Me.Label15.Name = "Label15"
             Me.Label15.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
             Me.Label15.Size = New System.Drawing.Size(66, 18)
@@ -359,7 +360,7 @@
             '
             Me.LblAmount.AutoSize = True
             Me.LblAmount.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblAmount.Location = New System.Drawing.Point(590, 5)
+            Me.LblAmount.Location = New System.Drawing.Point(561, 5)
             Me.LblAmount.Name = "LblAmount"
             Me.LblAmount.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
             Me.LblAmount.Size = New System.Drawing.Size(68, 18)
@@ -371,7 +372,7 @@
             Me.LblTransCount.AutoSize = True
             Me.LblTransCount.Dock = System.Windows.Forms.DockStyle.Left
             Me.LblTransCount.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.LblTransCount.Location = New System.Drawing.Point(503, 5)
+            Me.LblTransCount.Location = New System.Drawing.Point(474, 5)
             Me.LblTransCount.Name = "LblTransCount"
             Me.LblTransCount.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
             Me.LblTransCount.Size = New System.Drawing.Size(87, 18)
@@ -385,7 +386,7 @@
             Me.BtnSave.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnSave.Dock = System.Windows.Forms.DockStyle.Left
             Me.BtnSave.Image = CType(resources.GetObject("BtnSave.Image"), System.Drawing.Image)
-            Me.BtnSave.Location = New System.Drawing.Point(447, 5)
+            Me.BtnSave.Location = New System.Drawing.Point(418, 5)
             Me.BtnSave.Name = "BtnSave"
             Me.BtnSave.Size = New System.Drawing.Size(56, 28)
             Me.BtnSave.TabIndex = 18
@@ -396,10 +397,26 @@
             'Label13
             '
             Me.Label13.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label13.Location = New System.Drawing.Point(442, 5)
+            Me.Label13.Location = New System.Drawing.Point(413, 5)
             Me.Label13.Name = "Label13"
             Me.Label13.Size = New System.Drawing.Size(5, 28)
             Me.Label13.TabIndex = 23
+            '
+            'Btn212
+            '
+            Me.Btn212.AutoSize = True
+            Me.Btn212.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.Btn212.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.Btn212.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Btn212.Image = CType(resources.GetObject("Btn212.Image"), System.Drawing.Image)
+            Me.Btn212.Location = New System.Drawing.Point(362, 5)
+            Me.Btn212.Name = "Btn212"
+            Me.Btn212.Size = New System.Drawing.Size(51, 28)
+            Me.Btn212.TabIndex = 24
+            Me.Btn212.Text = "212"
+            Me.Btn212.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.ToolTip1.SetToolTip(Me.Btn212, "Import transactions from Trading ")
+            Me.Btn212.UseVisualStyleBackColor = False
             '
             'BtnNexo
             '
@@ -408,7 +425,7 @@
             Me.BtnNexo.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnNexo.Dock = System.Windows.Forms.DockStyle.Left
             Me.BtnNexo.Image = CType(resources.GetObject("BtnNexo.Image"), System.Drawing.Image)
-            Me.BtnNexo.Location = New System.Drawing.Point(383, 5)
+            Me.BtnNexo.Location = New System.Drawing.Point(303, 5)
             Me.BtnNexo.Name = "BtnNexo"
             Me.BtnNexo.Size = New System.Drawing.Size(59, 28)
             Me.BtnNexo.TabIndex = 20
@@ -416,22 +433,6 @@
             Me.BtnNexo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
             Me.ToolTip1.SetToolTip(Me.BtnNexo, "Import Interest entries only from Nexo CSV download")
             Me.BtnNexo.UseVisualStyleBackColor = False
-            '
-            'BtnNicehash
-            '
-            Me.BtnNicehash.AutoSize = True
-            Me.BtnNicehash.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnNicehash.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnNicehash.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnNicehash.Image = CType(resources.GetObject("BtnNicehash.Image"), System.Drawing.Image)
-            Me.BtnNicehash.Location = New System.Drawing.Point(303, 5)
-            Me.BtnNicehash.Name = "BtnNicehash"
-            Me.BtnNicehash.Size = New System.Drawing.Size(80, 28)
-            Me.BtnNicehash.TabIndex = 11
-            Me.BtnNicehash.Text = "Nicehash"
-            Me.BtnNicehash.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.ToolTip1.SetToolTip(Me.BtnNicehash, "Import mining entries only from Nicehash CSV file")
-            Me.BtnNicehash.UseVisualStyleBackColor = False
             '
             'LblCustomImportSep
             '
@@ -1008,7 +1009,6 @@
         Friend WithEvents LblMining As Label
         Friend WithEvents LblNetTransfers As Label
         Friend WithEvents Label9 As Label
-        Friend WithEvents BtnNicehash As Button
         Friend WithEvents LblCustomImportSep As Label
         Friend WithEvents LblTransCount As Label
         Friend WithEvents LblAmount As Label
@@ -1028,6 +1028,7 @@
         Friend WithEvents ToolTip1 As ToolTip
         Friend WithEvents Label13 As Label
         Friend WithEvents ChkNonTaxable As CheckBox
+        Friend WithEvents Btn212 As Button
     End Class
 
 End Namespace
