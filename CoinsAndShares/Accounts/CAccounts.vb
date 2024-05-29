@@ -202,18 +202,23 @@ Namespace Accounts
 
         Friend Shared Function GetTransferTransactions(transfer As CTransfer) As IEnumerable(Of CTransaction)
 
+            Dim sDescriptionSuffix = String.Empty
+            If Not String.IsNullOrEmpty(transfer.DescriptionSuffix) Then
+                sDescriptionSuffix &= " - " & transfer.DescriptionSuffix
+            End If
+
             Dim ts As New Collection(Of CTransaction)
             If transfer.IntermediateAmount <> 0 Then
-                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Transfer, transfer.AccountCodeFrom, String.Empty, 0, transfer.IntermediateAmount * -1, GetTransDescriptionTransferTo(transfer.AccountCodeTo), 0, 0))
+                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Transfer, transfer.AccountCodeFrom, String.Empty, 0, transfer.IntermediateAmount * -1, GetTransDescriptionTransferTo(transfer.AccountCodeTo) & sDescriptionSuffix, 0, 0))
             End If
             If transfer.SendFee <> 0 Then
-                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Fee, transfer.AccountCodeFrom, String.Empty, 0, transfer.SendFee * -1, GetTransDescriptionFeeForSending(transfer.AccountCodeTo), 0, 0))
+                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Fee, transfer.AccountCodeFrom, String.Empty, 0, transfer.SendFee * -1, GetTransDescriptionFeeForSending(transfer.AccountCodeTo) & sDescriptionSuffix, 0, 0))
             End If
             If transfer.ReceiveCredit <> 0 Then
-                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Transfer, transfer.AccountCodeTo, String.Empty, 0, transfer.IntermediateAmount, GetTransDescriptionReceiptFrom(transfer.AccountCodeFrom), 0, 0))
+                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Transfer, transfer.AccountCodeTo, String.Empty, 0, transfer.IntermediateAmount, GetTransDescriptionReceiptFrom(transfer.AccountCodeFrom) & sDescriptionSuffix, 0, 0))
             End If
             If transfer.ReceiveFee <> 0 Then
-                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Fee, transfer.AccountCodeTo, String.Empty, 0, transfer.ReceiveFee * -1, GetTransDescriptionFeeForReceiving(transfer.AccountCodeFrom), 0, 0))
+                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Fee, transfer.AccountCodeTo, String.Empty, 0, transfer.ReceiveFee * -1, GetTransDescriptionFeeForReceiving(transfer.AccountCodeFrom) & sDescriptionSuffix, 0, 0))
             End If
             Return ts
 

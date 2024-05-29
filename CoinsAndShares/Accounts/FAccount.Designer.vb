@@ -415,7 +415,7 @@
             Me.Btn212.TabIndex = 24
             Me.Btn212.Text = "212"
             Me.Btn212.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.ToolTip1.SetToolTip(Me.Btn212, "Import transactions from Trading ")
+            Me.ToolTip1.SetToolTip(Me.Btn212, "Import transactions from Trading 212")
             Me.Btn212.UseVisualStyleBackColor = False
             '
             'BtnNexo

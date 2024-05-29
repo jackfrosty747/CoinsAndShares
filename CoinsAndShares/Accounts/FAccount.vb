@@ -415,12 +415,14 @@ Namespace Accounts
 
         Private Sub Btn212_Click(sender As Object, e As EventArgs) Handles Btn212.Click
 
-            ' Import Interest, Dividend and Cashback from Trading 212 CSV import.  Transfers are not included.
+            ' Import Interest, Dividend and Cashback and transfers from Trading 212 CSV import
             Const COL_ACTION = "Action"
             Const COL_TIME = "Time"
             Const COL_TICKER = "Ticker"
             'Const COL_NAME = "Name"
             Const COL_TOTAL = "Total"
+
+            Const CASH_ACCOUNT = "Cash"
 
             Try
                 Using ofd = New OpenFileDialog()
@@ -434,27 +436,39 @@ Namespace Accounts
                         Dim allTrans = account.Transactions
 
                         Dim importAfterDate As Date
+                        Dim sMsg As String
                         Try
-                            Dim sMsg = "Enter the date all dividend, cashback and interest has already been included up to (inclusive).  Only records in the CSV AFTER this date will be imported."
-                            Dim t = allTrans.Where(Function(c) c.TransactionType = ETransactionType.Bonus).OrderBy(Function(c) c.TransDate)
+                            sMsg = $"Enter the date all dividend, cashback, interest and transfers have already been included up to (inclusive).  Only records in the CSV AFTER this date will be imported.  Watch out for partial days at start or end of file.  Stock purchase/sale must be done manually.  Transfers will be made to/from account {CASH_ACCOUNT}"
+                            Dim t = allTrans.Where(Function(c) c.TransactionType = ETransactionType.Bonus Or c.TransactionType = ETransactionType.Transfer).OrderBy(Function(c) c.TransDate)
                             Dim sRet = String.Empty
                             If t.Any Then
                                 sRet = t.Last.TransDate.ToShortDateString
                             End If
                             sRet = InputBox(sMsg, "Trading 212 Import", sRet)
-                            If Not Date.TryParse(sRet, importAfterDate) Then
+                            If String.IsNullOrEmpty(sRet) Then
+                                Return
+                            ElseIf Not Date.TryParse(sRet, importAfterDate) Then
                                 Throw New Exception(My.Resources.Error_NotAValidDate)
                             End If
                         Catch ex As Exception
                             Throw
                         End Try
 
+                        m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
+
                         Dim adjustments As New List(Of CAdjustment)
+                        Dim transfers As New List(Of Tuple(Of Date, Decimal, String))
+
+                        Dim warnings = New List(Of String)
 
                         For Each dr As DataRow In dt.Rows
                             Dim sAction = CDatabase.DbToString(dr(COL_ACTION))
                             Dim sDate = CDatabase.DbToString(dr(COL_TIME))
-                            Dim sTicker = CDatabase.DbToString(dr(COL_TICKER))
+                            Dim sTicker = String.Empty
+                            If dt.Columns.Contains(COL_TICKER) Then
+                                sTicker = CDatabase.DbToString(dr(COL_TICKER))
+                            End If
+
                             Dim transDate As Date
                             If Not Date.TryParse(sDate, transDate) Then
                                 Throw New Exception($"{sDate} is not a valid date")
@@ -478,6 +492,14 @@ Namespace Accounts
                                     sDescription = EDescriptionPresets.Interest.ToString
                                 ElseIf sAction.ToUpper.Contains("Spending cashback".ToUpper) Then
                                     sDescription = EDescriptionPresets.Cashback.ToString
+                                ElseIf sAction.ToUpper.Equals("Deposit", StringComparison.CurrentCultureIgnoreCase) OrElse sAction.ToUpper.Equals("Card debit", StringComparison.CurrentCultureIgnoreCase) Then
+                                    Dim sDescriptionSuffix = String.Empty
+                                    If sAction.ToUpper.Equals("Card debit", StringComparison.CurrentCultureIgnoreCase) Then
+                                        sDescriptionSuffix = "Debit Card Spend"
+                                    End If
+                                    transfers.Add(New Tuple(Of Date, Decimal, String)(transDate.Date, cTotal, sDescriptionSuffix))
+                                Else
+                                    warnings.Add($"{sAction} found in file; this must be added manually")
                                 End If
 
                                 If Not String.IsNullOrEmpty(sDescription) Then
@@ -488,11 +510,35 @@ Namespace Accounts
                             End If
                         Next
 
-                        If Not adjustments.Any Then
+                        If adjustments.Count = 0 AndAlso transfers.Count = 0 Then
                             Throw New Exception("No transactions to import")
                         End If
 
-                        m_commonObjects.Accounts.ProcessAdjustments(adjustments)
+                        sMsg = "Import complete."
+
+                        If adjustments.Count > 0 Then
+                            m_commonObjects.Accounts.ProcessAdjustments(adjustments)
+                            sMsg &= $" {adjustments.Count} adjustments"
+                        End If
+
+                        If transfers.Count > 0 Then
+                            For Each transfer In transfers
+                                Dim t = New CTransfer(CASH_ACCOUNT, AccountCode, transfer.Item2, 0, 0, transfer.Item1.Date, transfer.Item1.Date) With {
+                                    .DescriptionSuffix = transfer.Item3
+                                }
+                                m_commonObjects.Accounts.ProcessTransfer(t)
+                            Next
+                            sMsg &= $" {transfers.Count} transfers"
+                        End If
+
+                        If warnings.Count > 0 Then
+                            sMsg &= vbNewLine & vbNewLine
+                            For Each warning In warnings
+                                sMsg &= $"{vbNewLine}{warning}"
+                            Next
+                        End If
+
+                        MessageBox.Show(sMsg, Text, MessageBoxButtons.OK, If(warnings.Count > 0, MessageBoxIcon.Warning, MessageBoxIcon.Information))
 
                     End If
                 End Using

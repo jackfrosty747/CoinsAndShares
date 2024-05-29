@@ -6,6 +6,7 @@
         Friend ReadOnly Property SendFee As Decimal
         Friend ReadOnly Property SendDateTime As Date
         Friend ReadOnly Property ReceiveDateTime As Date
+        Friend Property DescriptionSuffix As String
 
         Friend Function IntermediateAmount() As Decimal
             Return SendDebit - SendFee
