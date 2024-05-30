@@ -85,9 +85,7 @@ Namespace Rates.CoinGecko
         Friend Function RateTypeSearch(searchText As String) As IEnumerable(Of CRateType) Implements IRateProvider.RateTypeSearch
 
             ' Get ALL rate types matching the search text.  This might be a filter of all the rate times 
-            ' collected from above, of a request in its own right, depending on the provider.  If no search text
-            ' provided, return NO RESULTS.  Has to be this way because we might not be allowed by certain
-            ' providers to get everything
+            ' collected from above, of a request in its own right, depending on the provider.
 
             Static all As List(Of CRateType)
             Static dataRead As Boolean
@@ -98,12 +96,11 @@ Namespace Rates.CoinGecko
             End If
 
             Dim filtered = all.Where(Function(c)
-                                         If searchText.Length = 0 Then
-                                             Return True
-                                         End If
-                                         Return c.Name.ToUpper.Contains(searchText.ToUpper) OrElse
-                                                        c.Symbol.ToUpper.Contains(searchText.ToUpper) OrElse
-                                                        c.Id.ToUpper.Contains(searchText.ToUpper)
+                                         Return _
+                                            searchText.Length = 0 OrElse
+                                            ContainsIgnoreCase(c.Name, searchText) OrElse
+                                            ContainsIgnoreCase(c.Symbol, searchText) OrElse
+                                            ContainsIgnoreCase(c.Id, searchText)
                                      End Function)
 
             Return filtered

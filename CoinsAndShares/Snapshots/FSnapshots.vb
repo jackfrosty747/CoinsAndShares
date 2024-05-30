@@ -122,25 +122,13 @@ Namespace Snapshots
                         If previousRow IsNot Nothing Then
                             Dim previousSnapshot = GetSnapshotFromRow(previousRow)
                             diffCoins = thisSnapshot.Coins - previousSnapshot.Coins
-                            If thisSnapshot.Coins <> 0 Then
-                                diffCoinsPc = (thisSnapshot.Coins - previousSnapshot.Coins) / thisSnapshot.Coins
-                            Else
-                                diffCoinsPc = 0
-                            End If
+                            diffCoinsPc = If(thisSnapshot.Coins <> 0, (thisSnapshot.Coins - previousSnapshot.Coins) / thisSnapshot.Coins, 0)
 
                             diffShares = thisSnapshot.Shares - previousSnapshot.Shares
-                            If thisSnapshot.Shares <> 0 Then
-                                diffSharesPc = (thisSnapshot.Shares - previousSnapshot.Shares) / thisSnapshot.Shares
-                            Else
-                                diffSharesPc = 0
-                            End If
+                            diffSharesPc = If(thisSnapshot.Shares <> 0, (thisSnapshot.Shares - previousSnapshot.Shares) / thisSnapshot.Shares, 0)
 
                             diffTotal = thisSnapshot.Total - previousSnapshot.Total
-                            If thisSnapshot.Total <> 0 Then
-                                diffTotalPc = (thisSnapshot.Total - previousSnapshot.Total) / thisSnapshot.Total
-                            Else
-                                diffTotalPc = 0
-                            End If
+                            diffTotalPc = If(thisSnapshot.Total <> 0, (thisSnapshot.Total - previousSnapshot.Total) / thisSnapshot.Total, 0)
                         End If
 
                         Dim foreColour As Color

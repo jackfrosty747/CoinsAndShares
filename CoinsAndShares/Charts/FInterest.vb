@@ -48,7 +48,7 @@ Namespace Charts
             Dim filtered = transactions.GetAll.Where(Function(c)
                                                          If ChkExactMatch.Checked AndAlso c.Description.Equals(TxtFilter.Text, StringComparison.CurrentCultureIgnoreCase) Then
                                                              Return True
-                                                         ElseIf c.Description.ToUpper.Contains(TxtFilter.Text.ToUpper) Then
+                                                         ElseIf ContainsIgnoreCase(c.Description, TxtFilter.Text) Then
                                                              Return True
                                                          End If
                                                          Return False
@@ -90,11 +90,7 @@ Namespace Charts
                 For Each account In accounts
                     With ChartAccount.Series(SERIES_ACCOUNT).Points.Add(account.AccountValue)
                         .AxisLabel = account.AccountCode
-                        If account.AccountValue > 0 Then
-                            .Color = Color.Green
-                        Else
-                            .Color = Color.Red
-                        End If
+                        .Color = If(account.AccountValue > 0, Color.Green, Color.Red)
                     End With
                 Next
 

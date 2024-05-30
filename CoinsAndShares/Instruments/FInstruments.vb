@@ -56,10 +56,10 @@ Namespace Instruments
 
             filtered = filtered.Where(Function(c)
                                           If filterText.Length > 0 AndAlso Not (
-                                                c.Code.ToUpper.Contains(filterText) OrElse
-                                                c.Description.ToUpper.Contains(filterText) OrElse
-                                                c.ProviderLinkCode.ToUpper.Contains(filterText)
-                                  ) Then
+                                                    ContainsIgnoreCase(c.Code, filterText) OrElse
+                                                    ContainsIgnoreCase(c.Description, filterText) OrElse
+                                                    ContainsIgnoreCase(c.ProviderLinkCode, filterText)
+                                                ) Then
                                               Return False
                                           End If
                                           If OptTypeCrypto.Checked AndAlso Not c.InstrumentType = EInstrumentType.Crypto Then

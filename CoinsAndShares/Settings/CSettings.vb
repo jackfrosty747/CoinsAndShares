@@ -22,11 +22,9 @@ Namespace Settings
             Using dt = m_commonObjects.Database.GetDatatable(sql)
                 For Each dr As DataRow In dt.Rows
                     sAlphavantageKey = CDatabase.DbToString(dr(CDatabase.FIELD_SETTINGS_ALPHAVANTAGEKEY))
-                    If IsDBNull(dr(CDatabase.FIELD_SETTINGS_RATEUPDATEWARNINGHOURS)) Then
-                        RateUpdateWarningHours = Nothing
-                    Else
-                        RateUpdateWarningHours = CDatabase.DbToInt(dr(CDatabase.FIELD_SETTINGS_RATEUPDATEWARNINGHOURS))
-                    End If
+                    RateUpdateWarningHours = If(IsDBNull(dr(CDatabase.FIELD_SETTINGS_RATEUPDATEWARNINGHOURS)),
+                        Nothing,
+                        CDatabase.DbToInt(dr(CDatabase.FIELD_SETTINGS_RATEUPDATEWARNINGHOURS)))
                     sExchangeRatesApiKey = CDatabase.DbToString(dr(CDatabase.FIELD_SETTINGS_EXCHANGERATESAPIKEY))
                     sDefaultBackupPath = CDatabase.DbToString(dr(CDatabase.FIELD_SETTINGS_DEFAULTBACKUPPATH))
                 Next

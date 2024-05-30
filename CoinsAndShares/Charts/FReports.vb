@@ -248,7 +248,7 @@ Namespace Charts
 
 
 
-            Dim miningTrans = allTransactions.Where(Function(c) c.TransactionType = ETransactionType.Mining Or c.Description.ToUpper.Contains(PART_DESCRIPTION.ToUpper))
+            Dim miningTrans = allTransactions.Where(Function(c) c.TransactionType = ETransactionType.Mining OrElse ContainsIgnoreCase(c.Description, PART_DESCRIPTION))
             If ChkMiningDateRange.Checked Then
                 miningTrans = miningTrans.Where(Function(c) c.TransDate.Date >= DtpMiningDateFrom.Value.Date And c.TransDate.Date <= DtpMiningDateTo.Value.Date)
             End If
@@ -429,15 +429,11 @@ Namespace Charts
 
             Dim analysisOfRequiredType = allAnalysis.Where(Function(c)
                                                                Dim i = allInstruments.Where(Function(d) d.Code.Equals(c.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                                                               If i Is Nothing Then
-                                                                   Return False
-                                                               End If
-                                                               If OptPlPerInstrumentTypeAll.Checked OrElse
+                                                               Return i IsNot Nothing AndAlso (
+                                                                    OptPlPerInstrumentTypeAll.Checked OrElse
                                                                     (OptPlPerInstrumentCrypto.Checked AndAlso i.InstrumentType = EInstrumentType.Crypto) OrElse
-                                                                    (OptPlPerInstrumentShares.Checked AndAlso i.InstrumentType = EInstrumentType.Share) Then
-                                                                   Return True
-                                                               End If
-                                                               Return False
+                                                                    (OptPlPerInstrumentShares.Checked AndAlso i.InstrumentType = EInstrumentType.Share)
+                                                                )
                                                            End Function).OrderByDescending(Function(c) c.CurrentWorth)
 
             '   Dim iBar As Integer
@@ -445,11 +441,7 @@ Namespace Charts
                 '  iBar += 1
                 With ChartPlPerInstrument.Series(SERIES_INSTRUMENT).Points.Add(instrumentAnalysis.Pl)
                     .AxisLabel = instrumentAnalysis.InstrumentCode
-                    If instrumentAnalysis.Pl > 0 Then
-                        .Color = Color.Green
-                    Else
-                        .Color = Color.Red
-                    End If
+                    .Color = If(instrumentAnalysis.Pl > 0, Color.Green, Color.Red)
                 End With
             Next
 

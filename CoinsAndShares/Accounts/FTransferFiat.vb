@@ -43,12 +43,7 @@
             Dim cSendFee As Decimal = GetCurrencyAmount(LblSendingFeeLabel.Text, TxtSendFee.Text, fSilent)
             Dim cReceiveFee As Decimal = GetCurrencyAmount(TxtReceivingFeeLabel.Text, TxtReceiveFee.Text, fSilent)
 
-            Dim receiveDate As Date
-            If ChkSameAsSendingDate.Checked Then
-                receiveDate = DtpSendDateTime.Value
-            Else
-                receiveDate = DtpReceiveDateTime.Value
-            End If
+            Dim receiveDate = If(ChkSameAsSendingDate.Checked, DtpSendDateTime.Value, DtpReceiveDateTime.Value)
 
             Dim transfer As New CTransfer(CmbAccountFrom.Text, CmbAccountTo.Text, cSendDebit, cSendFee, cReceiveFee,
                                           DtpSendDateTime.Value, receiveDate)

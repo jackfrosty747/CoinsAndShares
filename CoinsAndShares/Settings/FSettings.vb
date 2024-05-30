@@ -17,11 +17,9 @@ Namespace Settings
             Dim settings As New CSettings(m_commonObjects)
             TxtAlphavantageApiKey.Text = settings.AlphavantageKey
 
-            If settings.RateUpdateWarningHours.HasValue Then
-                TxtRateUpdateWarningHours.Text = settings.RateUpdateWarningHours.Value.ToString(CultureInfo.CurrentCulture)
-            Else
-                TxtRateUpdateWarningHours.Text = String.Empty
-            End If
+            TxtRateUpdateWarningHours.Text = If(settings.RateUpdateWarningHours.HasValue,
+                settings.RateUpdateWarningHours.Value.ToString(CultureInfo.CurrentCulture),
+                String.Empty)
 
             TxtExchangeRatesApiKey.Text = settings.ExchangeRatesApiKey
 

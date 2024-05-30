@@ -26,15 +26,15 @@ Module PublicFunctions
         Airdrop
     End Enum
 
+    Friend Function ContainsIgnoreCase(source As String, toCheck As String) As Boolean
+        Return source.IndexOf(toCheck, StringComparison.OrdinalIgnoreCase) >= 0
+    End Function
+
     <Extension()>
     Friend Function Code(enumConstant As [Enum]) As String
         Dim fi As FieldInfo = enumConstant.GetType().GetField(enumConstant.ToString())
         Dim aattr = DirectCast(fi.GetCustomAttributes(GetType(DescriptionAttribute), False), DescriptionAttribute())
-        If aattr.Length > 0 Then
-            Return aattr(0).Description
-        Else
-            Return enumConstant.ToString()
-        End If
+        Return If(aattr.Length > 0, aattr(0).Description, enumConstant.ToString())
     End Function
 
     Friend Sub GridDefaults(ugl As UltraGridLayout)
@@ -68,17 +68,11 @@ Module PublicFunctions
 
         lastElementEntered = grid.DisplayLayout.UIElement.LastElementEntered
 
-        If TypeOf lastElementEntered Is RowUIElement Then
-            rowElement = DirectCast(lastElementEntered, RowUIElement)
-        Else
-            rowElement = DirectCast(lastElementEntered.GetAncestor(GetType(RowUIElement)), RowUIElement)
-        End If
+        rowElement = If(TypeOf lastElementEntered Is RowUIElement,
+            DirectCast(lastElementEntered, RowUIElement),
+            DirectCast(lastElementEntered.GetAncestor(GetType(RowUIElement)), RowUIElement))
 
-        If rowElement IsNot Nothing Then
-            Return True
-        End If
-
-        Return False
+        Return rowElement IsNot Nothing
 
     End Function
 

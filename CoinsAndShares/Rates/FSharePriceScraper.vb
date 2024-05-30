@@ -417,12 +417,9 @@ Namespace Rates
                     End If
 
                     If row.Cells(Columns.ProviderLinkCode.ToString).Text.Length > 0 AndAlso rateProvider > 0 Then
-                        Dim dt As Date
-                        If IsDBNull(row.Cells(Columns.RateUpdated.ToString).Value) Then
-                            dt = CDate("1/1/1900")
-                        Else
-                            dt = CDate(row.Cells(Columns.RateUpdated.ToString).Value)
-                        End If
+                        Dim dt = If(IsDBNull(row.Cells(Columns.RateUpdated.ToString).Value),
+                            CDate("1/1/1900"),
+                            CDate(row.Cells(Columns.RateUpdated.ToString).Value))
                         all.Add(New ScrapeRequired(rateProvider, row.Cells(Columns.Code.ToString).Text, row.Cells(Columns.ProviderLinkCode.ToString).Text))
                     End If
                 Next

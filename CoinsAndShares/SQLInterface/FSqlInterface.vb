@@ -37,14 +37,14 @@
 
         Private Sub BtnGo_Click(sender As Object, e As EventArgs) Handles BtnGo.Click
             Try
-                If TxtSql.Text.ToUpper.Contains("UPDATE".ToUpper) Or TxtSql.Text.ToUpper.Contains("DELETE".ToUpper) Or
-                    TxtSql.Text.ToUpper.Contains("INTO".ToUpper) Then
+                If ContainsIgnoreCase(TxtSql.Text, "UPDATE") OrElse ContainsIgnoreCase(TxtSql.Text, "DELETE") OrElse
+                    ContainsIgnoreCase(TxtSql.Text, "INTO") Then
 
                     m_commonObjects.Database.ExecuteQuery(TxtSql.Text)
                     'Throw New InvalidOperationException("Cannot update database")
                 End If
 
-                If TxtSql.Text.ToUpper.Contains("SELECT".ToUpper) Then
+                If ContainsIgnoreCase(TxtSql.Text, "SELECT") Then
                     GrdSql.DataSource = m_commonObjects.Database.GetDatatable(TxtSql.Text)
                 End If
             Catch ex As Exception

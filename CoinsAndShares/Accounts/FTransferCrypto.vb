@@ -47,11 +47,7 @@ Namespace Accounts
         End Class
 
         Private Sub DisplayTransferInstrument(instrument As CInstrument)
-            If instrument Is Nothing Then
-                LblInstrumentDescription.Text = "< Select Instrument To Transfer >"
-            Else
-                LblInstrumentDescription.Text = instrument.Description
-            End If
+            LblInstrumentDescription.Text = If(instrument Is Nothing, "< Select Instrument To Transfer >", instrument.Description)
         End Sub
 
 
@@ -130,12 +126,8 @@ Namespace Accounts
                 Return SendAmount * SendInstrument.Rate
             End Function
             Friend Function GetTransactionBlocks(commonObjects As CCommonObjects, fSilent As Boolean) As IEnumerable(Of IEnumerable(Of CTransaction))
-                Dim dateToUse As Date
-                If TransferDate.HasValue Then
-                    dateToUse = TransferDate.Value
-                Else
-                    dateToUse = Now.Date
-                End If
+
+                Dim dateToUse = If(TransferDate, Now.Date)
 
                 Dim sFromAccountCode As String
                 If FromAccount Is Nothing Then

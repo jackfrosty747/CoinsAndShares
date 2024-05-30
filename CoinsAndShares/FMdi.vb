@@ -689,7 +689,7 @@ Projected Tax: {projectedTax:c2}"
             Dim transactions = New CTransactions(m_commonObjects)
             Dim accounts = New CAccounts(m_commonObjects)
 
-            Dim selectedAccounts = accounts.GetAll.Where(Function(c) c.AccountType = EAccountType.Bank_Account And c.AccountName.ToUpper.Contains("ISA"))
+            Dim selectedAccounts = accounts.GetAll.Where(Function(c) c.AccountType = EAccountType.Bank_Account AndAlso ContainsIgnoreCase(c.AccountName, "ISA"))
             Dim accountTransactions = transactions.GetAll().Where(Function(c) selectedAccounts.Select(Function(d) d.AccountCode.ToUpper).Contains(c.AccountCode.ToUpper))
             accountTransactions = accountTransactions.Where(Function(c) c.TransDate >= taxYearStartInclusive AndAlso c.TransDate < taxYearStartInclusive.AddYears(1))
             Dim transfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer)

@@ -114,12 +114,7 @@ Namespace Dashboard
                             Dim rowRectF = New RectangleF(New PointF(_PADDING, y), New SizeF(g.VisibleClipBounds.Width - 2 * _PADDING, szf.Height))
                             g.DrawString(sTitle, headingFont, assetBrush, rowRectF, sfNoClip)
 
-                            Dim instrumentAnalysis As IEnumerable(Of CInstrumentAnalysis)
-                            If m_analysis Is Nothing Then
-                                instrumentAnalysis = New List(Of CInstrumentAnalysis)
-                            Else
-                                instrumentAnalysis = m_analysis.InstrumentAnalysis
-                            End If
+                            Dim instrumentAnalysis = If(m_analysis Is Nothing, New List(Of CInstrumentAnalysis), m_analysis.InstrumentAnalysis)
 
                             ' Currency boxes
                             Using currencyBoxFormat As New StringFormat With {
@@ -155,12 +150,7 @@ Namespace Dashboard
                                                 fOutputRow = i.InstrumentType.Equals(instrumentType.Value)
                                                 If fOutputRow Then
                                                     sInstrumentName = i.Description
-                                                    Dim iHoursWarning As Integer
-                                                    If m_settings.RateUpdateWarningHours.HasValue Then
-                                                        iHoursWarning = m_settings.RateUpdateWarningHours.Value
-                                                    Else
-                                                        iHoursWarning = 24
-                                                    End If
+                                                    Dim iHoursWarning = If(m_settings.RateUpdateWarningHours, 24)
                                                     fDisplayRateWarning = Not i.RateUpdated.HasValue OrElse i.RateUpdated.Value < Now.AddHours(iHoursWarning * -1)
                                                 End If
                                             End If
@@ -265,11 +255,7 @@ Namespace Dashboard
         Private Sub UHoldings_MouseMove(sender As Object, e As MouseEventArgs) Handles Me.MouseMove
             Try
                 Dim m = m_mouseClickAreas.Where(Function(c) c.Item1.Contains(e.Location)).FirstOrDefault
-                If m IsNot Nothing AndAlso m.Item2 IsNot Nothing Then
-                    Cursor = Cursors.Hand
-                Else
-                    Cursor = Cursors.Default
-                End If
+                Cursor = If(m IsNot Nothing AndAlso m.Item2 IsNot Nothing, Cursors.Hand, Cursors.Default)
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             End Try

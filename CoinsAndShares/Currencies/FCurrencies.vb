@@ -97,11 +97,7 @@ Namespace Currencies
                         If currency Is Nothing Then
                             Throw New Exception(My.Resources.Error_ItemNotFound)
                         End If
-                        If IsDBNull(e.NewValue) Then
-                            currency.CurrencyRate = Nothing
-                        Else
-                            currency.CurrencyRate = CType(e.NewValue, Decimal)
-                        End If
+                        currency.CurrencyRate = If(IsDBNull(e.NewValue), Nothing, CType(e.NewValue, Decimal?))
                         tagBits.FrmCurrencies.UpdatingData = True
                         currencies.SaveAll(all)
                     End If
@@ -140,11 +136,8 @@ Namespace Currencies
 
                     e.Row.Cells(Columns.Hint.ToString).Value = sHint
                     For Each col As UltraGridColumn In e.Row.Band.Columns
-                        If col.Key.Equals(Columns.Rate.ToString, StringComparison.CurrentCultureIgnoreCase) Then
-                            e.Row.Cells(col.Key).Activation = rateColumnActivation
-                        Else
-                            e.Row.Cells(col.Key).Activation = Activation.NoEdit
-                        End If
+                        e.Row.Cells(col.Key).Activation =
+                            If(col.Key.Equals(Columns.Rate.ToString, StringComparison.CurrentCultureIgnoreCase), rateColumnActivation, Activation.NoEdit)
                     Next
 
                 Catch ex As Exception

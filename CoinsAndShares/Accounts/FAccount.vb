@@ -107,9 +107,9 @@ Namespace Accounts
             LblAccountValue.Text = FormatCurrency(analysis.CurrentValue)
             LblProfitLoss.Text = FormatCurrency(analysis.ProfitLoss)
 
-            Btn212.Visible = account.AccountName.ToUpper.Contains(TRADING212_ACCOUNT_CODE)
-            BtnNexo.Visible = account.AccountName.ToUpper.Contains(NEXO_ACCOUNT_CODE)
-            LblCustomImportSep.Visible = account.AccountName.ToUpper.Contains(TRADING212_ACCOUNT_CODE) Or account.AccountName.ToUpper.Contains(NEXO_ACCOUNT_CODE)
+            Btn212.Visible = ContainsIgnoreCase(account.AccountName, TRADING212_ACCOUNT_CODE)
+            BtnNexo.Visible = ContainsIgnoreCase(account.AccountName, NEXO_ACCOUNT_CODE)
+            LblCustomImportSep.Visible = ContainsIgnoreCase(account.AccountName, TRADING212_ACCOUNT_CODE) OrElse ContainsIgnoreCase(account.AccountName, NEXO_ACCOUNT_CODE)
             BtnSwapCrypto.Visible = account.AccountType = EAccountType.Crypto
             LblBtnSwapCryptoSep.Visible = account.AccountType = EAccountType.Crypto
 
@@ -133,11 +133,12 @@ Namespace Accounts
                     theDate = dt
                 End If
                 transactions = transactions.Where(Function(c)
-                                                      Return c.Description.ToUpper.Contains(TxtFilter.Text.ToUpper) OrElse
-                                                      c.InstrumentCode.ToUpper.Contains(TxtFilter.Text.ToUpper) OrElse
-                                                      c.TransactionType.ToString.ToUpper.Contains(TxtFilter.Text.ToUpper) OrElse
-                                                      (amount.HasValue AndAlso c.Amount = amount.Value) OrElse
-                                                      (theDate.HasValue AndAlso theDate.Value.Date = c.TransDate.Date)
+                                                      Return _
+                                                        ContainsIgnoreCase(c.Description, TxtFilter.Text) OrElse
+                                                        ContainsIgnoreCase(c.InstrumentCode, TxtFilter.Text) OrElse
+                                                        ContainsIgnoreCase(c.TransactionType.ToString, TxtFilter.Text) OrElse
+                                                        (amount.HasValue AndAlso c.Amount = amount.Value) OrElse
+                                                        (theDate.HasValue AndAlso theDate.Value.Date = c.TransDate.Date)
                                                   End Function)
             End If
 
@@ -238,11 +239,7 @@ Namespace Accounts
                 'LoadData()
                 FilterTransactions()
                 Dim txt As TextBox = CType(sender, TextBox)
-                If txt.TextLength > 0 Then
-                    txt.BackColor = Color.Yellow
-                Else
-                    txt.BackColor = SystemColors.Window
-                End If
+                txt.BackColor = If(txt.TextLength > 0, Color.Yellow, SystemColors.Window)
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             End Try
@@ -392,7 +389,7 @@ Namespace Accounts
 
                                     Dim sDescription = $"{EDescriptionPresets.Interest} - {sTransId} - {sTypeDescription}"
 
-                                    If Not allTrans.Any(Function(c) c.Description.ToUpper.Contains(sTransId.ToUpper)) Then
+                                    If Not allTrans.Any(Function(c) ContainsIgnoreCase(c.Description, sTransId)) Then
                                         Dim adjustment = New CAdjustment(transactionType.Value, AccountCode, dtDateTime, EAdjustType.Instrument,
                                                                          sInputCurrency, rInputAmount, rGbpRate, cGbpAmount, sDescription)
                                         adjustments.Add(adjustment)
@@ -486,13 +483,13 @@ Namespace Accounts
 
                                 Dim sDescription = String.Empty
 
-                                If sAction.ToUpper.Contains("Dividend".ToUpper) Then
+                                If ContainsIgnoreCase(sAction, "Dividend") Then
                                     sDescription = $"{sTicker} Dividend"
-                                ElseIf sAction.ToUpper.Contains("Interest".ToUpper) Then
+                                ElseIf ContainsIgnoreCase(sAction, "Interest") Then
                                     sDescription = EDescriptionPresets.Interest.ToString
-                                ElseIf sAction.ToUpper.Contains("Spending cashback".ToUpper) Then
+                                ElseIf ContainsIgnoreCase(sAction, "Spending cashback") Then
                                     sDescription = EDescriptionPresets.Cashback.ToString
-                                ElseIf sAction.ToUpper.Equals("Deposit", StringComparison.CurrentCultureIgnoreCase) OrElse sAction.ToUpper.Equals("Card debit", StringComparison.CurrentCultureIgnoreCase) Then
+                                ElseIf ContainsIgnoreCase(sAction, "Deposit") OrElse ContainsIgnoreCase(sAction, "Card debit") Then
                                     Dim sDescriptionSuffix = String.Empty
                                     If sAction.ToUpper.Equals("Card debit", StringComparison.CurrentCultureIgnoreCase) Then
                                         sDescriptionSuffix = "Debit Card Spend"

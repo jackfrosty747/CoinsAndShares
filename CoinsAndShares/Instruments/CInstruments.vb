@@ -255,7 +255,7 @@ Namespace Instruments
                 Dim i = all.Where(Function(c) c.Code.Equals(selected.Code, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
                 If i Is Nothing Then
                     Throw New Exception(My.Resources.Error_ItemNotFound)
-                ElseIf i.Transactions.Any Then
+                ElseIf i.Transactions.Count > 0 Then
                     Throw New Exception(My.Resources.Error_CannotDeleteTransactionsExist)
                 End If
             Next
@@ -308,10 +308,7 @@ Namespace Instruments
                 Return 1
             End If
             Dim cur = currencies.GetAll.Where(Function(c) c.CurrencyCode.Equals(instrument.CurrencyCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-            If cur Is Nothing OrElse cur.CurrencyRate <= 0 OrElse Not cur.CurrencyRate.HasValue Then
-                Return 1
-            End If
-            Return cur.CurrencyRate.Value
+            Return If(cur Is Nothing OrElse cur.CurrencyRate <= 0 OrElse Not cur.CurrencyRate.HasValue, 1, cur.CurrencyRate.Value)
         End Function
 
         Friend Sub StoreNewRates(rates As IEnumerable(Of CRate))

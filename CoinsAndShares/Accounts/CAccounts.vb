@@ -244,12 +244,7 @@ Namespace Accounts
             ' Recalculate the rate to make sure it all adds up
             buySell.Rate = buySell.Amount * rExchangeRate / buySell.Quantity
 
-            Dim transactionType As ETransactionType
-            If buySell.BuySell = EBuySell.Buy Then
-                transactionType = ETransactionType.Buy
-            Else
-                transactionType = ETransactionType.Sell
-            End If
+            Dim transactionType = If(buySell.BuySell = EBuySell.Buy, ETransactionType.Buy, ETransactionType.Sell)
 
             Dim sDesc As String = $"{buySell.BuySell} {buySell.InstrumentCode}"
 
