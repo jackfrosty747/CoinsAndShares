@@ -7,7 +7,7 @@ Namespace Accounts
         Private ReadOnly m_commonObjects As CCommonObjects
         Private ReadOnly m_allInstruments As IEnumerable(Of CInstrument)
         Private ReadOnly m_allAccounts As IEnumerable(Of CAccount)
-        Friend Sub New(commonObjects As CCommonObjects)
+        Friend Sub New(commonObjects As CCommonObjects, sDefaultFromAccount As String)
 
             m_commonObjects = commonObjects
             m_allInstruments = m_commonObjects.Instruments.GetAll()
@@ -22,6 +22,8 @@ Namespace Accounts
 
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountFrom, cryptoAccounts, commonObjects)
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountTo, cryptoAccounts, commonObjects)
+
+            CmbAccountFrom.Text = sDefaultFromAccount
 
             TxtDate.Text = Now.Date.ToShortDateString
 

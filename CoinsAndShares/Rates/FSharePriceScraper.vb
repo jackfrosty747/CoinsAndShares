@@ -469,7 +469,7 @@ Namespace Rates
                 End If
                 Dim sMsg = $"Update {updatesRequired.Count} price{IIf(updatesRequired.Count > 1, "s", String.Empty)}?  (Blank ones will be left as they are)"
                 If MessageBox.Show(sMsg, Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
-                    Cursor = Cursors.WaitCursor
+                    m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
                     Dim instruments = m_commonObjects.Instruments
                     instruments.StoreNewRates(updatesRequired)
                     LoadData()
@@ -477,7 +477,7 @@ Namespace Rates
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             Finally
-                Cursor = Cursors.Default
+                m_commonObjects.FrmMdi.Cursor = Cursors.Default
             End Try
         End Sub
 
@@ -508,6 +508,9 @@ Namespace Rates
                         For Each newRate In newRates
                             GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
                         Next
+                        If m_fStop Then
+                            Exit For
+                        End If
                     Next
 
                     If m_fStop Then

@@ -389,11 +389,13 @@ Namespace Accounts
 
         Private Sub BtnTransferFiat_Click(sender As Object, e As EventArgs) Handles BtnTransferFiat.Click
             Try
-                'If m_accounts.GetAll.Count < 2 Then
-                '    Throw New Exception("Must have at least 2 accounts to transfer")
-                'End If
                 Cursor = Cursors.WaitCursor
-                Using frmTransfer As New FTransferFiat(m_commonObjects)
+                Dim sFromAccount = String.Empty
+                Dim accounts = GridHelper.GetSelectedRows(GrdAccounts)
+                If accounts.Count = 1 Then
+                    sFromAccount = accounts.First.AccountCode
+                End If
+                Using frmTransfer As New FTransferFiat(m_commonObjects, sFromAccount)
                     frmTransfer.ShowDialog()
                 End Using
             Catch ex As Exception
@@ -417,11 +419,13 @@ Namespace Accounts
 
         Private Sub BtnTransferCrypto_Click(sender As Object, e As EventArgs) Handles BtnTransferCrypto.Click
             Try
-                'If m_accounts.GetAll.Count < 2 Then
-                '    Throw New Exception("Must have at least 2 accounts to transfer")
-                'End If
+                Dim sFromAccount = String.Empty
+                Dim accounts = GridHelper.GetSelectedRows(GrdAccounts)
+                If accounts.Count = 1 Then
+                    sFromAccount = accounts.First.AccountCode
+                End If
                 Cursor = Cursors.WaitCursor
-                Using frmTransferCrypto As New FTransferCrypto(m_commonObjects)
+                Using frmTransferCrypto As New FTransferCrypto(m_commonObjects, sFromAccount)
                     frmTransferCrypto.ShowDialog()
                 End Using
             Catch ex As Exception

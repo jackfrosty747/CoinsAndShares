@@ -3,7 +3,7 @@
         Private ReadOnly m_commonObjects As CCommonObjects
         Private ReadOnly m_allAccounts As IEnumerable(Of CAccount)
         Private m_fOkPressed As Boolean
-        Friend Sub New(commonObjects As CCommonObjects)
+        Friend Sub New(commonObjects As CCommonObjects, sDefaultFromAccount As String)
 
             ' This call is required by the designer.
             InitializeComponent()
@@ -19,6 +19,8 @@
 
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountFrom, m_allAccounts, commonObjects)
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountTo, m_allAccounts, commonObjects)
+
+            CmbAccountFrom.Text = sDefaultFromAccount
 
             AmountTextChanged(Nothing, Nothing)
             SameDateChecked()
