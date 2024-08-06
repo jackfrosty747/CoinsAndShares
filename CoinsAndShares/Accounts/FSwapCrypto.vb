@@ -35,18 +35,14 @@ Namespace Accounts
 
             allInstruments = allInstruments.OrderByDescending(Function(c)
                                                                   Return c.Code.Equals("USDC", StringComparison.CurrentCultureIgnoreCase)
-                                                              End Function).ThenBy(Function(c)
-                                                                                       Return c.Code.Equals("BTC", StringComparison.CurrentCultureIgnoreCase)
-                                                                                   End Function).ThenBy(Function(c)
-                                                                                                            Return c.Code
-                                                                                                        End Function)
+                                                              End Function).ThenByDescending(Function(c)
+                                                                                                 Return c.Code.Equals("BTC", StringComparison.CurrentCultureIgnoreCase)
+                                                                                             End Function).ThenBy(Function(c)
+                                                                                                                      Return c.Code
+                                                                                                                  End Function)
 
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbFromInstrument, allCryptoInstrumentsWithBalance, commonObjects, New LocalInstrumentReader(TxtFromRate))
-            CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbToInstrument, m_allCryptoInstruments.OrderByDescending(Function(c)
-                                                                                                                        Return c.Code.Equals("USDC", StringComparison.CurrentCultureIgnoreCase)
-                                                                                                                    End Function).ThenBy(Function(c)
-                                                                                                                                             Return c.Code
-                                                                                                                                         End Function), commonObjects, New LocalInstrumentReader(TxtToRate))
+            CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbToInstrument, allInstruments, commonObjects, New LocalInstrumentReader(TxtToRate))
 
             TxtDate.Text = Now.Date.ToShortDateString
 

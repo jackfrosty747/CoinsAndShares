@@ -8,14 +8,14 @@
         Friend ReadOnly Property Amount As Decimal
         Friend ReadOnly Property AccountCode As String
         Friend Sub New(buySell As EBuySell, instrumentCode As String, buySellDate As Date, quantity As Decimal, rate As Decimal,
-            amount As Decimal, sAccountCode As String)
+            amount As Decimal, accountCode As String)
             Me.BuySell = buySell
             Me.InstrumentCode = instrumentCode
             Me.BuySellDate = buySellDate
             Me.Quantity = quantity
             Me.Rate = rate
             Me.Amount = amount
-            Me.AccountCode = sAccountCode
+            Me.AccountCode = accountCode
         End Sub
     End Class
 End Namespace
