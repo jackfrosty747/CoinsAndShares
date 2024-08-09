@@ -712,4 +712,14 @@ Transfers: {transfers.Sum(Function(c) c.Amount):c}
             Cursor = Cursors.Default
         End Try
     End Sub
+
+    Private Sub BtnTwrr_Click(sender As Object, e As EventArgs) Handles BtnTwrr.Click
+        Try
+            Dim twrr = New TWRR.Ftwrr(m_commonObjects)
+            twrr.MdiParent = Me
+            twrr.Show()
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        End Try
+    End Sub
 End Class

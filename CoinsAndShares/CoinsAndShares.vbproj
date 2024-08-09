@@ -451,6 +451,12 @@
     <Compile Include="Dashboard\UDashboard.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TWRR\Ftwrr.Designer.vb">
+      <DependentUpon>Ftwrr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TWRR\Ftwrr.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Accounts\FAccount.resx">
@@ -558,6 +564,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Transactions\FTransactionEdit.resx">
       <DependentUpon>FTransactionEdit.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TWRR\Ftwrr.resx">
+      <DependentUpon>Ftwrr.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
