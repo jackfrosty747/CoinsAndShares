@@ -37,6 +37,11 @@
             Me.TxtEndBalance3 = New System.Windows.Forms.TextBox()
             Me.TxtEndBalance4 = New System.Windows.Forms.TextBox()
             Me.Label7 = New System.Windows.Forms.Label()
+            Me.BtnAccount = New System.Windows.Forms.Button()
+            Me.Label3 = New System.Windows.Forms.Label()
+            Me.TxtAccount = New System.Windows.Forms.TextBox()
+            Me.TxtInstrument = New System.Windows.Forms.TextBox()
+            Me.Label4 = New System.Windows.Forms.Label()
             Me.SuspendLayout()
             '
             'TxtStartingBalance
@@ -45,7 +50,7 @@
             Me.TxtStartingBalance.Name = "TxtStartingBalance"
             Me.TxtStartingBalance.Size = New System.Drawing.Size(100, 22)
             Me.TxtStartingBalance.TabIndex = 0
-            Me.TxtStartingBalance.Text = "1000000"
+            Me.TxtStartingBalance.Text = "100"
             '
             'Label1
             '
@@ -62,7 +67,7 @@
             Me.TxtChange1.Name = "TxtChange1"
             Me.TxtChange1.Size = New System.Drawing.Size(100, 22)
             Me.TxtChange1.TabIndex = 2
-            Me.TxtChange1.Text = "0"
+            Me.TxtChange1.Text = "50"
             '
             'Label2
             '
@@ -79,7 +84,7 @@
             Me.TxtChange2.Name = "TxtChange2"
             Me.TxtChange2.Size = New System.Drawing.Size(100, 22)
             Me.TxtChange2.TabIndex = 4
-            Me.TxtChange2.Text = "100000"
+            Me.TxtChange2.Text = "-10"
             '
             'TxtChange3
             '
@@ -87,6 +92,7 @@
             Me.TxtChange3.Name = "TxtChange3"
             Me.TxtChange3.Size = New System.Drawing.Size(100, 22)
             Me.TxtChange3.TabIndex = 5
+            Me.TxtChange3.Text = "0"
             '
             'TxtChange4
             '
@@ -119,7 +125,7 @@
             Me.TxtEndBalance1.Name = "TxtEndBalance1"
             Me.TxtEndBalance1.Size = New System.Drawing.Size(100, 22)
             Me.TxtEndBalance1.TabIndex = 12
-            Me.TxtEndBalance1.Text = "1162484"
+            Me.TxtEndBalance1.Text = "160"
             '
             'TxtEndBalance2
             '
@@ -127,7 +133,7 @@
             Me.TxtEndBalance2.Name = "TxtEndBalance2"
             Me.TxtEndBalance2.Size = New System.Drawing.Size(100, 22)
             Me.TxtEndBalance2.TabIndex = 13
-            Me.TxtEndBalance2.Text = "1192328"
+            Me.TxtEndBalance2.Text = "160"
             '
             'TxtEndBalance3
             '
@@ -135,6 +141,7 @@
             Me.TxtEndBalance3.Name = "TxtEndBalance3"
             Me.TxtEndBalance3.Size = New System.Drawing.Size(100, 22)
             Me.TxtEndBalance3.TabIndex = 14
+            Me.TxtEndBalance3.Text = "180"
             '
             'TxtEndBalance4
             '
@@ -152,11 +159,59 @@
             Me.Label7.TabIndex = 16
             Me.Label7.Text = "End Balance"
             '
+            'BtnAccount
+            '
+            Me.BtnAccount.Location = New System.Drawing.Point(292, 397)
+            Me.BtnAccount.Name = "BtnAccount"
+            Me.BtnAccount.Size = New System.Drawing.Size(75, 23)
+            Me.BtnAccount.TabIndex = 17
+            Me.BtnAccount.Text = "Get TWR"
+            Me.BtnAccount.UseVisualStyleBackColor = True
+            '
+            'Label3
+            '
+            Me.Label3.AutoSize = True
+            Me.Label3.Location = New System.Drawing.Point(45, 374)
+            Me.Label3.Name = "Label3"
+            Me.Label3.Size = New System.Drawing.Size(49, 13)
+            Me.Label3.TabIndex = 18
+            Me.Label3.Text = "Account"
+            '
+            'TxtAccount
+            '
+            Me.TxtAccount.Location = New System.Drawing.Point(161, 371)
+            Me.TxtAccount.Name = "TxtAccount"
+            Me.TxtAccount.Size = New System.Drawing.Size(100, 22)
+            Me.TxtAccount.TabIndex = 19
+            Me.TxtAccount.Text = "VANGUARD"
+            '
+            'TxtInstrument
+            '
+            Me.TxtInstrument.Location = New System.Drawing.Point(161, 399)
+            Me.TxtInstrument.Name = "TxtInstrument"
+            Me.TxtInstrument.Size = New System.Drawing.Size(100, 22)
+            Me.TxtInstrument.TabIndex = 20
+            Me.TxtInstrument.Text = "LIFE100"
+            '
+            'Label4
+            '
+            Me.Label4.AutoSize = True
+            Me.Label4.Location = New System.Drawing.Point(45, 402)
+            Me.Label4.Name = "Label4"
+            Me.Label4.Size = New System.Drawing.Size(63, 13)
+            Me.Label4.TabIndex = 21
+            Me.Label4.Text = "Instrument"
+            '
             'Ftwrr
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
             Me.ClientSize = New System.Drawing.Size(624, 441)
+            Me.Controls.Add(Me.Label4)
+            Me.Controls.Add(Me.TxtInstrument)
+            Me.Controls.Add(Me.TxtAccount)
+            Me.Controls.Add(Me.Label3)
+            Me.Controls.Add(Me.BtnAccount)
             Me.Controls.Add(Me.Label7)
             Me.Controls.Add(Me.TxtEndBalance4)
             Me.Controls.Add(Me.TxtEndBalance3)
@@ -195,6 +250,11 @@
         Friend WithEvents TxtEndBalance3 As TextBox
         Friend WithEvents TxtEndBalance4 As TextBox
         Friend WithEvents Label7 As Label
+        Friend WithEvents BtnAccount As Button
+        Friend WithEvents Label3 As Label
+        Friend WithEvents TxtAccount As TextBox
+        Friend WithEvents TxtInstrument As TextBox
+        Friend WithEvents Label4 As Label
     End Class
 
 End Namespace
