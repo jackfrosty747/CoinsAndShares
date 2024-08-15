@@ -1,6 +1,4 @@
 ﻿Imports System.Globalization
-Imports CoinsAndShares.Accounts
-Imports CoinsAndShares.Instruments
 
 Namespace TWRR
     Friend Class Ftwrr
@@ -76,131 +74,62 @@ Namespace TWRR
 
         End Sub
 
-        Private Class CTwrr
-            Friend Class TwrrPeriod
-                Public Sub New(cashflow As Decimal, endBalance As Decimal)
-                    Me.Cashflow = cashflow
-                    Me.EndBalance = endBalance
-                End Sub
-
-                Friend Property Cashflow As Decimal
-                Friend Property EndBalance As Decimal
-            End Class
-
-            Friend Shared Function CalculateTwrr(startBalance As Decimal, periods As IEnumerable(Of TwrrPeriod)) As Decimal
-
-                ' Provide the starting balance (cannot be zero)
-                ' Then, for every deposit or withdrawal, provide the cashflow and balance after that cashflow.
-                ' The last period will probably have no cashflow.
-
-                ' Example
-                ' £100 investment.
-                ' has risen to £110.  Then we deposit another £50, making £160.  
-                ' has risen to £170.  We withdraw £10, making £160
-                ' then, at end of analysis period, the value is £180.
-
-                ' Starting: 100
-                ' Cashflow 50, Balance 160
-                ' Cashflow -10, Balance 160
-                ' Cashflow 0, Balance 180
-
-                If startBalance = 0D Then
-                    Throw New ArgumentException("Starting balance cannot be zero.")
-                End If
-
-                Dim previousEndBalance As Decimal = startBalance
-                Dim twrr As Decimal = 1D
-                Dim hasActiveInvestment As Boolean = True
-
-                For Each period In periods
-                    If previousEndBalance = 0D Then
-                        ' Skip the periods where the balance is zero
-                        hasActiveInvestment = False
-                        ' If the investment is bought again, reset calculation from here
-                        If period.EndBalance > 0D Then
-                            previousEndBalance = period.EndBalance
-                            hasActiveInvestment = True
-                        End If
-                        Continue For
-                    End If
-
-                    If hasActiveInvestment Then
-                        Dim endBalanceBeforeCashflow = period.EndBalance - period.Cashflow
-                        Dim periodReturn = endBalanceBeforeCashflow / previousEndBalance
-                        twrr *= periodReturn
-                        previousEndBalance = period.EndBalance
-                    End If
-                Next
-
-                ' If no active investment period was found, return 0 indicating no valid TWRR can be calculated
-                If Not hasActiveInvestment Then
-                    Return 0D
-                End If
-
-                twrr -= 1D
-
-                Return twrr
-
-
-            End Function
-
-        End Class
 
         Private Sub BtnAccount_Click(sender As Object, e As EventArgs) Handles BtnAccount.Click
             Try
-                If TxtAccount.Text.Length = 0 Then
-                    Throw New Exception("Enter the account code to calculate")
-                ElseIf TxtInstrument.Text.Length = 0 Then
-                    Throw New Exception("Enter the instrument to calculate for")
-                End If
+                'Dim twrr = New CTwrr(m_commonObjects)
+                'Dim rate = twrr.CalculateTwrr(TxtAccount.Text, TxtInstrument.Text)
+                'MessageBox.Show($"TWRR: {rate * 100:0.00}%")
 
-                Dim accounts = New CAccounts(m_commonObjects)
-                Dim account = accounts.GetAll.SingleOrDefault(Function(c) c.AccountCode.Equals(TxtAccount.Text, StringComparison.CurrentCultureIgnoreCase))
+                'If TxtAccount.Text.Length = 0 Then
+                '    Throw New Exception("Enter the account code to calculate")
+                'ElseIf TxtInstrument.Text.Length = 0 Then
+                '    Throw New Exception("Enter the instrument to calculate for")
+                'End If
 
-                If account Is Nothing Then
-                    Throw New Exception("Account not found")
-                End If
+                'Dim accounts = New CAccounts(m_commonObjects)
+                'Dim account = accounts.GetAll.SingleOrDefault(Function(c) c.AccountCode.Equals(TxtAccount.Text, StringComparison.CurrentCultureIgnoreCase))
 
-                Dim allTransactions = account.Transactions
+                'If account Is Nothing Then
+                '    Throw New Exception("Account not found")
+                'End If
 
-                Dim instrumentTransactions = allTransactions.Where(Function(c) c.InstrumentCode.Equals(TxtInstrument.Text, StringComparison.CurrentCultureIgnoreCase))
-                If Not instrumentTransactions.Any Then
-                    Throw New Exception("No transactions found for this instrument in within account")
-                End If
+                'Dim allTransactions = account.Transactions
 
-                Dim startingBalance = 0D
-                Dim periods = New List(Of CTwrr.TwrrPeriod)
-                Dim lastQuantity As Decimal
-                Dim runningTotalQty As Decimal
-                Dim runningTotalBalance As Decimal
-                For Each transaction In instrumentTransactions.OrderBy(Function(c) c.TransDate)
-                    Dim cashflow = transaction.Amount * transaction.Rate
+                'Dim instrumentTransactions = allTransactions.Where(Function(c) c.InstrumentCode.Equals(TxtInstrument.Text, StringComparison.CurrentCultureIgnoreCase))
+                'If Not instrumentTransactions.Any Then
+                '    Throw New Exception("No transactions found for this instrument in within account")
+                'End If
 
-                    runningTotalBalance += cashflow
-                    runningTotalQty += transaction.Amount
+                'Dim periods = New List(Of CTwrr.TwrrPeriod)
+                'Dim startingBalance = 0D
+                'Dim runningQuantity = 0D
 
-                    If cashflow <> 0 Then
-                        If startingBalance = 0 Then
-                            startingBalance = transaction.Amount * transaction.Rate
-                        Else
-                            Dim endBalance = runningTotalQty * transaction.Rate
-                            periods.Add(New CTwrr.TwrrPeriod(cashFlow, endBalance))
-                        End If
+                'For Each transaction In instrumentTransactions.OrderBy(Function(c) c.TransDate)
+                '    Dim cashFlow = Math.Round(transaction.Amount * transaction.Rate, 2)
+                '    runningQuantity += transaction.Amount
+                '    Dim balAtEndOfPeriod = Math.Round(runningQuantity * transaction.Rate, 2)
+                '    If balAtEndOfPeriod <= 0 Then
+                '        periods.Clear()
+                '        startingBalance = 0
+                '        runningQuantity = 0 ' Should be zero - but clear in case of rounding 
+                '    Else
+                '        If startingBalance = 0 Then
+                '            startingBalance = cashFlow
+                '        Else
+                '            periods.Add(New CTwrr.TwrrPeriod(cashFlow, balAtEndOfPeriod))
+                '        End If
+                '    End If
+                'Next
 
-                        'MsgBox($"Amount: {transaction.Amount},  Rate:  {transaction.Rate}")
-                        lastQuantity = transaction.Amount
-                    End If
-                Next
+                'Dim instruments = New CInstruments(m_commonObjects)
+                'Dim instrument = instruments.GetAll.SingleOrDefault(Function(c) c.Code.Equals(TxtInstrument.Text, StringComparison.CurrentCultureIgnoreCase))
 
-                Dim instruments = New CInstruments(m_commonObjects)
-                Dim instrument = instruments.GetAll.SingleOrDefault(Function(c) c.Code.Equals(TxtInstrument.Text, StringComparison.CurrentCultureIgnoreCase))
+                'periods.Add(New CTwrr.TwrrPeriod(0, runningQuantity * instrument.Rate))
 
-                ' Add end record
-                periods.Add(New CTwrr.TwrrPeriod(0, lastQuantity * instrument.Rate))
+                'Dim twrr = CTwrr.CalculateTwrr(startingBalance, periods)
 
-                Dim twrr = CTwrr.CalculateTwrr(startingBalance, periods)
-
-                MessageBox.Show($"TWRR: {twrr * 100:0.00}%")
+                'MessageBox.Show($"TWRR: {twrr * 100:0.00}%")
 
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)

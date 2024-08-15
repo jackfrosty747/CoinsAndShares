@@ -451,6 +451,7 @@
     <Compile Include="Dashboard\UDashboard.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TWRR\CTwrr.vb" />
     <Compile Include="TWRR\Ftwrr.Designer.vb">
       <DependentUpon>Ftwrr.vb</DependentUpon>
     </Compile>

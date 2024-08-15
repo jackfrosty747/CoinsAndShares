@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.ObjectModel
 Imports CoinsAndShares.Instruments
+Imports CoinsAndShares.TWRR
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 
@@ -14,6 +15,7 @@ Namespace Transactions
 
             NetCash
             Pl
+            TWRR
         End Enum
         Private NotInheritable Class LocalTagBits : Inherits TagBits
             Friend ReadOnly Property AllInstruments As IEnumerable(Of CInstrument)
@@ -23,9 +25,8 @@ Namespace Transactions
             End Sub
         End Class
         Friend Shared Sub LoadData(grid As UltraGrid, transactions As Collection(Of CTransaction),
-                                   commonObjects As CCommonObjects, batches As IEnumerable(Of CBatch), allInstruments As IEnumerable(Of CInstrument))
-            'Dim instruments = New CInstruments(commonObjects)
-            'Dim allInstruments = instruments.GetAll
+                                   commonObjects As CCommonObjects, batches As IEnumerable(Of CBatch),
+                                   allInstruments As IEnumerable(Of CInstrument))
 
             Dim currencies = commonObjects.Currencies
             Dim allCurrencies = currencies.GetAll
@@ -61,8 +62,23 @@ Namespace Transactions
 
                     dr(Columns.Pl.ToString) = cPurchasedNetLocalCurrency + t.LocalCurrencyValue
 
+                    If Math.Round(t.LocalCurrencyValue, 2) > 0 AndAlso Not String.IsNullOrEmpty(t.InstrumentCode) Then
+                        ' TODO
+                        Dim currentRate = allInstruments.Single(Function(c) c.Code.Equals(t.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).Rate
+                        Dim instrumentTransactions = transactions.Where(Function(c) c.InstrumentCode.Equals(t.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
+                        Dim exchangeRate As Decimal = 1
+                        If Not String.IsNullOrEmpty(i.CurrencyCode) Then
+                            Dim curr = allCurrencies.SingleOrDefault(Function(c) c.CurrencyCode.Equals(i.CurrencyCode, StringComparison.CurrentCultureIgnoreCase))
+                            If curr IsNot Nothing AndAlso curr.CurrencyRate.HasValue Then
+                                exchangeRate = curr.CurrencyRate.Value
+                            End If
+                        End If
+                        Dim twrrRate = CTwrr.CalculateTwrr(instrumentTransactions, currentRate, exchangeRate)
+                        dr(Columns.TWRR.ToString) = twrrRate
+                    End If
                 End If
                 dr(Columns.CurrentValue.ToString) = t.LocalCurrencyValue
+
 
 
                 dt.Rows.Add(dr)
@@ -186,7 +202,7 @@ Namespace Transactions
                             col.Width = 120
                         Case Columns.Quantity.ToString
                             col.Header.Caption = "Qty Held"
-                            col.Width = 125
+                            col.Width = 110
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = FORMAT_QUANTITY
                             col.Style = ColumnStyle.Button
@@ -211,6 +227,13 @@ Namespace Transactions
                             col.Width = 100
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = "c2"
+
+                        Case Columns.TWRR.ToString
+                            col.Header.Caption = "TWRR"
+                            col.Width = 90
+                            col.CellAppearance.TextHAlign = HAlign.Right
+                            col.Format = "0.0%"
+
                         Case Else
                             col.Hidden = True
                     End Select
@@ -230,6 +253,8 @@ Namespace Transactions
 
             dt.Columns.Add(Columns.NetCash.ToString, GetType(Decimal))
             dt.Columns.Add(Columns.Pl.ToString, GetType(Decimal))
+
+            dt.Columns.Add(Columns.TWRR.ToString, GetType(Decimal))
             Return dt
         End Function
     End Class
