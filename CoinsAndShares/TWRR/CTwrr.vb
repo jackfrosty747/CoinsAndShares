@@ -49,6 +49,9 @@ Namespace TWRR
                 End If
             Next
 
+            If startingBalance <= 0 Then
+                Return 0
+            End If
 
             periods.Add(New TwrrPeriod(0, runningQuantity * currentRate / currentExchangeRate))
 

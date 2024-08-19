@@ -337,12 +337,13 @@ Partial Class FMdi
         '
         'BtnTwrr
         '
-        Me.BtnTwrr.Location = New System.Drawing.Point(421, 167)
+        Me.BtnTwrr.Location = New System.Drawing.Point(533, 47)
         Me.BtnTwrr.Name = "BtnTwrr"
         Me.BtnTwrr.Size = New System.Drawing.Size(75, 23)
         Me.BtnTwrr.TabIndex = 4
         Me.BtnTwrr.Text = "TWRR"
         Me.BtnTwrr.UseVisualStyleBackColor = True
+        Me.BtnTwrr.Visible = False
         '
         'FMdi
         '

@@ -31,7 +31,7 @@ Namespace Rates.MorningStar
             ' If this path breaks, use the below code to find the path of a known price
             Dim PathIsBroken = True
             If PathIsBroken Then
-                FindXPath(doc, "$412.53")
+                FindXPath(doc, "106.80")
                 Return Nothing
             End If
 

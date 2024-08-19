@@ -619,14 +619,16 @@ Friend Class CDropdowns
     Friend NotInheritable Class CRateProvidersDropdown
         Const COL_CODE = "code"
         Const COL_NAME = "name"
-        Friend Shared Sub SetupDropdown(cmb As UltraCombo)
+        Friend Shared Sub SetupDropdown(cmb As UltraCombo, commonObjects As CCommonObjects)
             Dim dt = New DataTable
             dt.Columns.Add(COL_CODE, GetType(Integer))
             dt.Columns.Add(COL_NAME, GetType(String))
             For Each e As Rates.MRates.ERateProvider In [Enum].GetValues(GetType(Rates.MRates.ERateProvider))
                 Dim dr = dt.NewRow()
                 dr(COL_CODE) = e
-                dr(COL_NAME) = [Enum].GetName(GetType(Rates.MRates.ERateProvider), e)
+                'dr(COL_NAME) = [Enum].GetName(GetType(Rates.MRates.ERateProvider), e)
+                'Dim rp = Rates.GetRateProvider(commonObjects, e).GetName
+                dr(COL_NAME) = Rates.GetRateProvider(commonObjects, e).GetName
                 dt.Rows.Add(dr)
             Next
             RemoveHandler cmb.InitializeLayout, AddressOf InitializeLayout

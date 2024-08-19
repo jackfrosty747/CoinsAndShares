@@ -26,7 +26,7 @@ Namespace Instruments
 
             CDropdowns.CCurrenciesDropdown.SetupDropdown(CmbCurrencyCode, commonObjects, commonObjects.Currencies.GetAll())
             CDropdowns.CHedgingGroupsGropdown.SetupDropdown(CmbHedgingGroupCode, commonObjects.Instruments.GetAll())
-            CDropdowns.CRateProvidersDropdown.SetupDropdown(CmbRateProvider)
+            CDropdowns.CRateProvidersDropdown.SetupDropdown(CmbRateProvider, commonObjects)
 
             LoadData()
 
