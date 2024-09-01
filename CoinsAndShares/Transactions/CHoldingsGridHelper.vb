@@ -202,7 +202,7 @@ Namespace Transactions
                             col.Width = 120
                         Case Columns.Quantity.ToString
                             col.Header.Caption = "Qty Held"
-                            col.Width = 110
+                            col.Width = 100
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = FORMAT_QUANTITY
                             col.Style = ColumnStyle.Button
@@ -213,7 +213,7 @@ Namespace Transactions
                             col.Format = FORMAT_RATE
                         Case Columns.CurrentValue.ToString
                             col.Header.Caption = "Value"
-                            col.Width = 100
+                            col.Width = 110
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = "c2"
 
