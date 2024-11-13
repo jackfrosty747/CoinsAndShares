@@ -13,8 +13,10 @@ Namespace Transactions
         Friend Property Description As String
         Friend Property Batch As Long
         Friend ReadOnly Property ExchangeRate As Decimal
+        Friend ReadOnly Property Reconciled As Boolean
         Friend Sub New(id As Long, transDate As Date, transactionType As ETransactionType, accountCode As String,
-                   instrumentCode As String, rate As Decimal, amount As Decimal, description As String, batch As Long, exchangeRate As Decimal)
+                   instrumentCode As String, rate As Decimal, amount As Decimal, description As String, batch As Long, exchangeRate As Decimal,
+                       reconciled As Boolean)
             Me.Id = id
             Me.TransDate = transDate
             Me.TransactionType = transactionType
@@ -25,6 +27,7 @@ Namespace Transactions
             Me.Description = description
             Me.Batch = batch
             Me.ExchangeRate = exchangeRate
+            Me.Reconciled = reconciled
         End Sub
         Friend Function GetLocalCurrencyBalance(allInstruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail)) As Decimal
             Dim cLocal As Decimal

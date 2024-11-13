@@ -42,6 +42,8 @@
             Me.LblBalance = New System.Windows.Forms.Label()
             Me.ChkIncludeOnShortcuts = New System.Windows.Forms.CheckBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
+            Me.BtnReconcile = New System.Windows.Forms.Button()
+            Me.Label20 = New System.Windows.Forms.Label()
             Me.LblSelected = New System.Windows.Forms.Label()
             Me.Label15 = New System.Windows.Forms.Label()
             Me.LblAmount = New System.Windows.Forms.Label()
@@ -310,6 +312,8 @@
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.BtnReconcile)
+            Me.Panel1.Controls.Add(Me.Label20)
             Me.Panel1.Controls.Add(Me.LblSelected)
             Me.Panel1.Controls.Add(Me.Label15)
             Me.Panel1.Controls.Add(Me.LblAmount)
@@ -332,6 +336,29 @@
             Me.Panel1.Padding = New System.Windows.Forms.Padding(5)
             Me.Panel1.Size = New System.Drawing.Size(784, 38)
             Me.Panel1.TabIndex = 3
+            '
+            'BtnReconcile
+            '
+            Me.BtnReconcile.AutoSize = True
+            Me.BtnReconcile.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnReconcile.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnReconcile.Dock = System.Windows.Forms.DockStyle.Left
+            Me.BtnReconcile.Location = New System.Drawing.Point(770, 5)
+            Me.BtnReconcile.Name = "BtnReconcile"
+            Me.BtnReconcile.Size = New System.Drawing.Size(24, 28)
+            Me.BtnReconcile.TabIndex = 26
+            Me.BtnReconcile.Text = "R"
+            Me.BtnReconcile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.ToolTip1.SetToolTip(Me.BtnReconcile, "Reconcile or unreconcile selected transactions")
+            Me.BtnReconcile.UseVisualStyleBackColor = False
+            '
+            'Label20
+            '
+            Me.Label20.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label20.Location = New System.Drawing.Point(765, 5)
+            Me.Label20.Name = "Label20"
+            Me.Label20.Size = New System.Drawing.Size(5, 28)
+            Me.Label20.TabIndex = 25
             '
             'LblSelected
             '
@@ -1029,6 +1056,8 @@
         Friend WithEvents Label13 As Label
         Friend WithEvents ChkNonTaxable As CheckBox
         Friend WithEvents Btn212 As Button
+        Friend WithEvents BtnReconcile As Button
+        Friend WithEvents Label20 As Label
     End Class
 
 End Namespace

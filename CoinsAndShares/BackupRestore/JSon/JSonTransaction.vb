@@ -10,9 +10,10 @@
         Public Property Description As String
         Public Property Batch As Integer?
         Public Property ExchangeRate As Decimal?
+        Public Property Reconciled As Boolean
         Friend Sub Fill(id As Long, transDate As Date?, transType As String, accountCode As String,
                         instrumentCode As String, rate As Decimal?, amount As Decimal?,
-                        description As String, batch As Integer?, exchangeRate As Decimal?)
+                        description As String, batch As Integer?, exchangeRate As Decimal?, reconciled As Boolean)
             Me.Id = id
             Me.TransDate = transDate
             Me.TransType = transType
@@ -23,6 +24,7 @@
             Me.Description = description
             Me.Batch = batch
             Me.ExchangeRate = exchangeRate
+            Me.Reconciled = reconciled
         End Sub
     End Class
 End Namespace

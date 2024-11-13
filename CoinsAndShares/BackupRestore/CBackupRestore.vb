@@ -221,8 +221,9 @@ Namespace BackupRestore
                     If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE)) Then
                         rExchangeRate = CType(dr(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE), Decimal)
                     End If
+                    Dim fReconciled = CDatabase.DbToBool(dr(CDatabase.FIELD_TRANSACTIONS_RECONCILED))
                     Dim transaction As New JSonTransaction
-                    transaction.Fill(lId, transDate, sTransType, sAccountCode, sInstrumentCode, rRate, cAmount, sDescription, iBatch, rExchangeRate)
+                    transaction.Fill(lId, transDate, sTransType, sAccountCode, sInstrumentCode, rRate, cAmount, sDescription, iBatch, rExchangeRate, fReconciled)
                     transactions.Add(transaction)
                 Next
             End Using
@@ -371,7 +372,9 @@ Namespace BackupRestore
                             If t.ExchangeRate.HasValue Then
                                 dr(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE) = t.ExchangeRate.Value
                             End If
-
+                            If t.Reconciled Then
+                                dr(CDatabase.FIELD_TRANSACTIONS_RECONCILED) = True
+                            End If
                             dt.Rows.Add(dr)
                         Next
                         Using cb = New SqlCeCommandBuilder(da)

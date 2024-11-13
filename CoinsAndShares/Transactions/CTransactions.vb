@@ -183,8 +183,9 @@ Namespace Transactions
             Dim sDesc As String = CDatabase.DbToString(dr(CDatabase.FIELD_TRANSACTIONS_DESCRIPTION))
             Dim lBatch As Long = CDatabase.DbToLong(dr(CDatabase.FIELD_TRANSACTIONS_BATCH))
             Dim rExchangeRate As Decimal = CDatabase.DbToDecimal(dr(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE))
+            Dim fReconciled As Boolean = CDatabase.DbToBool(dr(CDatabase.FIELD_TRANSACTIONS_RECONCILED))
             Dim transaction As New CTransaction(lId, transDateTime, transactionType, sAccountCode,
-                                                sInstrumentCode, rRate, rAmount, sDesc, lBatch, rExchangeRate)
+                                                sInstrumentCode, rRate, rAmount, sDesc, lBatch, rExchangeRate, fReconciled)
             Return transaction
         End Function
 
@@ -338,6 +339,24 @@ Namespace Transactions
 
         End Function
 
+        Friend Sub ReconcileUnreconcile(ids As IEnumerable(Of Long))
+            If ids Is Nothing OrElse Not ids.Any Then
+                Throw New Exception("No IDs specified")
+            End If
+            m_commonObjects.Database.TransactionBegin()
+            Try
+                Dim sql = $"
+                    UPDATE {CDatabase.TABLE_TRANSACTIONS}
+                    SET {CDatabase.FIELD_TRANSACTIONS_RECONCILED} = CASE WHEN Coalesce({CDatabase.FIELD_TRANSACTIONS_RECONCILED}, 0) = 0 THEN 1 ELSE 0 END
+                    WHERE {CDatabase.FIELD_TRANSACTIONS_ID} IN ({String.Join(", ", ids)});"
+                m_commonObjects.Database.ExecuteQuery(sql)
+
+                m_commonObjects.Database.TransactionCommit()
+            Catch ex As Exception
+                m_commonObjects.Database.TransactionRollback()
+                Throw
+            End Try
+        End Sub
     End Class
 
 End Namespace

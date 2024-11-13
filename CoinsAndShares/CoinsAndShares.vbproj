@@ -80,10 +80,11 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>A7DCA34F535BC2FA0FAACD7BE3FD67BEC996B69A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>0C7281D121EE210A4EDDD7C4258E02A78B43CAB8</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>CoinsAndShares_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>

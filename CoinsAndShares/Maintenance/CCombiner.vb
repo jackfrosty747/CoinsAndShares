@@ -44,7 +44,7 @@ Namespace Maintenance
                 Dim rExchangeRate As Decimal ' Not sure yet
 
                 Dim transaction = New CTransaction(0, dDate, TransactionType, AccountCode, group.Instrument, rAverageRate,
-                                                   group.TotalAmount, sDesc, 0, rExchangeRate)
+                                                   group.TotalAmount, sDesc, 0, rExchangeRate, False)
 
                 newTransactions.Add(transaction)
             Next

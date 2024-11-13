@@ -547,6 +547,31 @@ Namespace Accounts
 
         End Sub
 
+        Private Sub BtnReconcile_Click(sender As Object, e As EventArgs) Handles BtnReconcile.Click
+            Try
+                Dim selectedRows As IEnumerable(Of CTransaction) = CTransactionsGridHelper.GetSelectedTransactions(GrdTransactions)
+                If Not selectedRows.Any Then
+                    Throw New Exception(My.Resources.Error_NoRowsSelected)
+                End If
+                Cursor = Cursors.WaitCursor
+                Dim transactions = New CTransactions(m_commonObjects)
+                transactions.ReconcileUnreconcile(selectedRows.Select(Function(c) c.Id))
+
+                Dim firstVisibleRowId = CTransactionsGridHelper.GetFirstVisibleId(GrdTransactions)
+
+                m_commonObjects.ClearCache()
+                LoadData()
+
+                If firstVisibleRowId.HasValue Then
+                    CTransactionsGridHelper.SetFirstVisibleId(GrdTransactions, firstVisibleRowId.Value)
+                End If
+
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
     End Class
 
 End Namespace

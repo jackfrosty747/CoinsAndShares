@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.Windows.Forms.DataVisualization.Charting
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 
@@ -20,6 +21,7 @@ Namespace Transactions
             Description
             Batch
             ExchangeRate
+            Reconciled
         End Enum
         Private NotInheritable Class LocalTagBits : Inherits TagBits
             Friend ReadOnly HostForm As ITransactionsForm
@@ -50,6 +52,7 @@ Namespace Transactions
                 If transaction.ExchangeRate > 0 And transaction.ExchangeRate <> 1 Then
                     dr(Columns.ExchangeRate.ToString) = transaction.ExchangeRate
                 End If
+                dr(Columns.Reconciled.ToString) = transaction.Reconciled
                 dt.Rows.Add(dr)
             Next
             RemoveHandler grid.InitializeRow, AddressOf InitializeRow
@@ -143,6 +146,9 @@ Namespace Transactions
                         Case Columns.ExchangeRate.ToString
                             col.Header.Caption = "Exch/R"
                             col.Width = 40
+                        Case Columns.Reconciled.ToString
+                            col.Header.Caption = "R"
+                            col.Width = 20
                         Case Else
                             col.Hidden = True
                     End Select
@@ -208,6 +214,9 @@ Namespace Transactions
                 'e.Row.Cells(Columns.AmountDisplay.ToString).ToolTipText = sTooltip
 
                 e.Row.CellAppearance.ForeColor = CColours.TransactionType(transaction.TransactionType)
+
+                e.Row.CellAppearance.BackColor = If(transaction.Reconciled, Color.PaleGreen, Color.White)
+
             Catch ex As Exception
                 tagBits.CommonObjects.Errors.Handle(ex)
             End Try
@@ -224,8 +233,9 @@ Namespace Transactions
             Dim sDescription As String = row.Cells(Columns.Description.ToString).Text
             Dim lBatch As Long = CDatabase.DbToLong(row.Cells(Columns.Batch.ToString).Value)
             Dim rExchangeRate As Decimal = CDatabase.DbToDecimal(row.Cells(Columns.ExchangeRate.ToString).Value)
+            Dim fReconciled As Boolean = CDatabase.DbToBool(row.Cells(Columns.Reconciled.ToString).Value)
             Dim transaction As New CTransaction(lId, transDate, transactionType, sAccountCode, sInstrumentCode,
-                                                rRate, rAmount, sDescription, lBatch, rExchangeRate)
+                                                rRate, rAmount, sDescription, lBatch, rExchangeRate, fReconciled)
             Return transaction
         End Function
 
@@ -244,7 +254,24 @@ Namespace Transactions
             dt.Columns.Add(Columns.Sterling.ToString, GetType(Decimal))
             dt.Columns.Add(Columns.Description.ToString)
             dt.Columns.Add(Columns.ExchangeRate.ToString, GetType(Decimal))
+            dt.Columns.Add(Columns.Reconciled.ToString, GetType(Boolean))
             Return dt
         End Function
+
+        Friend Shared Function GetFirstVisibleId(grid As UltraGrid) As Long?
+            If grid.ActiveRowScrollRegion Is Nothing Then
+                Return Nothing
+            End If
+            Return CDatabase.DbToLong(grid.ActiveRowScrollRegion.FirstRow.Cells(Columns.Id.ToString).Value)
+        End Function
+
+        Friend Shared Sub SetFirstVisibleId(grid As UltraGrid, id As Long)
+            For Each r As UltraGridRow In grid.Rows
+                If CDatabase.DbToLong(r.Cells(Columns.Id.ToString).Value) = id Then
+                    grid.ActiveRowScrollRegion.FirstRow = r
+                    Exit For
+                End If
+            Next
+        End Sub
     End Class
 End Namespace

@@ -112,7 +112,7 @@ Namespace Accounts
                     rRate = adjustment.Rate
                 End If
                 ts.Add(New CTransaction(0, adjustment.TransDate, adjustment.TransactionType, adjustment.AccountCode, adjustment.InstrumentCode,
-                                 rRate, rAmount, adjustment.Description, 0, 0))
+                                 rRate, rAmount, adjustment.Description, 0, 0, False))
             Next
 
             transactions.AddNewTransactions(ts)
@@ -209,16 +209,16 @@ Namespace Accounts
 
             Dim ts As New Collection(Of CTransaction)
             If transfer.IntermediateAmount <> 0 Then
-                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Transfer, transfer.AccountCodeFrom, String.Empty, 0, transfer.IntermediateAmount * -1, GetTransDescriptionTransferTo(transfer.AccountCodeTo) & sDescriptionSuffix, 0, 0))
+                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Transfer, transfer.AccountCodeFrom, String.Empty, 0, transfer.IntermediateAmount * -1, GetTransDescriptionTransferTo(transfer.AccountCodeTo) & sDescriptionSuffix, 0, 0, False))
             End If
             If transfer.SendFee <> 0 Then
-                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Fee, transfer.AccountCodeFrom, String.Empty, 0, transfer.SendFee * -1, GetTransDescriptionFeeForSending(transfer.AccountCodeTo) & sDescriptionSuffix, 0, 0))
+                ts.Add(New CTransaction(0, transfer.SendDateTime, ETransactionType.Fee, transfer.AccountCodeFrom, String.Empty, 0, transfer.SendFee * -1, GetTransDescriptionFeeForSending(transfer.AccountCodeTo) & sDescriptionSuffix, 0, 0, False))
             End If
             If transfer.ReceiveCredit <> 0 Then
-                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Transfer, transfer.AccountCodeTo, String.Empty, 0, transfer.IntermediateAmount, GetTransDescriptionReceiptFrom(transfer.AccountCodeFrom) & sDescriptionSuffix, 0, 0))
+                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Transfer, transfer.AccountCodeTo, String.Empty, 0, transfer.IntermediateAmount, GetTransDescriptionReceiptFrom(transfer.AccountCodeFrom) & sDescriptionSuffix, 0, 0, False))
             End If
             If transfer.ReceiveFee <> 0 Then
-                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Fee, transfer.AccountCodeTo, String.Empty, 0, transfer.ReceiveFee * -1, GetTransDescriptionFeeForReceiving(transfer.AccountCodeFrom) & sDescriptionSuffix, 0, 0))
+                ts.Add(New CTransaction(0, transfer.ReceiveDateTime, ETransactionType.Fee, transfer.AccountCodeTo, String.Empty, 0, transfer.ReceiveFee * -1, GetTransDescriptionFeeForReceiving(transfer.AccountCodeFrom) & sDescriptionSuffix, 0, 0, False))
             End If
             Return ts
 
@@ -254,8 +254,8 @@ Namespace Accounts
             End If
 
             Dim ts As New Collection(Of CTransaction) From {
-                New CTransaction(0, buySell.BuySellDate, transactionType, buySell.AccountCode, String.Empty, 0, buySell.Amount * -1 * iBuySellMult, sDesc, 0, 0),
-                New CTransaction(0, buySell.BuySellDate, transactionType, buySell.AccountCode, buySell.InstrumentCode, buySell.Rate, buySell.Quantity * iBuySellMult, sDesc, 0, rExchangeRate)
+                New CTransaction(0, buySell.BuySellDate, transactionType, buySell.AccountCode, String.Empty, 0, buySell.Amount * -1 * iBuySellMult, sDesc, 0, 0, False),
+                New CTransaction(0, buySell.BuySellDate, transactionType, buySell.AccountCode, buySell.InstrumentCode, buySell.Rate, buySell.Quantity * iBuySellMult, sDesc, 0, rExchangeRate, False)
             }
             Return ts
         End Function

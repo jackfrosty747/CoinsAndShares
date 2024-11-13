@@ -191,5 +191,8 @@ Namespace Networks
             End Try
         End Sub
 
+        Private Sub GrdNetworks_InitializeLayout(sender As Object, e As InitializeLayoutEventArgs) Handles GrdNetworks.InitializeLayout
+
+        End Sub
     End Class
 End Namespace
