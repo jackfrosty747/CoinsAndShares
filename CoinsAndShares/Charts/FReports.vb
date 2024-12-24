@@ -473,7 +473,8 @@ Namespace Charts
             ChartPl.AntiAliasing = AntiAliasingStyles.All
 
             With ChartPl.ChartAreas(0)
-                .AxisX.Interval = 7
+                .AxisX.Interval = 1
+                .AxisX.IntervalType = DateTimeIntervalType.Months
                 .AxisX.Title = "Snapshot Date"
                 .AxisX.LabelAutoFitMaxFontSize = 8
                 .AxisX.MajorGrid.LineColor = Color.LightGray
