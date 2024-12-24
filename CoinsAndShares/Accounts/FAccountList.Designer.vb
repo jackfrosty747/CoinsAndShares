@@ -85,7 +85,7 @@
             '
             Me.ChkShowZero.AutoSize = True
             Me.ChkShowZero.Dock = System.Windows.Forms.DockStyle.Left
-            Me.ChkShowZero.Location = New System.Drawing.Point(403, 5)
+            Me.ChkShowZero.Location = New System.Drawing.Point(402, 5)
             Me.ChkShowZero.Name = "ChkShowZero"
             Me.ChkShowZero.Size = New System.Drawing.Size(81, 28)
             Me.ChkShowZero.TabIndex = 3
@@ -95,7 +95,7 @@
             'Label7
             '
             Me.Label7.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label7.Location = New System.Drawing.Point(398, 5)
+            Me.Label7.Location = New System.Drawing.Point(397, 5)
             Me.Label7.Name = "Label7"
             Me.Label7.Size = New System.Drawing.Size(5, 28)
             Me.Label7.TabIndex = 15
@@ -107,7 +107,7 @@
             Me.BtnRefresh.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnRefresh.Dock = System.Windows.Forms.DockStyle.Left
             Me.BtnRefresh.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_circle_double_135
-            Me.BtnRefresh.Location = New System.Drawing.Point(326, 5)
+            Me.BtnRefresh.Location = New System.Drawing.Point(325, 5)
             Me.BtnRefresh.Name = "BtnRefresh"
             Me.BtnRefresh.Size = New System.Drawing.Size(72, 28)
             Me.BtnRefresh.TabIndex = 10
@@ -118,7 +118,7 @@
             'Label4
             '
             Me.Label4.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label4.Location = New System.Drawing.Point(321, 5)
+            Me.Label4.Location = New System.Drawing.Point(320, 5)
             Me.Label4.Name = "Label4"
             Me.Label4.Size = New System.Drawing.Size(5, 28)
             Me.Label4.TabIndex = 9
@@ -130,7 +130,7 @@
             Me.BtnTransferCrypto.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnTransferCrypto.Dock = System.Windows.Forms.DockStyle.Left
             Me.BtnTransferCrypto.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
-            Me.BtnTransferCrypto.Location = New System.Drawing.Point(254, 5)
+            Me.BtnTransferCrypto.Location = New System.Drawing.Point(253, 5)
             Me.BtnTransferCrypto.Name = "BtnTransferCrypto"
             Me.BtnTransferCrypto.Size = New System.Drawing.Size(67, 28)
             Me.BtnTransferCrypto.TabIndex = 14
@@ -141,7 +141,7 @@
             'Label6
             '
             Me.Label6.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label6.Location = New System.Drawing.Point(249, 5)
+            Me.Label6.Location = New System.Drawing.Point(248, 5)
             Me.Label6.Name = "Label6"
             Me.Label6.Size = New System.Drawing.Size(5, 28)
             Me.Label6.TabIndex = 13
@@ -181,7 +181,7 @@
             Me.BtnTransferFiat.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
             Me.BtnTransferFiat.Location = New System.Drawing.Point(195, 5)
             Me.BtnTransferFiat.Name = "BtnTransferFiat"
-            Me.BtnTransferFiat.Size = New System.Drawing.Size(54, 28)
+            Me.BtnTransferFiat.Size = New System.Drawing.Size(53, 28)
             Me.BtnTransferFiat.TabIndex = 8
             Me.BtnTransferFiat.Text = "FIAT"
             Me.BtnTransferFiat.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText

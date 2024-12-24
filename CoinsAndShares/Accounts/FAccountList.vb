@@ -56,6 +56,8 @@ Namespace Accounts
                 AccountCode
                 AccountName
                 AccountTypeCode
+                CashSavingsRate
+                CashSavingsRateDisplay
                 NetworkId
                 LocalCurrencyBalance
                 Pl
@@ -83,6 +85,12 @@ Namespace Accounts
                         dr(ColumnsAccount.AccountCode.ToString) = account.AccountCode
                         dr(ColumnsAccount.AccountName.ToString) = account.AccountName
                         dr(ColumnsAccount.AccountTypeCode.ToString) = account.AccountType.Code
+
+                        dr(ColumnsAccount.CashSavingsRate.ToString) = account.CashSavingsRate
+                        If account.CashSavingsRate > 0 Then
+                            dr(ColumnsAccount.CashSavingsRateDisplay.ToString) = account.CashSavingsRate.ToString("0.00") & "%"
+                        End If
+
                         dr(ColumnsAccount.NetworkId.ToString) = account.NetworkId
                         dr(ColumnsAccount.LocalCurrencyBalance.ToString) = cBalance
 
@@ -185,6 +193,9 @@ Namespace Accounts
                 Dim sAccountName As String = row.Cells(ColumnsAccount.AccountName.ToString).Text
                 Dim sAccountType As String = row.Cells(ColumnsAccount.AccountTypeCode.ToString).Text
                 Dim accountType As EAccountType = GetAccountTypeFromCode(sAccountType, True)
+
+                Dim cashSavingsRate As Decimal = DirectCast(row.Cells(ColumnsAccount.CashSavingsRate.ToString).Value, Decimal)
+
                 Dim sNetworkId As String = row.Cells(ColumnsAccount.NetworkId.ToString).Text
                 Dim sNotes As String = row.Cells(ColumnsAccount.Notes.ToString).Text
 
@@ -202,7 +213,7 @@ Namespace Accounts
                 Dim includeOnShortcuts = CDatabase.DbToBool(row.Cells(ColumnsAccount.IncludeOnShortcuts.ToString).Value)
                 Dim nonTaxable = CDatabase.DbToBool(row.Cells(ColumnsAccount.NonTaxable.ToString).Value)
 
-                Dim account As New CAccount(sAccountCode, sAccountName, accountType, sNotes, sNetworkId, includeOnShortcuts, nonTaxable)
+                Dim account As New CAccount(sAccountCode, sAccountName, accountType, sNotes, sNetworkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
                 Return account
             End Function
 
@@ -212,6 +223,8 @@ Namespace Accounts
                 dt.Columns.Add(ColumnsAccount.AccountCode.ToString)
                 dt.Columns.Add(ColumnsAccount.AccountName.ToString)
                 dt.Columns.Add(ColumnsAccount.AccountTypeCode.ToString)
+                dt.Columns.Add(ColumnsAccount.CashSavingsRate.ToString, GetType(Decimal))
+                dt.Columns.Add(ColumnsAccount.CashSavingsRateDisplay.ToString)
                 dt.Columns.Add(ColumnsAccount.NetworkId.ToString)
                 dt.Columns.Add(ColumnsAccount.LocalCurrencyBalance.ToString, GetType(Decimal))
                 dt.Columns.Add(ColumnsAccount.Pl.ToString, GetType(Decimal))
@@ -276,6 +289,11 @@ Namespace Accounts
                             Case ColumnsAccount.NetworkId.ToString
                                 col.Header.Caption = "Network Id"
                                 col.Width = 65
+                            Case ColumnsAccount.CashSavingsRateDisplay.ToString
+                                col.Header.Caption = "Int"
+                                col.MinWidth = 45
+                                col.MaxWidth = 45
+                                col.CellAppearance.TextHAlign = HAlign.Center
                             Case ColumnsAccount.LocalCurrencyBalance.ToString
                                 col.Header.Caption = GetLocalCurrencyName()
                                 col.Width = 60
@@ -447,5 +465,6 @@ Namespace Accounts
                 Cursor = Cursors.Default
             End Try
         End Sub
+
     End Class
 End Namespace

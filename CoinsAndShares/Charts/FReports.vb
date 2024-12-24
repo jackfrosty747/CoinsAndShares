@@ -54,6 +54,76 @@ Namespace Charts
             LoadDataPlPerInstrument(allTransactions, allInstruments, allCurrencies)
             LoadMining(allTransactions, allInstruments, allCurrencies)
             LoadNetworks(allTransactions, allInstruments, allCurrencies, allAccounts)
+            LoadSavings(allAccounts, allInstruments, allCurrencies)
+
+        End Sub
+
+        Private Sub LoadSavings(allAccounts As IEnumerable(Of CAccount), allInstruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail))
+
+            Dim accountSummaries = allAccounts.Where(Function(c) c.CashSavingsRate > 0).Select(Function(account) New With {
+                .Code = account.AccountCode,
+                .Name = account.AccountName,
+                .Rate = account.CashSavingsRate,
+                .Balance = account.GetLocalCurrencyBalance(allInstruments, allCurrencies),
+                .YearlyInterest = .Balance / 100 * .Rate,
+                .MonthlyInterest = .YearlyInterest / 12,
+                .WeeklyInterest = .YearlyInterest / 52,
+                .DailyInterest = .YearlyInterest / 365
+            }).ToList()
+
+            ' Clear previous data
+            ChartSavings.Series.Clear()
+            ChartSavings.ChartAreas.Clear()
+
+            ' Add a new chart area
+            Dim chartArea As New ChartArea("MainArea")
+            With chartArea
+                .AxisX.Title = "Accounts"
+                .AxisX.Interval = 1
+                .AxisX.LabelStyle.Angle = -45 ' Rotate labels for better readability
+                .AxisY.Title = "Balance"
+                .AxisY.LabelStyle.Format = "C2" ' Format Y-axis as currency
+            End With
+            ChartSavings.ChartAreas.Add(chartArea)
+
+            ' Add a new series for the bar chart
+            Dim series As New Series("Balances")
+            With series
+                .ChartType = SeriesChartType.Bar
+                .IsValueShownAsLabel = True ' Show balance as labels on the bars
+                .LabelFormat = "C2" ' Format labels as currency
+            End With
+            ChartSavings.Series.Add(series)
+
+            ' Sort accountSummaries by balance in descending order
+            Dim sortedSummaries = accountSummaries.OrderByDescending(Function(a) a.Balance).ToList()
+
+            ' Add data points to the series
+            For Each account In sortedSummaries
+                Dim dataPoint As New DataPoint()
+                dataPoint.SetValueXY($"{account.Code} ({account.Name})", account.Balance)
+                dataPoint.Label = $"{account.Balance:C2}{Environment.NewLine}Rate: {account.Rate / 100:P2}{Environment.NewLine}Yearly:{account.YearlyInterest:C2} Monthly:{account.MonthlyInterest:C2} Weekly:{account.WeeklyInterest:C2} Daily:{account.DailyInterest:C2}"
+                series.Points.Add(dataPoint)
+            Next
+
+            ' Calculate the weighted average rate
+            Dim totalBalance = accountSummaries.Sum(Function(account) account.Balance)
+            Dim weightedSum = accountSummaries.Sum(Function(account) account.Rate * account.Balance)
+
+            ' Calculate the weighted average rate
+            Dim weightedAverageRate = If(totalBalance > 0, weightedSum / totalBalance, 0)
+
+            ' Customize appearance if needed
+            ChartSavings.Titles.Clear()
+            With ChartSavings.Titles.Add($"Account Balances {totalBalance:c2} (Avg Rate: {weightedAverageRate:##0.00}%)")
+                .Font = New Font("Arial", 14, FontStyle.Bold)
+            End With
+
+            ' Subtitle
+            With ChartSavings.Titles.Add($"Yearly:{accountSummaries.Sum(Function(c) c.YearlyInterest):C2}  Monthly:{accountSummaries.Sum(Function(c) c.MonthlyInterest):C2}  Weekly:{accountSummaries.Sum(Function(c) c.WeeklyInterest):C2}  Daily:{accountSummaries.Sum(Function(c) c.DailyInterest):C2}")
+                .Font = New Font("Arial", 10, FontStyle.Italic)
+                .Alignment = ContentAlignment.TopCenter  ' Align the subtitle at the center
+            End With
 
         End Sub
 
@@ -770,5 +840,6 @@ Namespace Charts
                 Cursor = Cursors.Default
             End Try
         End Sub
+
     End Class
 End Namespace

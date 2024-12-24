@@ -12,9 +12,10 @@ Namespace Accounts
         Friend ReadOnly Property NetworkId As String
         Friend ReadOnly Property IncludeOnShortcuts As Boolean
         Friend ReadOnly Property NonTaxable As Boolean
+        Friend ReadOnly Property CashSavingsRate As Decimal
         Friend Property Transactions As Collection(Of CTransaction)
         Friend Sub New(accountCode As String, accountName As String, accountType As EAccountType, notes As String,
-            networkId As String, includeOnShortcuts As Boolean, nonTaxable As Boolean)
+            networkId As String, includeOnShortcuts As Boolean, nonTaxable As Boolean, cashSavingsRate As Decimal)
             Me.AccountCode = accountCode
             Me.AccountName = accountName
             Me.AccountType = accountType
@@ -22,6 +23,7 @@ Namespace Accounts
             Me.NetworkId = networkId
             Me.IncludeOnShortcuts = includeOnShortcuts
             Me.NonTaxable = nonTaxable
+            Me.CashSavingsRate = cashSavingsRate
             Transactions = New Collection(Of CTransaction)
         End Sub
         Friend Function GetLocalCurrencyBalance(instruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail)) As Decimal

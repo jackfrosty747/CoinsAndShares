@@ -48,6 +48,7 @@ Namespace Accounts
             AddHandler TxtAccountName.TextChanged, AddressOf DataChanged
             AddHandler TxtNotes.TextChanged, AddressOf DataChanged
             AddHandler CmbNetworkId.TextChanged, AddressOf DataChanged
+            AddHandler TxtCashSavingsRate.TextChanged, AddressOf DataChanged
             AddHandler ChkIncludeOnShortcuts.CheckedChanged, AddressOf DataChanged
             AddHandler ChkNonTaxable.CheckedChanged, AddressOf DataChanged
 
@@ -81,6 +82,7 @@ Namespace Accounts
             TxtNotes.Text = account.Notes
             ChkIncludeOnShortcuts.Checked = account.IncludeOnShortcuts
             ChkNonTaxable.Checked = account.NonTaxable
+            TxtCashSavingsRate.Text = If(account.CashSavingsRate > 0, account.CashSavingsRate.ToString("0.00"), String.Empty)
 
             'Dim networksInUse = all.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
 
@@ -163,8 +165,12 @@ Namespace Accounts
             If sNetworkId.Length > CDatabase.LENGTH_ACCOUNTS_NETWORKID Then
                 sNetworkId = sNetworkId.Substring(0, CDatabase.LENGTH_ACCOUNTS_NETWORKID)
             End If
+            Dim cashSavingsRate As Decimal
+            If TxtCashSavingsRate.Text.Length > 0 AndAlso Not Decimal.TryParse(TxtCashSavingsRate.Text, cashSavingsRate) OrElse cashSavingsRate < 0 Then
+                Throw New Exception("Savings rate not valid")
+            End If
             Dim account = New CAccount(AccountCode, TxtAccountName.Text, existing.AccountType, TxtNotes.Text,
-                sNetworkId, ChkIncludeOnShortcuts.Checked, ChkNonTaxable.Checked)
+                sNetworkId, ChkIncludeOnShortcuts.Checked, ChkNonTaxable.Checked, cashSavingsRate)
             m_commonObjects.Accounts.Update(account)
         End Sub
 

@@ -286,6 +286,7 @@ Friend Class FMdi
                     End If
                     Cursor = Cursors.WaitCursor
                     CBackupRestore.Restore(m_commonObjects, jsonDatabase)
+                    m_commonObjects.ClearCache()
                     m_commonObjects.RefreshForms()
                     MessageBox.Show("Database restored", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If

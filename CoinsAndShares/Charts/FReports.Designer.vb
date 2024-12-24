@@ -37,6 +37,9 @@
             Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
             Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
             Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
             Me.TabControl1 = New System.Windows.Forms.TabControl()
             Me.TabPage1 = New System.Windows.Forms.TabPage()
             Me.ChartPl = New System.Windows.Forms.DataVisualization.Charting.Chart()
@@ -83,6 +86,8 @@
             Me.LblMiningSummary = New System.Windows.Forms.Label()
             Me.TabPage5 = New System.Windows.Forms.TabPage()
             Me.TxtNetworks = New System.Windows.Forms.TextBox()
+            Me.TabPage6 = New System.Windows.Forms.TabPage()
+            Me.ChartSavings = New System.Windows.Forms.DataVisualization.Charting.Chart()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             Me.TabControl1.SuspendLayout()
@@ -103,6 +108,8 @@
             CType(Me.ChartMiningCumulative, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel5.SuspendLayout()
             Me.TabPage5.SuspendLayout()
+            Me.TabPage6.SuspendLayout()
+            CType(Me.ChartSavings, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
@@ -113,6 +120,7 @@
             Me.TabControl1.Controls.Add(Me.TabPage3)
             Me.TabControl1.Controls.Add(Me.TabPage4)
             Me.TabControl1.Controls.Add(Me.TabPage5)
+            Me.TabControl1.Controls.Add(Me.TabPage6)
             Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
             Me.TabControl1.Location = New System.Drawing.Point(5, 5)
             Me.TabControl1.Name = "TabControl1"
@@ -293,7 +301,7 @@
             Me.CmbAccountHoldings.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal
             Me.CmbAccountHoldings.DisplayMember = ""
             Me.CmbAccountHoldings.Dock = System.Windows.Forms.DockStyle.Left
-            Me.CmbAccountHoldings.Location = New System.Drawing.Point(534, 5)
+            Me.CmbAccountHoldings.Location = New System.Drawing.Point(535, 5)
             Me.CmbAccountHoldings.Name = "CmbAccountHoldings"
             Me.CmbAccountHoldings.Size = New System.Drawing.Size(97, 22)
             Me.CmbAccountHoldings.TabIndex = 10
@@ -305,7 +313,7 @@
             '
             Me.Label4.AutoSize = True
             Me.Label4.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label4.Location = New System.Drawing.Point(475, 5)
+            Me.Label4.Location = New System.Drawing.Point(476, 5)
             Me.Label4.Name = "Label4"
             Me.Label4.Padding = New System.Windows.Forms.Padding(10, 7, 0, 0)
             Me.Label4.Size = New System.Drawing.Size(59, 20)
@@ -315,7 +323,7 @@
             'TxtHoldingsCurrency
             '
             Me.TxtHoldingsCurrency.Dock = System.Windows.Forms.DockStyle.Left
-            Me.TxtHoldingsCurrency.Location = New System.Drawing.Point(421, 5)
+            Me.TxtHoldingsCurrency.Location = New System.Drawing.Point(422, 5)
             Me.TxtHoldingsCurrency.Name = "TxtHoldingsCurrency"
             Me.TxtHoldingsCurrency.Size = New System.Drawing.Size(54, 22)
             Me.TxtHoldingsCurrency.TabIndex = 8
@@ -324,7 +332,7 @@
             '
             Me.Label1.AutoSize = True
             Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label1.Location = New System.Drawing.Point(359, 5)
+            Me.Label1.Location = New System.Drawing.Point(360, 5)
             Me.Label1.Name = "Label1"
             Me.Label1.Padding = New System.Windows.Forms.Padding(10, 7, 0, 0)
             Me.Label1.Size = New System.Drawing.Size(62, 20)
@@ -335,7 +343,7 @@
             '
             Me.OptHoldingsTypeShares.AutoSize = True
             Me.OptHoldingsTypeShares.Dock = System.Windows.Forms.DockStyle.Left
-            Me.OptHoldingsTypeShares.Location = New System.Drawing.Point(290, 5)
+            Me.OptHoldingsTypeShares.Location = New System.Drawing.Point(291, 5)
             Me.OptHoldingsTypeShares.Name = "OptHoldingsTypeShares"
             Me.OptHoldingsTypeShares.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
             Me.OptHoldingsTypeShares.Size = New System.Drawing.Size(69, 28)
@@ -348,7 +356,7 @@
             '
             Me.OptHoldingsTypeCrypto.AutoSize = True
             Me.OptHoldingsTypeCrypto.Dock = System.Windows.Forms.DockStyle.Left
-            Me.OptHoldingsTypeCrypto.Location = New System.Drawing.Point(221, 5)
+            Me.OptHoldingsTypeCrypto.Location = New System.Drawing.Point(222, 5)
             Me.OptHoldingsTypeCrypto.Name = "OptHoldingsTypeCrypto"
             Me.OptHoldingsTypeCrypto.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
             Me.OptHoldingsTypeCrypto.Size = New System.Drawing.Size(69, 28)
@@ -362,7 +370,7 @@
             Me.OptHoldingsTypeAll.AutoSize = True
             Me.OptHoldingsTypeAll.Checked = True
             Me.OptHoldingsTypeAll.Dock = System.Windows.Forms.DockStyle.Left
-            Me.OptHoldingsTypeAll.Location = New System.Drawing.Point(173, 5)
+            Me.OptHoldingsTypeAll.Location = New System.Drawing.Point(174, 5)
             Me.OptHoldingsTypeAll.Name = "OptHoldingsTypeAll"
             Me.OptHoldingsTypeAll.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
             Me.OptHoldingsTypeAll.Size = New System.Drawing.Size(48, 28)
@@ -374,7 +382,7 @@
             'TxtHoldingsGroupPc
             '
             Me.TxtHoldingsGroupPc.Dock = System.Windows.Forms.DockStyle.Left
-            Me.TxtHoldingsGroupPc.Location = New System.Drawing.Point(121, 5)
+            Me.TxtHoldingsGroupPc.Location = New System.Drawing.Point(122, 5)
             Me.TxtHoldingsGroupPc.Name = "TxtHoldingsGroupPc"
             Me.TxtHoldingsGroupPc.Size = New System.Drawing.Size(52, 22)
             Me.TxtHoldingsGroupPc.TabIndex = 1
@@ -386,7 +394,7 @@
             Me.Label2.Location = New System.Drawing.Point(5, 5)
             Me.Label2.Name = "Label2"
             Me.Label2.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
-            Me.Label2.Size = New System.Drawing.Size(116, 16)
+            Me.Label2.Size = New System.Drawing.Size(117, 16)
             Me.Label2.TabIndex = 0
             Me.Label2.Text = "Group Small Below %"
             '
@@ -673,6 +681,35 @@
             Me.TxtNetworks.Size = New System.Drawing.Size(760, 519)
             Me.TxtNetworks.TabIndex = 0
             '
+            'TabPage6
+            '
+            Me.TabPage6.Controls.Add(Me.ChartSavings)
+            Me.TabPage6.Location = New System.Drawing.Point(4, 22)
+            Me.TabPage6.Name = "TabPage6"
+            Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
+            Me.TabPage6.Size = New System.Drawing.Size(766, 525)
+            Me.TabPage6.TabIndex = 5
+            Me.TabPage6.Text = "Savings"
+            Me.TabPage6.UseVisualStyleBackColor = True
+            '
+            'ChartSavings
+            '
+            ChartArea6.Name = "ChartArea1"
+            Me.ChartSavings.ChartAreas.Add(ChartArea6)
+            Me.ChartSavings.Dock = System.Windows.Forms.DockStyle.Fill
+            Legend4.Name = "Legend1"
+            Me.ChartSavings.Legends.Add(Legend4)
+            Me.ChartSavings.Location = New System.Drawing.Point(3, 3)
+            Me.ChartSavings.Name = "ChartSavings"
+            Me.ChartSavings.Padding = New System.Windows.Forms.Padding(3)
+            Series6.ChartArea = "ChartArea1"
+            Series6.Legend = "Legend1"
+            Series6.Name = "Series1"
+            Me.ChartSavings.Series.Add(Series6)
+            Me.ChartSavings.Size = New System.Drawing.Size(760, 519)
+            Me.ChartSavings.TabIndex = 5
+            Me.ChartSavings.Text = "Chart1"
+            '
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.Gray
@@ -717,6 +754,8 @@
             Me.Panel5.PerformLayout()
             Me.TabPage5.ResumeLayout(False)
             Me.TabPage5.PerformLayout()
+            Me.TabPage6.ResumeLayout(False)
+            CType(Me.ChartSavings, System.ComponentModel.ISupportInitialize).EndInit()
             Me.Panel1.ResumeLayout(False)
             Me.ResumeLayout(False)
 
@@ -770,6 +809,8 @@
         Friend WithEvents ChkReduceByElectricityCost As CheckBox
         Friend WithEvents CmbMiningRollingDays As ComboBox
         Friend WithEvents Label7 As Label
+        Friend WithEvents TabPage6 As TabPage
+        Friend WithEvents ChartSavings As DataVisualization.Charting.Chart
     End Class
 
 End Namespace

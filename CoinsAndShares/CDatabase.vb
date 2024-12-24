@@ -5,7 +5,7 @@ Imports System.IO
 
 Friend Class CDatabase : Implements IDisposable
 
-    Private Const DB_VERSION As Integer = 28
+    Private Const DB_VERSION As Integer = 30
 
     Friend Const DATABASE_PASSWORD = "1234"
 
@@ -35,6 +35,7 @@ Friend Class CDatabase : Implements IDisposable
     Friend Const FIELD_ACCOUNTS_BACKGROUNDCOLOUR__DEPRECATED As String = "backgroundColour"
     Friend Const FIELD_ACCOUNTS_INCLUDEONSHORTCUTS As String = "includeOnShortcuts"
     Friend Const FIELD_ACCOUNTS_NONTAXABLE As String = "nonTaxable"
+    Friend Const FIELD_ACCOUNTS_CASHSAVINGSRATE As String = "cashSavingsRate"
 
     Friend Const FIELD_CURRENCIES_CURRENCYCODE As String = "currencyCode"
     Friend Const FIELD_CURRENCIES_CURRENCYRATE As String = "currencyRate"
@@ -305,6 +306,10 @@ Friend Class CDatabase : Implements IDisposable
 
             If iCurrentVersion < 28 Then
                 AddField(FIELD_TRANSACTIONS_RECONCILED, TABLE_TRANSACTIONS, EFieldType.Bit, 0)
+            End If
+
+            If iCurrentVersion < 30 Then
+                AddField(FIELD_ACCOUNTS_CASHSAVINGSRATE, TABLE_ACCOUNTS, EFieldType.Real, 0)
             End If
 
             If iCurrentVersion < DB_VERSION Then

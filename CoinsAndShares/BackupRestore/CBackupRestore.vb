@@ -120,9 +120,10 @@ Namespace BackupRestore
                     'End If
                     Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
                     Dim nonTaxable = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE))
+                    Dim cashSavingsRate = CDatabase.DbToDecimal(dr(CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE))
 
                     Dim jsonAccount As New JSonAccount
-                    jsonAccount.Fill(sAccountCode, sAccountName, sAccountType, sNotes, sNetworkId, includeOnShortcuts, nonTaxable)
+                    jsonAccount.Fill(sAccountCode, sAccountName, sAccountType, sNotes, sNetworkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
                     accounts.Add(jsonAccount)
                 Next
             End Using
@@ -454,6 +455,7 @@ Namespace BackupRestore
 
                             dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS) = a.IncludeOnShortcuts
                             dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE) = a.NonTaxable
+                            dr(CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE) = a.CashSavingsRate
 
                             dt.Rows.Add(dr)
                         Next
