@@ -108,14 +108,17 @@ Namespace Transactions
                     Select Case col.Key
                         Case Columns.Id.ToString
                             col.Header.Caption = "Id"
-                            col.Width = 25
+                            col.MinWidth = 45
+                            col.MaxWidth = 45
                         Case Columns.Batch.ToString
                             col.Header.Caption = "Batch"
-                            col.Width = 25
+                            col.MinWidth = 45
+                            col.MaxWidth = 45
                         Case Columns.TransDate.ToString
                             col.Header.Caption = "Date"
                             col.Width = 80
-                            'col.SortComparer = New DateComparer
+                            col.MinWidth = 70
+                            col.MaxWidth = 70
                             col.CellAppearance.TextHAlign = HAlign.Center
                         Case Columns.TransTypeCodeDisplay.ToString
                             col.Header.Caption = "Trans Type"
@@ -148,7 +151,8 @@ Namespace Transactions
                             col.Width = 40
                         Case Columns.Reconciled.ToString
                             col.Header.Caption = "R"
-                            col.Width = 20
+                            col.MinWidth = 20
+                            col.MaxWidth = 20
                         Case Else
                             col.Hidden = True
                     End Select
