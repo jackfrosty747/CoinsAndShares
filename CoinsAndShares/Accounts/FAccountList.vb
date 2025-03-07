@@ -33,17 +33,24 @@ Namespace Accounts
             Dim allInstruments = m_commonObjects.Instruments.GetAll()
             Dim allAccounts = m_commonObjects.Accounts.GetAll().ToList
             Dim allCurrencies = m_commonObjects.Currencies.GetAll()
-            GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstruments, allCurrencies, ChkShowZero.Checked, m_commonObjects.Networks)
+            GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstruments, allCurrencies, ChkShowZero.Checked, m_commonObjects.Networks, Me)
             LblGrandTotal.Text = FormatCurrency(allAccounts.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies)))
+            SelectChanged()
+        End Sub
+        Private Sub SelectChanged()
+            Dim selectedValue = GridHelper.GetSelectedValue(GrdAccounts)
+            LblSelected.Text = Format(selectedValue, "c2")
         End Sub
         Private NotInheritable Class GridHelper
             Private NotInheritable Class LocalTagBits : Inherits TagBits
                 Friend ReadOnly Property FrmAccountList As FAccountList
                 Friend ReadOnly Property Networks As CNetworks
-                Friend Sub New(commonObjects As CCommonObjects, frmAccountList As FAccountList, networks As CNetworks)
+                Friend ReadOnly Property HostForm As FAccountList
+                Friend Sub New(commonObjects As CCommonObjects, frmAccountList As FAccountList, networks As CNetworks, hostForm As FAccountList)
                     MyBase.New(commonObjects)
                     Me.FrmAccountList = frmAccountList
                     Me.Networks = networks
+                    Me.HostForm = hostForm
                 End Sub
             End Class
             Private Enum ColumnsGroup
@@ -68,8 +75,8 @@ Namespace Accounts
             Friend Shared Sub LoadData(grid As UltraGrid, accounts As IEnumerable(Of CAccount), commonObjects As CCommonObjects,
                                        frmAccountList As FAccountList, allInstruments As IEnumerable(Of CInstrument),
                                        allCurrencies As IEnumerable(Of CCurrencyDetail), fShowZeroBalanceAccounts As Boolean,
-                                       networks As CNetworks)
-                grid.Tag = New LocalTagBits(commonObjects, frmAccountList, networks)
+                                       networks As CNetworks, hostForm As FAccountList)
+                grid.Tag = New LocalTagBits(commonObjects, frmAccountList, networks, hostForm)
 
                 Dim dtGroups As DataTable = GetGroupsTable(accounts)
 
@@ -104,6 +111,8 @@ Namespace Accounts
                         dtAccounts.Rows.Add(dr)
                     End If
                 Next
+                RemoveHandler grid.AfterSelectChange, AddressOf AfterSelectChange
+                AddHandler grid.AfterSelectChange, AddressOf AfterSelectChange
                 RemoveHandler grid.InitializeRow, AddressOf InitializeRow
                 AddHandler grid.InitializeRow, AddressOf InitializeRow
                 RemoveHandler grid.InitializeLayout, AddressOf InitializeLayout
@@ -122,6 +131,23 @@ Namespace Accounts
                     row.ExpandAll()
                 Next
             End Sub
+            Friend Shared Function GetSelectedValue(grid As UltraGrid) As Decimal
+                Dim cOut As Decimal
+                For Each row As UltraGridRow In grid.Selected.Rows
+                    cOut += CDec(row.Cells(ColumnsAccount.LocalCurrencyBalance.ToString).Value)
+                Next
+                Return cOut
+            End Function
+            Private Shared Sub AfterSelectChange(sender As Object, e As AfterSelectChangeEventArgs)
+                Dim grid As UltraGrid = CType(sender, UltraGrid)
+                Dim tagBits As LocalTagBits = CType(grid.Tag, LocalTagBits)
+                Try
+                    tagBits.HostForm.SelectChanged()
+                Catch ex As Exception
+                    tagBits.CommonObjects.Errors.Handle(ex)
+                End Try
+            End Sub
+
             Private Shared Function GetGroupsTable(accounts As IEnumerable(Of CAccount)) As DataTable
                 Dim dt As New DataTable
                 dt.Columns.Add(ColumnsGroup.IsGroupBand.ToString)

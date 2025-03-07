@@ -41,6 +41,8 @@
             Me.BtnEdit = New System.Windows.Forms.Button()
             Me.Label1 = New System.Windows.Forms.Label()
             Me.BtnNew = New System.Windows.Forms.Button()
+            Me.Label8 = New System.Windows.Forms.Label()
+            Me.LblSelected = New System.Windows.Forms.Label()
             CType(Me.GrdAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
@@ -59,6 +61,8 @@
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.Label8)
+            Me.Panel1.Controls.Add(Me.LblSelected)
             Me.Panel1.Controls.Add(Me.ChkShowZero)
             Me.Panel1.Controls.Add(Me.Label7)
             Me.Panel1.Controls.Add(Me.BtnRefresh)
@@ -256,6 +260,32 @@
             Me.BtnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
             Me.BtnNew.UseVisualStyleBackColor = False
             '
+            'Label8
+            '
+            Me.Label8.AutoSize = True
+            Me.Label8.Dock = System.Windows.Forms.DockStyle.Right
+            Me.Label8.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label8.ForeColor = System.Drawing.Color.Black
+            Me.Label8.Location = New System.Drawing.Point(545, 5)
+            Me.Label8.Name = "Label8"
+            Me.Label8.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+            Me.Label8.Size = New System.Drawing.Size(53, 21)
+            Me.Label8.TabIndex = 16
+            Me.Label8.Text = "Selected:"
+            '
+            'LblSelected
+            '
+            Me.LblSelected.AutoSize = True
+            Me.LblSelected.Dock = System.Windows.Forms.DockStyle.Right
+            Me.LblSelected.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.LblSelected.ForeColor = System.Drawing.Color.Blue
+            Me.LblSelected.Location = New System.Drawing.Point(598, 5)
+            Me.LblSelected.Name = "LblSelected"
+            Me.LblSelected.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+            Me.LblSelected.Size = New System.Drawing.Size(66, 21)
+            Me.LblSelected.TabIndex = 17
+            Me.LblSelected.Text = "LblSelected"
+            '
             'FAccountList
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -290,6 +320,8 @@
         Friend WithEvents Label6 As Label
         Friend WithEvents ChkShowZero As CheckBox
         Friend WithEvents Label7 As Label
+        Friend WithEvents Label8 As Label
+        Friend WithEvents LblSelected As Label
     End Class
 
 End Namespace
