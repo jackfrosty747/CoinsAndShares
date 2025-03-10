@@ -77,7 +77,6 @@ Partial Class FMdi
         Me.MnuHelpAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
-        Me.BtnTwrr = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -243,7 +242,7 @@ Partial Class FMdi
         'MnuTransactionHistory
         '
         Me.MnuTransactionHistory.Name = "MnuTransactionHistory"
-        Me.MnuTransactionHistory.Size = New System.Drawing.Size(175, 22)
+        Me.MnuTransactionHistory.Size = New System.Drawing.Size(176, 22)
         Me.MnuTransactionHistory.Text = "Transaction History"
         '
         'SnapshotsToolStripMenuItem
@@ -335,22 +334,11 @@ Partial Class FMdi
         Me.StatusStrip1.TabIndex = 2
         Me.StatusStrip1.Text = "StatusStrip1"
         '
-        'BtnTwrr
-        '
-        Me.BtnTwrr.Location = New System.Drawing.Point(533, 47)
-        Me.BtnTwrr.Name = "BtnTwrr"
-        Me.BtnTwrr.Size = New System.Drawing.Size(75, 23)
-        Me.BtnTwrr.TabIndex = 4
-        Me.BtnTwrr.Text = "TWRR"
-        Me.BtnTwrr.UseVisualStyleBackColor = True
-        Me.BtnTwrr.Visible = False
-        '
         'FMdi
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Controls.Add(Me.BtnTwrr)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -408,5 +396,4 @@ Partial Class FMdi
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
     Friend WithEvents MnuReportsIsaTransfers As ToolStripMenuItem
-    Friend WithEvents BtnTwrr As Button
 End Class

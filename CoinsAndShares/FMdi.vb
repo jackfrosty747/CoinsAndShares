@@ -714,13 +714,119 @@ Transfers: {transfers.Sum(Function(c) c.Amount):c}
         End Try
     End Sub
 
-    Private Sub BtnTwrr_Click(sender As Object, e As EventArgs) Handles BtnTwrr.Click
-        Try
-            Dim twrr = New TWRR.Ftwrr(m_commonObjects)
-            twrr.MdiParent = Me
-            twrr.Show()
-        Catch ex As Exception
-            m_commonObjects.Errors.Handle(ex)
-        End Try
-    End Sub
+    'Private Sub BtnTwrr_Click(sender As Object, e As EventArgs) Handles BtnTwrr.Click
+    '    Try
+    '        Const INSTRUMENT_CASH = "Cash"
+    '        Const NETWORK_METALS = "METALS"
+    '        Const NETWORK_SAVINGS = "SAVINGS"
+    '        Const ACCOUNT_TYPE_CRYPTO As String = NameOf(EAccountType.Crypto)
+
+    '        Dim transactions = New CTransactions(m_commonObjects).GetAll
+    '        Dim allInstruments = New CInstruments(m_commonObjects).GetAll
+    '        Dim allCurrencies = New CCurrencies(m_commonObjects).GetAll
+    '        Dim allAccounts = New CAccounts(m_commonObjects).GetAll
+
+    '        Dim totalAmountsByInstrument = transactions.
+    '            GroupBy(Function(t) If(String.IsNullOrEmpty(t.InstrumentCode), INSTRUMENT_CASH, t.InstrumentCode.ToUpperInvariant())).
+    '            Select(Function(g) New With {
+    '                .InstrumentCode = g.Key,
+    '                .TotalAmount = g.Sum(Function(t) t.Amount),
+    '                .AccountCodes = g.Select(Function(t) t.AccountCode).Distinct().ToList() ' Collect account codes
+    '            }).
+    '            Where(Function(g) g.TotalAmount <> 0). ' Filter out zero balances
+    '            Select(Function(g)
+    '                       Dim instrument = allInstruments.FirstOrDefault(Function(i) i.Code.ToUpperInvariant() = g.InstrumentCode)
+    '                       Dim rate As Decimal = If(instrument?.Rate, 1) ' Default rate to 1
+
+    '                       ' Get currency exchange rate
+    '                       Dim exchangeRate As Decimal = 1
+    '                       If instrument IsNot Nothing AndAlso Not String.IsNullOrEmpty(instrument.CurrencyCode) Then
+    '                           Dim currency = allCurrencies.FirstOrDefault(Function(c) c.CurrencyCode.Equals(instrument.CurrencyCode, StringComparison.CurrentCultureIgnoreCase))
+    '                           If currency IsNot Nothing AndAlso currency.CurrencyRate.HasValue AndAlso currency.CurrencyRate.Value > 0 Then
+    '                               exchangeRate = currency.CurrencyRate.Value
+    '                           End If
+    '                       End If
+    '                       ' Calculate local currency value
+    '                       Dim currentValue As Decimal = If(g.InstrumentCode = INSTRUMENT_CASH, g.TotalAmount, g.TotalAmount * rate / exchangeRate)
+
+    '                       ' Get the NetworkId (assuming multiple accounts might be involved)
+    '                       Dim networkIds = g.AccountCodes.
+    '                           Select(Function(ac) allAccounts.FirstOrDefault(Function(a) a.AccountCode = ac)?.NetworkId).
+    '                           Where(Function(nid) nid IsNot Nothing).
+    '                           Distinct().
+    '                           ToList()
+
+    '                       ' Get AccountTypes (descriptions)
+    '                       Dim accountTypes = g.AccountCodes.
+    '                           Select(Function(ac) allAccounts.FirstOrDefault(Function(a) a.AccountCode = ac)?.AccountType).
+    '                           Where(Function(nid) nid IsNot Nothing).
+    '                           Distinct().
+    '                           ToList()
+
+    '                       ' If multiple NetworkIds exist, join them into a string; otherwise, use the single one
+    '                       Dim networkIdDisplay As String = If(networkIds.Count > 0, String.Join(", ", networkIds), "N/A")
+    '                       Dim accountTypeDisplay As String = If(accountTypes.Count > 0, String.Join(", ", accountTypes), "N/A")
+
+    '                       Return New With {
+    '                            .InstrumentCode = g.InstrumentCode,
+    '                            .TotalAmount = g.TotalAmount,
+    '                            .CurrentValue = currentValue,
+    '                            .NetworkId = networkIdDisplay,
+    '                            .AccountType = accountTypeDisplay
+    '                        }
+    '                   End Function).
+    '            ToList()
+
+    '        ' Display results
+    '        'For Each item In totalAmountsByInstrument.Where(Function(c) c.InstrumentCode <> INSTRUMENT_CASH)
+    '        '    Console.WriteLine($"Instrument: {item.InstrumentCode,-20} Total Amount: {item.TotalAmount,-15:0.0000000} Current Value: {item.CurrentValue,-15:C2} Account Type: {item.AccountType,-20} Network ID: {item.NetworkId,-20}")
+    '        'Next
+
+    '        Dim nonCashItems = totalAmountsByInstrument.Where(Function(c) Not c.InstrumentCode.Equals(INSTRUMENT_CASH, StringComparison.CurrentCultureIgnoreCase))
+    '        Dim metals = nonCashItems.Where(Function(c) c.NetworkId.Equals(NETWORK_METALS, StringComparison.CurrentCultureIgnoreCase))
+    '        Dim crypto = nonCashItems.Where(Function(c) Not c.NetworkId.Equals(NETWORK_METALS, StringComparison.CurrentCultureIgnoreCase) And c.AccountType.Contains(ACCOUNT_TYPE_CRYPTO))
+    '        Dim stock = nonCashItems.Where(Function(c) Not c.NetworkId.Equals(NETWORK_METALS, StringComparison.CurrentCultureIgnoreCase) And Not c.AccountType.Contains(ACCOUNT_TYPE_CRYPTO))
+
+    '        Console.WriteLine($"Metals: {metals.Sum(Function(c) c.CurrentValue):c2}")
+    '        Console.WriteLine($"Crypto: {crypto.Sum(Function(c) c.CurrentValue):c2}")
+    '        For Each item In crypto.OrderByDescending(Function(c) c.CurrentValue)
+    '            Console.WriteLine($"  ->  Instrument: {item.InstrumentCode,-20} Total Amount: {item.TotalAmount,-15:0.0000000} Current Value: {item.CurrentValue,-15:C2}")
+    '        Next
+    '        Console.WriteLine($"Shares: {stock.Sum(Function(c) c.CurrentValue):c2}")
+    '        For Each item In stock.OrderByDescending(Function(c) c.CurrentValue)
+    '            Console.WriteLine($"  ->  Instrument: {item.InstrumentCode,-20} Total Amount: {item.TotalAmount,-15:0.0000000} Current Value: {item.CurrentValue,-15:C2}")
+    '        Next
+
+    '        ' TODO - Add SAVINGS
+
+    '        'Add savings
+    '        Dim cashBalances = transactions.Where(Function(t) String.IsNullOrEmpty(t.InstrumentCode)).
+    '            GroupBy(Function(t) t.AccountCode). ' Group by AccountCode
+    '            Select(Function(g) New With {
+    '                .AccountCode = g.Key,
+    '                .TotalCashBalance = g.Sum(Function(t) t.Amount)
+    '            }).ToList()
+    '        Dim savings = From account In allAccounts
+    '                      Where account.NetworkId.Equals(NETWORK_SAVINGS, StringComparison.CurrentCultureIgnoreCase)
+    '                      Join cash In cashBalances On account.AccountCode Equals cash.AccountCode
+    '                      Where cash.TotalCashBalance <> 0
+    '                      Select New With {
+    '                            .AccountCode = account.AccountCode,
+    '                            .TotalCashBalance = cash.TotalCashBalance
+    '                        }
+    '        Console.WriteLine($"Savings: {savings.Sum(Function(c) c.TotalCashBalance):c2}")
+    '        For Each item In savings.OrderByDescending(Function(c) c.TotalCashBalance)
+    '            Console.WriteLine($"  ->  Savings Account: {item.AccountCode,-20} Total Amount: {item.TotalCashBalance,-15:c2}")
+    '        Next
+
+    '        ' Add - run for specific dates to show on chart
+    '        Dim grandTotal = metals.Sum(Function(c) c.CurrentValue) + crypto.Sum(Function(c) c.CurrentValue) +
+    '            stock.Sum(Function(c) c.CurrentValue) + savings.Sum(Function(c) c.TotalCashBalance)
+    '        Console.WriteLine($"GRAND TOTAL: {grandTotal,-15:c2}")
+
+    '    Catch ex As Exception
+    '        m_commonObjects.Errors.Handle(ex)
+    '    End Try
+    'End Sub
+
 End Class

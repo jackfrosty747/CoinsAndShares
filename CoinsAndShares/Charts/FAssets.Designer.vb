@@ -32,12 +32,20 @@
             Me.GrdAccountsByAsset = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.TabPage3 = New System.Windows.Forms.TabPage()
             Me.TxtSummary = New System.Windows.Forms.TextBox()
+            Me.TabPage4 = New System.Windows.Forms.TabPage()
+            Me.TxtHodlings = New System.Windows.Forms.TextBox()
+            Me.Panel1 = New System.Windows.Forms.Panel()
+            Me.BtnHodlings = New System.Windows.Forms.Button()
+            Me.Label1 = New System.Windows.Forms.Label()
+            Me.DtpHodlingsDate = New System.Windows.Forms.DateTimePicker()
             CType(Me.GrdAssetsByAccount, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabControl1.SuspendLayout()
             Me.TabPage1.SuspendLayout()
             Me.TabPage2.SuspendLayout()
             CType(Me.GrdAccountsByAsset, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabPage3.SuspendLayout()
+            Me.TabPage4.SuspendLayout()
+            Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
             'GrdAssetsByAccount
@@ -55,6 +63,7 @@
             Me.TabControl1.Controls.Add(Me.TabPage1)
             Me.TabControl1.Controls.Add(Me.TabPage2)
             Me.TabControl1.Controls.Add(Me.TabPage3)
+            Me.TabControl1.Controls.Add(Me.TabPage4)
             Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
             Me.TabControl1.Location = New System.Drawing.Point(5, 5)
             Me.TabControl1.Name = "TabControl1"
@@ -117,6 +126,72 @@
             Me.TxtSummary.Size = New System.Drawing.Size(760, 519)
             Me.TxtSummary.TabIndex = 0
             '
+            'TabPage4
+            '
+            Me.TabPage4.Controls.Add(Me.TxtHodlings)
+            Me.TabPage4.Controls.Add(Me.Panel1)
+            Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+            Me.TabPage4.Name = "TabPage4"
+            Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
+            Me.TabPage4.Size = New System.Drawing.Size(766, 525)
+            Me.TabPage4.TabIndex = 3
+            Me.TabPage4.Text = "Full Hodlings Report"
+            Me.TabPage4.UseVisualStyleBackColor = True
+            '
+            'TxtHodlings
+            '
+            Me.TxtHodlings.Dock = System.Windows.Forms.DockStyle.Fill
+            Me.TxtHodlings.Font = New System.Drawing.Font("Lucida Console", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.TxtHodlings.Location = New System.Drawing.Point(3, 41)
+            Me.TxtHodlings.Multiline = True
+            Me.TxtHodlings.Name = "TxtHodlings"
+            Me.TxtHodlings.ReadOnly = True
+            Me.TxtHodlings.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+            Me.TxtHodlings.Size = New System.Drawing.Size(760, 481)
+            Me.TxtHodlings.TabIndex = 6
+            '
+            'Panel1
+            '
+            Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.BtnHodlings)
+            Me.Panel1.Controls.Add(Me.Label1)
+            Me.Panel1.Controls.Add(Me.DtpHodlingsDate)
+            Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+            Me.Panel1.Location = New System.Drawing.Point(3, 3)
+            Me.Panel1.Name = "Panel1"
+            Me.Panel1.Padding = New System.Windows.Forms.Padding(5)
+            Me.Panel1.Size = New System.Drawing.Size(760, 38)
+            Me.Panel1.TabIndex = 5
+            '
+            'BtnHodlings
+            '
+            Me.BtnHodlings.AutoSize = True
+            Me.BtnHodlings.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnHodlings.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnHodlings.Dock = System.Windows.Forms.DockStyle.Left
+            Me.BtnHodlings.Location = New System.Drawing.Point(210, 5)
+            Me.BtnHodlings.Name = "BtnHodlings"
+            Me.BtnHodlings.Size = New System.Drawing.Size(112, 28)
+            Me.BtnHodlings.TabIndex = 3
+            Me.BtnHodlings.Text = "GENERATE REPORT"
+            Me.BtnHodlings.UseVisualStyleBackColor = False
+            '
+            'Label1
+            '
+            Me.Label1.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label1.Location = New System.Drawing.Point(205, 5)
+            Me.Label1.Name = "Label1"
+            Me.Label1.Size = New System.Drawing.Size(5, 28)
+            Me.Label1.TabIndex = 4
+            '
+            'DtpHodlingsDate
+            '
+            Me.DtpHodlingsDate.Dock = System.Windows.Forms.DockStyle.Left
+            Me.DtpHodlingsDate.Location = New System.Drawing.Point(5, 5)
+            Me.DtpHodlingsDate.Name = "DtpHodlingsDate"
+            Me.DtpHodlingsDate.Size = New System.Drawing.Size(200, 22)
+            Me.DtpHodlingsDate.TabIndex = 0
+            '
             'FAssets
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -135,6 +210,10 @@
             CType(Me.GrdAccountsByAsset, System.ComponentModel.ISupportInitialize).EndInit()
             Me.TabPage3.ResumeLayout(False)
             Me.TabPage3.PerformLayout()
+            Me.TabPage4.ResumeLayout(False)
+            Me.TabPage4.PerformLayout()
+            Me.Panel1.ResumeLayout(False)
+            Me.Panel1.PerformLayout()
             Me.ResumeLayout(False)
 
         End Sub
@@ -146,6 +225,12 @@
         Friend WithEvents GrdAccountsByAsset As Infragistics.Win.UltraWinGrid.UltraGrid
         Friend WithEvents TabPage3 As TabPage
         Friend WithEvents TxtSummary As TextBox
+        Friend WithEvents TabPage4 As TabPage
+        Friend WithEvents Panel1 As Panel
+        Friend WithEvents BtnHodlings As Button
+        Friend WithEvents Label1 As Label
+        Friend WithEvents DtpHodlingsDate As DateTimePicker
+        Friend WithEvents TxtHodlings As TextBox
     End Class
 
 End Namespace
