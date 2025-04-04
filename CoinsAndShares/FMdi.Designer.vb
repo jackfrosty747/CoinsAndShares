@@ -77,7 +77,9 @@ Partial Class FMdi
         Me.MnuHelpAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
+        Me.TsslPortfolioValue = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1.SuspendLayout()
+        Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -328,11 +330,18 @@ Partial Class FMdi
         '
         'StatusStrip1
         '
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TsslPortfolioValue})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 428)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(800, 22)
         Me.StatusStrip1.TabIndex = 2
         Me.StatusStrip1.Text = "StatusStrip1"
+        '
+        'TsslPortfolioValue
+        '
+        Me.TsslPortfolioValue.Name = "TsslPortfolioValue"
+        Me.TsslPortfolioValue.Size = New System.Drawing.Size(120, 17)
+        Me.TsslPortfolioValue.Text = "ToolStripStatusLabel1"
         '
         'FMdi
         '
@@ -349,6 +358,8 @@ Partial Class FMdi
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.StatusStrip1.ResumeLayout(False)
+        Me.StatusStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -396,4 +407,5 @@ Partial Class FMdi
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
     Friend WithEvents MnuReportsIsaTransfers As ToolStripMenuItem
+    Friend WithEvents TsslPortfolioValue As ToolStripStatusLabel
 End Class

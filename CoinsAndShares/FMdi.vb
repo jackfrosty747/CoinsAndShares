@@ -56,7 +56,23 @@ Friend Class FMdi
             LoadShortcuts()
         End If
 
+        ShowPortfolioValue
+
     End Sub
+
+    Private Sub ShowPortfolioValue()
+        TsslPortfolioValue.Text = "Loading Portfolio Value..."
+        StatusStrip1.Refresh()
+        Task.Run(Sub()
+                     Dim value = MAssets.GetHodlings(m_commonObjects, DateTime.Now.Date).Item2
+
+                     ' Update UI safely using Invoke
+                     Me.Invoke(Sub()
+                                   TsslPortfolioValue.Text = $"Portfolio Value: {value:c2}"
+                               End Sub)
+                 End Sub)
+    End Sub
+
     Private Sub LoadShortcuts()
         ' Remove
         If m_shortcutPanel IsNot Nothing Then
@@ -713,6 +729,15 @@ Transfers: {transfers.Sum(Function(c) c.Amount):c}
             Cursor = Cursors.Default
         End Try
     End Sub
+
+    Private Sub TsslPortfolioValue_Click(sender As Object, e As EventArgs) Handles TsslPortfolioValue.Click
+        Try
+            ShowPortfolioValue()
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        End Try
+    End Sub
+
 
     'Private Sub BtnTwrr_Click(sender As Object, e As EventArgs) Handles BtnTwrr.Click
     '    Try
