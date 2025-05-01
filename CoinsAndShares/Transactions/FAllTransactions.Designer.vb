@@ -38,6 +38,8 @@
             Me.GroupBox4 = New System.Windows.Forms.GroupBox()
             Me.CmbType = New Infragistics.Win.UltraWinGrid.UltraCombo()
             Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+            Me.TxtAccountCodeNameFilter = New System.Windows.Forms.TextBox()
+            Me.Label11 = New System.Windows.Forms.Label()
             Me.ChkTaxable = New System.Windows.Forms.CheckBox()
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
             Me.PnlAccountSingle = New System.Windows.Forms.Panel()
@@ -153,7 +155,7 @@
             Me.GroupBox3.Size = New System.Drawing.Size(341, 107)
             Me.GroupBox3.TabIndex = 13
             Me.GroupBox3.TabStop = False
-            Me.GroupBox3.Text = "Date Range"
+            Me.GroupBox3.Text = "Date Range (Inclusive)"
             '
             'TlpDates
             '
@@ -189,7 +191,7 @@
             Me.Label2.AutoSize = True
             Me.Label2.Location = New System.Drawing.Point(3, 28)
             Me.Label2.Name = "Label2"
-            Me.Label2.Size = New System.Drawing.Size(46, 13)
+            Me.Label2.Size = New System.Drawing.Size(45, 13)
             Me.Label2.TabIndex = 5
             Me.Label2.Text = "Date To"
             '
@@ -244,6 +246,8 @@
             '
             'GroupBox2
             '
+            Me.GroupBox2.Controls.Add(Me.TxtAccountCodeNameFilter)
+            Me.GroupBox2.Controls.Add(Me.Label11)
             Me.GroupBox2.Controls.Add(Me.ChkTaxable)
             Me.GroupBox2.Controls.Add(Me.TableLayoutPanel1)
             Me.GroupBox2.Location = New System.Drawing.Point(359, 12)
@@ -253,14 +257,30 @@
             Me.GroupBox2.TabStop = False
             Me.GroupBox2.Text = "Account"
             '
+            'TxtAccountCodeNameFilter
+            '
+            Me.TxtAccountCodeNameFilter.Location = New System.Drawing.Point(235, 108)
+            Me.TxtAccountCodeNameFilter.Name = "TxtAccountCodeNameFilter"
+            Me.TxtAccountCodeNameFilter.Size = New System.Drawing.Size(100, 22)
+            Me.TxtAccountCodeNameFilter.TabIndex = 16
+            '
+            'Label11
+            '
+            Me.Label11.AutoSize = True
+            Me.Label11.Location = New System.Drawing.Point(88, 111)
+            Me.Label11.Name = "Label11"
+            Me.Label11.Size = New System.Drawing.Size(141, 13)
+            Me.Label11.TabIndex = 15
+            Me.Label11.Text = "Account Code/Name Filter"
+            '
             'ChkTaxable
             '
             Me.ChkTaxable.AutoSize = True
             Me.ChkTaxable.Checked = True
             Me.ChkTaxable.CheckState = System.Windows.Forms.CheckState.Indeterminate
-            Me.ChkTaxable.Location = New System.Drawing.Point(6, 109)
+            Me.ChkTaxable.Location = New System.Drawing.Point(6, 110)
             Me.ChkTaxable.Name = "ChkTaxable"
-            Me.ChkTaxable.Size = New System.Drawing.Size(64, 17)
+            Me.ChkTaxable.Size = New System.Drawing.Size(63, 17)
             Me.ChkTaxable.TabIndex = 14
             Me.ChkTaxable.Text = "Taxable"
             Me.ChkTaxable.ThreeState = True
@@ -377,7 +397,7 @@
             Me.OptAccountType.AutoSize = True
             Me.OptAccountType.Location = New System.Drawing.Point(3, 26)
             Me.OptAccountType.Name = "OptAccountType"
-            Me.OptAccountType.Size = New System.Drawing.Size(48, 17)
+            Me.OptAccountType.Size = New System.Drawing.Size(47, 17)
             Me.OptAccountType.TabIndex = 10
             Me.OptAccountType.Text = "Type"
             Me.OptAccountType.UseVisualStyleBackColor = True
@@ -485,7 +505,7 @@
             Me.OptInstrumentType.AutoSize = True
             Me.OptInstrumentType.Location = New System.Drawing.Point(3, 49)
             Me.OptInstrumentType.Name = "OptInstrumentType"
-            Me.OptInstrumentType.Size = New System.Drawing.Size(48, 17)
+            Me.OptInstrumentType.Size = New System.Drawing.Size(47, 17)
             Me.OptInstrumentType.TabIndex = 2
             Me.OptInstrumentType.Text = "Type"
             Me.OptInstrumentType.UseVisualStyleBackColor = True
@@ -560,9 +580,9 @@
             Me.BtnDelete.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnDelete.Dock = System.Windows.Forms.DockStyle.Right
             Me.BtnDelete.Image = Global.CoinsAndShares.My.Resources.Resources.cross_script
-            Me.BtnDelete.Location = New System.Drawing.Point(646, 5)
+            Me.BtnDelete.Location = New System.Drawing.Point(647, 5)
             Me.BtnDelete.Name = "BtnDelete"
-            Me.BtnDelete.Size = New System.Drawing.Size(133, 28)
+            Me.BtnDelete.Size = New System.Drawing.Size(132, 28)
             Me.BtnDelete.TabIndex = 4
             Me.BtnDelete.Text = "&Delete Transactions"
             Me.BtnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -573,7 +593,7 @@
             Me.LblSelected.AutoSize = True
             Me.LblSelected.Dock = System.Windows.Forms.DockStyle.Left
             Me.LblSelected.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.LblSelected.Location = New System.Drawing.Point(396, 5)
+            Me.LblSelected.Location = New System.Drawing.Point(395, 5)
             Me.LblSelected.Name = "LblSelected"
             Me.LblSelected.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
             Me.LblSelected.Size = New System.Drawing.Size(66, 18)
@@ -584,7 +604,7 @@
             '
             Me.Label3.AutoSize = True
             Me.Label3.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label3.Location = New System.Drawing.Point(338, 5)
+            Me.Label3.Location = New System.Drawing.Point(337, 5)
             Me.Label3.Name = "Label3"
             Me.Label3.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
             Me.Label3.Size = New System.Drawing.Size(58, 18)
@@ -596,7 +616,7 @@
             Me.LblTotalAmount.AutoSize = True
             Me.LblTotalAmount.Dock = System.Windows.Forms.DockStyle.Left
             Me.LblTotalAmount.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.LblTotalAmount.Location = New System.Drawing.Point(247, 5)
+            Me.LblTotalAmount.Location = New System.Drawing.Point(246, 5)
             Me.LblTotalAmount.Name = "LblTotalAmount"
             Me.LblTotalAmount.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
             Me.LblTotalAmount.Size = New System.Drawing.Size(91, 18)
@@ -607,7 +627,7 @@
             '
             Me.Label9.AutoSize = True
             Me.Label9.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label9.Location = New System.Drawing.Point(191, 5)
+            Me.Label9.Location = New System.Drawing.Point(190, 5)
             Me.Label9.Name = "Label9"
             Me.Label9.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
             Me.Label9.Size = New System.Drawing.Size(56, 18)
@@ -621,7 +641,7 @@
             Me.BtnExport.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnExport.Dock = System.Windows.Forms.DockStyle.Left
             Me.BtnExport.Image = Global.CoinsAndShares.My.Resources.Resources.database_share
-            Me.BtnExport.Location = New System.Drawing.Point(125, 5)
+            Me.BtnExport.Location = New System.Drawing.Point(124, 5)
             Me.BtnExport.Name = "BtnExport"
             Me.BtnExport.Size = New System.Drawing.Size(66, 28)
             Me.BtnExport.TabIndex = 7
@@ -632,7 +652,7 @@
             'Label5
             '
             Me.Label5.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label5.Location = New System.Drawing.Point(120, 5)
+            Me.Label5.Location = New System.Drawing.Point(119, 5)
             Me.Label5.Name = "Label5"
             Me.Label5.Size = New System.Drawing.Size(5, 28)
             Me.Label5.TabIndex = 6
@@ -646,7 +666,7 @@
             Me.BtnEdit.Image = Global.CoinsAndShares.My.Resources.Resources.pencil
             Me.BtnEdit.Location = New System.Drawing.Point(5, 5)
             Me.BtnEdit.Name = "BtnEdit"
-            Me.BtnEdit.Size = New System.Drawing.Size(115, 28)
+            Me.BtnEdit.Size = New System.Drawing.Size(114, 28)
             Me.BtnEdit.TabIndex = 5
             Me.BtnEdit.Text = "Edit Transaction"
             Me.BtnEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -744,6 +764,8 @@
         Friend WithEvents LblSelected As Label
         Friend WithEvents Label3 As Label
         Friend WithEvents ChkTaxable As CheckBox
+        Friend WithEvents Label11 As Label
+        Friend WithEvents TxtAccountCodeNameFilter As TextBox
     End Class
 
 End Namespace

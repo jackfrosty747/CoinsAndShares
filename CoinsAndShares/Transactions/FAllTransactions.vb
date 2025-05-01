@@ -55,6 +55,7 @@ Namespace Transactions
             AddHandler ChkAllDates.CheckedChanged, AddressOf Filter_ValueChanged
             AddHandler CmbType.TextChanged, AddressOf Filter_ValueChanged
             AddHandler ChkTaxable.CheckedChanged, AddressOf Filter_ValueChanged
+            AddHandler TxtAccountCodeNameFilter.TextChanged, AddressOf Filter_ValueChanged
 
             SelectChanged(0, 0, 0)
         End Sub
@@ -114,6 +115,12 @@ Namespace Transactions
                 rowsToShow = rowsToShow.Where(Function(c) accountsOfDesiredType.Select(Function(d) d.AccountCode.ToUpper).Contains(c.AccountCode.ToUpper))
             End If
 
+            If TxtAccountCodeNameFilter.Text.Trim.Length > 0 Then
+                Dim rowsToShowSoFar = rowsToShow.ToList
+                Dim matchingAccounts = m_accounts.GetAll.Where(Function(c) c.AccountCode.ToUpper.Contains(TxtAccountCodeNameFilter.Text.ToUpper.Trim) Or c.AccountName.ToUpper.Contains(TxtAccountCodeNameFilter.Text.ToUpper.Trim)).ToList
+                rowsToShow = rowsToShowSoFar.Where(Function(c) matchingAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
+            End If
+
             If OptInstrumentLocalCurrency.Checked Then
                 rowsToShow = rowsToShow.Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode))
             ElseIf OptInstrumentSingle.Checked AndAlso CmbInstrumentCode.Text.Length > 0 Then
@@ -134,6 +141,8 @@ Namespace Transactions
                 Dim accounts = m_accounts.GetAll.Where(Function(c) c.NonTaxable = (ChkTaxable.CheckState = CheckState.Unchecked))
                 rowsToShow = rowsToShow.Where(Function(c) accounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
             End If
+
+
 
             Return rowsToShow
 
@@ -252,6 +261,9 @@ Namespace Transactions
             End Try
         End Sub
 
+        Private Sub TxtDescription_TextChanged(sender As Object, e As EventArgs) Handles TxtDescription.TextChanged
+
+        End Sub
     End Class
 End Namespace
 
