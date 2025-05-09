@@ -609,7 +609,7 @@ Friend Class FMdi
             all = all.Where(Function(c) c.Description.Equals(interestDescription, StringComparison.CurrentCultureIgnoreCase))
 
             ' Only records from this tax year
-            all = all.Where(Function(c) c.TransDate > taxYearStartInclusive.Date.AddDays(-1) AndAlso c.TransDate < taxYearStartInclusive.Date.AddYears(1))
+            all = all.Where(Function(c) c.TransDate.Date > taxYearStartInclusive.Date.AddDays(-1) AndAlso c.TransDate.Date < taxYearStartInclusive.Date.AddYears(1))
 
             ' Exclude non taxable and types we're not interested in
             all = all.Where(Function(c) selectedAccountCodes.Any(Function(d) d.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
@@ -622,6 +622,13 @@ Friend Class FMdi
             '    MsgBox($"Account {accountCode}: {a.Sum(Function(c) c.Amount):c2}")
             'Next
 
+            'For Each account In all.Select(Function(c) c.AccountCode).Distinct
+            '    Dim value = all.Where(Function(c) c.AccountCode = account).Sum(Function(c) c.Amount)
+            '    Debug.WriteLine($"Account {account}: {value:c2}")
+            'Next
+            'For Each t In all.Where(Function(c) c.AccountCode = "CHIP")
+            '    Debug.WriteLine($"{t.TransDate}   {t.Amount}")
+            'Next
 
 
 
