@@ -33,11 +33,36 @@ Namespace Charts
             ChkReduceByElectricityCost.Checked = True
             EnableDisablePlDateRange()
             EnableDisableMiningDateRange()
+            LoadBonusDescriptionButtons()
             LoadData()
             m_fFormLoaded = True
         End Sub
         Private Sub RefreshData() Implements IDataRefresh.RefreshData
             LoadData()
+        End Sub
+        Private Sub LoadBonusDescriptionButtons()
+            Dim iButtonCount = [Enum].GetValues(GetType(EDescriptionPresets)).GetUpperBound(0) + 1
+            For Each b In [Enum].GetValues(GetType(EDescriptionPresets))
+                Dim sText = b.ToString.Replace("_", " ")
+                Dim btn = New Button With {
+                    .Parent = PnlBonusDescriptions,
+                    .Text = sText,
+                    .Dock = DockStyle.Left,
+                    .BackColor = SystemColors.ButtonFace,
+                    .Font = New Font(Font.FontFamily, 7, FontStyle.Regular),
+                    .Width = CInt(PnlBonusDescriptions.Width / iButtonCount) - 1
+                }
+                AddHandler btn.Click, Sub()
+                                          Cursor = Cursors.WaitCursor
+                                          Try
+                                              LoadBonuses(Nothing, sText)
+                                          Catch ex As Exception
+                                              m_commonObjects.Errors.Handle(ex)
+                                          Finally
+                                              Cursor = Cursors.Default
+                                          End Try
+                                      End Sub
+            Next
         End Sub
         Private Sub LoadData()
             Dim transactions = m_commonObjects.Transactions
@@ -55,7 +80,82 @@ Namespace Charts
             LoadMining(allTransactions, allInstruments, allCurrencies)
             LoadNetworks(allTransactions, allInstruments, allCurrencies, allAccounts)
             LoadSavings(allAccounts, allInstruments, allCurrencies)
+            LoadBonuses(allTransactions, Nothing)
 
+        End Sub
+
+        Private Sub LoadBonuses(Optional allTransactions As IEnumerable(Of CTransaction) = Nothing, Optional sDescriptionFilter As String = Nothing)
+
+            If allTransactions Is Nothing Then
+                allTransactions = m_commonObjects.Transactions.GetAll()
+            End If
+
+            Dim bonusTransactions = allTransactions.Where(Function(c) c.TransactionType = ETransactionType.Bonus).ToList()
+
+            If Not String.IsNullOrEmpty(sDescriptionFilter) Then
+                bonusTransactions = bonusTransactions.Where(Function(c) c.Description.IndexOf(sDescriptionFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList()
+            End If
+
+            ' Constants for formatting
+            Const COL_WIDTH = 15
+            Dim output As New StringBuilder()
+
+            ' Header for Description Summary
+            output.AppendLine("BONUS SUMMARY BY DESCRIPTION AND ACCOUNT")
+            output.AppendLine("=====================================")
+            output.AppendLine(LSet("DESCRIPTION", COL_WIDTH * 2) & LSet("ACCOUNT", COL_WIDTH) & RSet("AMOUNT", COL_WIDTH))
+            output.AppendLine(New String("-"c, COL_WIDTH * 4))
+
+            ' Group by Description / Account
+            Dim byDescription = bonusTransactions.GroupBy(Function(t) New With {
+                    Key t.Description,
+                    Key t.AccountCode
+                }).Select(Function(g) New With {
+                     g.Key.Description,
+                     g.Key.AccountCode,
+                    .TotalValue = g.Sum(Function(t) t.Amount * If(String.IsNullOrEmpty(t.InstrumentCode), 1, t.Rate))
+                }).OrderByDescending(Function(x) x.TotalValue)
+
+            ' Output Description totals
+            Dim descriptionTotal As Decimal = 0
+            For Each item In byDescription
+                output.AppendLine(LSet(item.Description, COL_WIDTH * 2) & LSet(item.AccountCode, COL_WIDTH) & RSet(item.TotalValue.ToString("C2"), COL_WIDTH))
+                descriptionTotal += item.TotalValue
+            Next
+            output.AppendLine(New String("-"c, COL_WIDTH * 4))
+            output.AppendLine(LSet("TOTAL", COL_WIDTH * 3) & RSet(descriptionTotal.ToString("C2"), COL_WIDTH))
+
+            ' Add spacing between sections
+            output.AppendLine()
+            output.AppendLine()
+
+
+            ' Header for Monthly Summary
+            output.AppendLine("BONUS SUMMARY BY MONTH")
+            output.AppendLine("======================")
+            output.AppendLine(LSet("MONTH", COL_WIDTH * 2) & RSet("AMOUNT", COL_WIDTH))
+            output.AppendLine(New String("-"c, COL_WIDTH * 3))
+
+            ' Group by Month using date key to ensure proper grouping
+            Dim byMonth = From trans In bonusTransactions
+                          Let monthKey = New DateTime(trans.TransDate.Year, trans.TransDate.Month, 1)
+                          Group trans By monthKey Into Group
+                          Select MonthYear = monthKey,
+                         TotalValue = Group.Sum(Function(t) t.Amount * If(String.IsNullOrEmpty(t.InstrumentCode), 1, t.Rate))
+                          Order By MonthYear Descending
+
+            ' Output Monthly totals
+            Dim monthlyTotal As Decimal = 0
+            For Each item In byMonth
+                Dim monthDisplay = item.MonthYear.ToString("MMMM yyyy")
+                output.AppendLine(LSet(monthDisplay, COL_WIDTH * 2) & RSet(item.TotalValue.ToString("C2"), COL_WIDTH))
+                monthlyTotal += item.TotalValue
+            Next
+            output.AppendLine(New String("-"c, COL_WIDTH * 3))
+            output.AppendLine(LSet("TOTAL", COL_WIDTH * 2) & RSet(monthlyTotal.ToString("C2"), COL_WIDTH))
+
+            ' Display in the form
+            TxtBonuses.Text = output.ToString()
         End Sub
 
         Private Sub LoadSavings(allAccounts As IEnumerable(Of CAccount), allInstruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail))

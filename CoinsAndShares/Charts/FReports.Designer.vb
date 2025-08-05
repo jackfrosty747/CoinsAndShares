@@ -88,6 +88,9 @@
             Me.TxtNetworks = New System.Windows.Forms.TextBox()
             Me.TabPage6 = New System.Windows.Forms.TabPage()
             Me.ChartSavings = New System.Windows.Forms.DataVisualization.Charting.Chart()
+            Me.TabPage7 = New System.Windows.Forms.TabPage()
+            Me.PnlBonusDescriptions = New System.Windows.Forms.Panel()
+            Me.TxtBonuses = New System.Windows.Forms.TextBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             Me.TabControl1.SuspendLayout()
@@ -110,6 +113,7 @@
             Me.TabPage5.SuspendLayout()
             Me.TabPage6.SuspendLayout()
             CType(Me.ChartSavings, System.ComponentModel.ISupportInitialize).BeginInit()
+            Me.TabPage7.SuspendLayout()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
@@ -121,6 +125,7 @@
             Me.TabControl1.Controls.Add(Me.TabPage4)
             Me.TabControl1.Controls.Add(Me.TabPage5)
             Me.TabControl1.Controls.Add(Me.TabPage6)
+            Me.TabControl1.Controls.Add(Me.TabPage7)
             Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
             Me.TabControl1.Location = New System.Drawing.Point(5, 5)
             Me.TabControl1.Name = "TabControl1"
@@ -710,6 +715,38 @@
             Me.ChartSavings.TabIndex = 5
             Me.ChartSavings.Text = "Chart1"
             '
+            'TabPage7
+            '
+            Me.TabPage7.Controls.Add(Me.TxtBonuses)
+            Me.TabPage7.Controls.Add(Me.PnlBonusDescriptions)
+            Me.TabPage7.Location = New System.Drawing.Point(4, 22)
+            Me.TabPage7.Name = "TabPage7"
+            Me.TabPage7.Padding = New System.Windows.Forms.Padding(3)
+            Me.TabPage7.Size = New System.Drawing.Size(766, 525)
+            Me.TabPage7.TabIndex = 6
+            Me.TabPage7.Text = "Bonuses"
+            Me.TabPage7.UseVisualStyleBackColor = True
+            '
+            'PnlBonusDescriptions
+            '
+            Me.PnlBonusDescriptions.Dock = System.Windows.Forms.DockStyle.Top
+            Me.PnlBonusDescriptions.Location = New System.Drawing.Point(3, 3)
+            Me.PnlBonusDescriptions.Name = "PnlBonusDescriptions"
+            Me.PnlBonusDescriptions.Size = New System.Drawing.Size(760, 20)
+            Me.PnlBonusDescriptions.TabIndex = 11
+            '
+            'TxtBonuses
+            '
+            Me.TxtBonuses.Dock = System.Windows.Forms.DockStyle.Fill
+            Me.TxtBonuses.Font = New System.Drawing.Font("Lucida Console", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.TxtBonuses.Location = New System.Drawing.Point(3, 23)
+            Me.TxtBonuses.Multiline = True
+            Me.TxtBonuses.Name = "TxtBonuses"
+            Me.TxtBonuses.ReadOnly = True
+            Me.TxtBonuses.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+            Me.TxtBonuses.Size = New System.Drawing.Size(760, 499)
+            Me.TxtBonuses.TabIndex = 0
+            '
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.Gray
@@ -756,6 +793,8 @@
             Me.TabPage5.PerformLayout()
             Me.TabPage6.ResumeLayout(False)
             CType(Me.ChartSavings, System.ComponentModel.ISupportInitialize).EndInit()
+            Me.TabPage7.ResumeLayout(False)
+            Me.TabPage7.PerformLayout()
             Me.Panel1.ResumeLayout(False)
             Me.ResumeLayout(False)
 
@@ -811,6 +850,9 @@
         Friend WithEvents Label7 As Label
         Friend WithEvents TabPage6 As TabPage
         Friend WithEvents ChartSavings As DataVisualization.Charting.Chart
+        Friend WithEvents TabPage7 As TabPage
+        Friend WithEvents TxtBonuses As TextBox
+        Friend WithEvents PnlBonusDescriptions As Panel
     End Class
 
 End Namespace

@@ -251,7 +251,7 @@
             Me.Label5.Location = New System.Drawing.Point(93, 120)
             Me.Label5.Name = "Label5"
             Me.Label5.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
-            Me.Label5.Size = New System.Drawing.Size(65, 16)
+            Me.Label5.Size = New System.Drawing.Size(64, 16)
             Me.Label5.TabIndex = 0
             Me.Label5.Text = "Date / Time"
             '

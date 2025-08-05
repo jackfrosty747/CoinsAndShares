@@ -713,7 +713,7 @@ Projected Tax: {projectedTax:c2}"
             Dim transactions = New CTransactions(m_commonObjects)
             Dim accounts = New CAccounts(m_commonObjects)
 
-            Dim selectedAccounts = accounts.GetAll.Where(Function(c) c.AccountType = EAccountType.Bank_Account AndAlso ContainsIgnoreCase(c.AccountName, "ISA"))
+            Dim selectedAccounts = accounts.GetAll.Where(Function(c) (c.AccountType = EAccountType.Bank_Account Or c.AccountType = EAccountType.Share_Account) AndAlso ContainsIgnoreCase(c.AccountName, "ISA"))
             Dim accountTransactions = transactions.GetAll().Where(Function(c) selectedAccounts.Select(Function(d) d.AccountCode.ToUpper).Contains(c.AccountCode.ToUpper))
             accountTransactions = accountTransactions.Where(Function(c) c.TransDate >= taxYearStartInclusive AndAlso c.TransDate < taxYearStartInclusive.AddYears(1))
             Dim transfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer)
@@ -743,6 +743,10 @@ Transfers: {transfers.Sum(Function(c) c.Amount):c}
         Catch ex As Exception
             m_commonObjects.Errors.Handle(ex)
         End Try
+    End Sub
+
+    Private Sub FMdi_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        MsgBox("Sort out ISA transfer total - deal with transfers")
     End Sub
 
 

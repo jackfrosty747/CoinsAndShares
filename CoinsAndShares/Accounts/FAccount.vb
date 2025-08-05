@@ -422,9 +422,7 @@ Namespace Accounts
             Const COL_ACTION = "Action"
             Const COL_TIME = "Time"
             Const COL_TICKER = "Ticker"
-            'Const COL_NAME = "Name"
             Const COL_TOTAL = "Total"
-
             Const CASH_ACCOUNT = "Cash"
 
             Try

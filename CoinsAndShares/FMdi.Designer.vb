@@ -257,7 +257,7 @@ Partial Class FMdi
         'MnuSnapshotsTakeSnapshot
         '
         Me.MnuSnapshotsTakeSnapshot.Name = "MnuSnapshotsTakeSnapshot"
-        Me.MnuSnapshotsTakeSnapshot.Size = New System.Drawing.Size(144, 22)
+        Me.MnuSnapshotsTakeSnapshot.Size = New System.Drawing.Size(180, 22)
         Me.MnuSnapshotsTakeSnapshot.Text = "Snapshot List"
         '
         'ChartsToolStripMenuItem
