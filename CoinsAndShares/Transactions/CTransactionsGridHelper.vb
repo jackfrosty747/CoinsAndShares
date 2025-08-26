@@ -91,6 +91,24 @@ Namespace Transactions
             End Try
         End Sub
 
+        Private NotInheritable Class AmountComparer : Implements IComparer
+
+            Friend Function Compare(x As Object, y As Object) As Integer Implements IComparer.Compare
+                Dim firstCell As UltraGridCell = CType(x, UltraGridCell)
+                Dim secondCell As UltraGridCell = CType(y, UltraGridCell)
+                Dim cFirstAmount = CDatabase.DbToDecimal(firstCell.Row.Cells(Columns.Amount.ToString).Value)
+                Dim cSecondAmount = CDatabase.DbToDecimal(secondCell.Row.Cells(Columns.Amount.ToString).Value)
+                If cFirstAmount > cSecondAmount Then
+                    Return 1
+                ElseIf cFirstAmount < cSecondAmount Then
+                    Return -1
+                Else
+                    Return 0
+                End If
+            End Function
+
+        End Class
+
         Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
             Dim grid As UltraGrid = CType(sender, UltraGrid)
             Dim tagBits As TagBits = CType(grid.Tag, TagBits)
@@ -138,6 +156,7 @@ Namespace Transactions
                             col.Width = 80
                             col.Format = FORMAT_QUANTITY
                             col.CellAppearance.TextHAlign = HAlign.Right
+                            col.SortComparer = New AmountComparer
                         Case Columns.Sterling.ToString
                             col.Header.Caption = "Sterling"
                             col.Width = 80

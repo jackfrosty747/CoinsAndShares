@@ -941,5 +941,103 @@ Namespace Charts
             End Try
         End Sub
 
+        Private Sub LoadIsaTransfers()
+
+            ' All accounts containing ISA in the name
+            Dim isaAccounts = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountName.ToUpperInvariant.Contains("ISA"))
+
+            ' All transfers IN to ISA accounts
+            Dim isaTransfersIn = m_commonObjects.Transactions.GetAll.Where(Function(c) c.TransactionType = ETransactionType.Transfer AndAlso
+                                                                             c.Amount > 0 AndAlso
+                                                                             isaAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.OrdinalIgnoreCase)))
+
+            ' Exclude inter ISA transfers
+            Dim isaTransfersInExcInterIsa = isaTransfersIn.Where(Function(c) Not isaAccounts.Any(Function(d) c.Description.ToUpperInvariant.EndsWith(d.AccountCode)))
+
+            Dim sb = New StringBuilder
+            Dim chartData = New List(Of (YearA As Integer, Amount As Decimal))
+
+            For iTaxYear = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
+                Dim taxYearTotal As Decimal = 0
+
+                Dim transfersForTaxYear = isaTransfersInExcInterIsa.Where(Function(c) c.TaxYear = iTaxYear)
+
+                sb.AppendLine($"TAX YEAR {iTaxYear}")
+                sb.AppendLine($"=============")
+
+                For Each t In transfersForTaxYear
+                    taxYearTotal += t.Amount
+                    sb.AppendLine($"  {t.TransDate.ToShortDateString} {LSet(t.Amount.ToString("c2"), 15)} {t.AccountCode}")
+                Next
+
+                sb.AppendLine($"TOTALS FOR TAX YEAR {iTaxYear}: {taxYearTotal:c}")
+                sb.AppendLine("")
+
+                chartData.Add((iTaxYear, taxYearTotal))
+            Next
+
+            TxtIsaDeposits.Text = sb.ToString
+
+            DisplayIsaDepositsChart(chartData)
+
+            m_fIsaTransfersLoaded = True
+        End Sub
+
+        Private Sub DisplayIsaDepositsChart(chartData As List(Of (YearA As Integer, Amount As Decimal)))
+
+            Dim chart = ChartIsaDeposits
+
+            ' Clear existing data
+            chart.Series.Clear()
+            chart.Titles.Clear()
+            chart.ChartAreas.Clear()
+            chart.ChartAreas.Add("MainArea")
+
+            ' Add title
+            chart.Titles.Add("ISA Deposits by Tax Year")
+            chart.Titles(0).Font = New Font("Arial", 12, FontStyle.Bold)
+
+            ' Create series
+            Dim series As New Series("Deposits")
+            series.ChartType = SeriesChartType.Column
+            series.IsValueShownAsLabel = True
+            series.LabelFormat = "C0"
+            series.Font = New Font("Arial", 8)
+            series.Color = Color.SteelBlue
+
+            ' Add data points from the list
+            For Each item In chartData
+                series.Points.AddXY(item.YearA.ToString(), item.Amount)
+            Next
+
+            ' Add series to chart
+            chart.Series.Add(series)
+
+            ' Format axes
+            With chart.ChartAreas(0)
+                .AxisX.Title = "Tax Year"
+                .AxisY.Title = "Amount (£)"
+                .AxisY.LabelStyle.Format = "C0"
+                .AxisX.MajorGrid.Enabled = False
+                .AxisY.MajorGrid.LineColor = Color.LightGray
+            End With
+
+        End Sub
+
+        Private m_fIsaTransfersLoaded As Boolean
+        Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+            Try
+                If TabControl1.SelectedTab Is TpIsaDeposits Then
+                    If Not m_fIsaTransfersLoaded Then
+                        Cursor = Cursors.WaitCursor
+                        LoadIsaTransfers()
+                    End If
+                End If
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
     End Class
 End Namespace

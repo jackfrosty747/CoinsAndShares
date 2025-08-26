@@ -66,6 +66,13 @@ Namespace Transactions
             End If
         End Function
 
+        Friend ReadOnly Property TaxYear As Integer
+            Get
+                Dim taxYearStart As New Date(TransDate.Year, 4, 6)
+                Return If(TransDate >= taxYearStart, TransDate.Year, TransDate.Year - 1)
+            End Get
+        End Property
+
     End Class
 
 End Namespace

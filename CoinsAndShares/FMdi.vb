@@ -1,7 +1,4 @@
-﻿Imports System.Deployment.Application
-Imports System.Reflection
-Imports System.Text.RegularExpressions
-Imports CoinsAndShares.Accounts
+﻿Imports CoinsAndShares.Accounts
 Imports CoinsAndShares.Accounts.MAccounts
 Imports CoinsAndShares.BackupRestore
 Imports CoinsAndShares.Charts
@@ -56,7 +53,7 @@ Friend Class FMdi
             LoadShortcuts()
         End If
 
-        ShowPortfolioValue
+        ShowPortfolioValue()
 
     End Sub
 
@@ -683,59 +680,59 @@ Projected Tax: {projectedTax:c2}"
         End Try
     End Sub
 
-    Private Sub MnuReportsIsaTransfers_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfers.Click
-        Try
-            Dim taxYearStartInclusive As Date
-            Try
-                ' Get the current date
-                Dim currentDate As Date = Date.Today
-                ' Calculate the tax year start date based on the current date
-                Dim taxYearStart As Date
-                If currentDate.Month > 4 Or (currentDate.Month = 4 And currentDate.Day >= 6) Then
-                    ' If the current date is on or after April 6th, use the current year's April 6th
-                    taxYearStart = New Date(currentDate.Year, 4, 6)
-                Else
-                    ' If the current date is before April 6th, use the previous year's April 6th
-                    taxYearStart = New Date(currentDate.Year - 1, 4, 6)
-                End If
-                Dim sRet = InputBox("Enter the tax year start (inclusive)", Text, taxYearStart.ToShortDateString)
-                If String.IsNullOrEmpty(sRet) Then
-                    Return
-                ElseIf Not Date.TryParse(sRet, taxYearStartInclusive) Then
-                    Throw New Exception(My.Resources.Error_NotAValidDate)
-                End If
-            Catch ex As Exception
-                Throw
-            End Try
+    '    Private Sub MnuReportsIsaTransfers_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfers.Click
+    '        Try
+    '            Dim taxYearStartInclusive As Date
+    '            Try
+    '                ' Get the current date
+    '                Dim currentDate As Date = Date.Today
+    '                ' Calculate the tax year start date based on the current date
+    '                Dim taxYearStart As Date
+    '                If currentDate.Month > 4 Or (currentDate.Month = 4 And currentDate.Day >= 6) Then
+    '                    ' If the current date is on or after April 6th, use the current year's April 6th
+    '                    taxYearStart = New Date(currentDate.Year, 4, 6)
+    '                Else
+    '                    ' If the current date is before April 6th, use the previous year's April 6th
+    '                    taxYearStart = New Date(currentDate.Year - 1, 4, 6)
+    '                End If
+    '                Dim sRet = InputBox("Enter the tax year start (inclusive)", Text, taxYearStart.ToShortDateString)
+    '                If String.IsNullOrEmpty(sRet) Then
+    '                    Return
+    '                ElseIf Not Date.TryParse(sRet, taxYearStartInclusive) Then
+    '                    Throw New Exception(My.Resources.Error_NotAValidDate)
+    '                End If
+    '            Catch ex As Exception
+    '                Throw
+    '            End Try
 
-            Cursor = Cursors.WaitCursor
+    '            Cursor = Cursors.WaitCursor
 
-            Dim transactions = New CTransactions(m_commonObjects)
-            Dim accounts = New CAccounts(m_commonObjects)
+    '            Dim transactions = New CTransactions(m_commonObjects)
+    '            Dim accounts = New CAccounts(m_commonObjects)
 
-            Dim selectedAccounts = accounts.GetAll.Where(Function(c) (c.AccountType = EAccountType.Bank_Account Or c.AccountType = EAccountType.Share_Account) AndAlso ContainsIgnoreCase(c.AccountName, "ISA"))
-            Dim accountTransactions = transactions.GetAll().Where(Function(c) selectedAccounts.Select(Function(d) d.AccountCode.ToUpper).Contains(c.AccountCode.ToUpper))
-            accountTransactions = accountTransactions.Where(Function(c) c.TransDate >= taxYearStartInclusive AndAlso c.TransDate < taxYearStartInclusive.AddYears(1))
-            Dim transfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer)
+    '            Dim selectedAccounts = accounts.GetAll.Where(Function(c) (c.AccountType = EAccountType.Bank_Account Or c.AccountType = EAccountType.Share_Account) AndAlso ContainsIgnoreCase(c.AccountName, "ISA"))
+    '            Dim accountTransactions = transactions.GetAll().Where(Function(c) selectedAccounts.Select(Function(d) d.AccountCode.ToUpper).Contains(c.AccountCode.ToUpper))
+    '            accountTransactions = accountTransactions.Where(Function(c) c.TransDate >= taxYearStartInclusive AndAlso c.TransDate < taxYearStartInclusive.AddYears(1))
+    '            Dim transfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer)
 
-            Dim sMsg = $"Accounts of: BANK ACCOUNT TYPE containing ISA in the name.
-TRANSFER type transactions greater or equal to {taxYearStartInclusive:d} and before {taxYearStartInclusive.AddYears(1):d}.
+    '            Dim sMsg = $"Accounts of: BANK ACCOUNT TYPE containing ISA in the name.
+    'TRANSFER type transactions greater or equal to {taxYearStartInclusive:d} and before {taxYearStartInclusive.AddYears(1):d}.
 
-Transfers: {transfers.Sum(Function(c) c.Amount):c}
-"
+    'Transfers: {transfers.Sum(Function(c) c.Amount):c}
+    '"
 
-            For Each i In transfers.OrderBy(Function(c) c.AccountCode.ToUpper)
-                sMsg &= $"{vbNewLine}{i.AccountCode}       {i.Amount:c}"
-            Next
+    '            For Each i In transfers.OrderBy(Function(c) c.AccountCode.ToUpper)
+    '                sMsg &= $"{vbNewLine}{i.AccountCode}       {i.Amount:c}"
+    '            Next
 
-            MessageBox.Show(sMsg, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+    '            MessageBox.Show(sMsg, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-        Catch ex As Exception
-            m_commonObjects.Errors.Handle(ex)
-        Finally
-            Cursor = Cursors.Default
-        End Try
-    End Sub
+    '        Catch ex As Exception
+    '            m_commonObjects.Errors.Handle(ex)
+    '        Finally
+    '            Cursor = Cursors.Default
+    '        End Try
+    '    End Sub
 
     Private Sub TsslPortfolioValue_Click(sender As Object, e As EventArgs) Handles TsslPortfolioValue.Click
         Try
@@ -745,120 +742,43 @@ Transfers: {transfers.Sum(Function(c) c.Amount):c}
         End Try
     End Sub
 
-    Private Sub FMdi_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        MsgBox("Sort out ISA transfer total - deal with transfers")
+    Private Sub MnuReportsIsaTransfersNew_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfersNew.Click
+        MessageBox.Show("See Reports screen", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
-
-    'Private Sub BtnTwrr_Click(sender As Object, e As EventArgs) Handles BtnTwrr.Click
+    'Private Sub MnuReportsIsaTransfersNew_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfersNew.Click
     '    Try
-    '        Const INSTRUMENT_CASH = "Cash"
-    '        Const NETWORK_METALS = "METALS"
-    '        Const NETWORK_SAVINGS = "SAVINGS"
-    '        Const ACCOUNT_TYPE_CRYPTO As String = NameOf(EAccountType.Crypto)
+    '        ' All accounts containing ISA in the name
+    '        Dim isaAccounts = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountName.ToUpperInvariant.Contains("ISA"))
 
-    '        Dim transactions = New CTransactions(m_commonObjects).GetAll
-    '        Dim allInstruments = New CInstruments(m_commonObjects).GetAll
-    '        Dim allCurrencies = New CCurrencies(m_commonObjects).GetAll
-    '        Dim allAccounts = New CAccounts(m_commonObjects).GetAll
+    '        ' All transfers IN to ISA accounts
+    '        Dim isaTransfersIn = m_commonObjects.Transactions.GetAll.Where(Function(c) c.TransactionType = ETransactionType.Transfer AndAlso
+    '                                                                         c.Amount > 0 AndAlso
+    '                                                                         isaAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.OrdinalIgnoreCase)))
 
-    '        Dim totalAmountsByInstrument = transactions.
-    '            GroupBy(Function(t) If(String.IsNullOrEmpty(t.InstrumentCode), INSTRUMENT_CASH, t.InstrumentCode.ToUpperInvariant())).
-    '            Select(Function(g) New With {
-    '                .InstrumentCode = g.Key,
-    '                .TotalAmount = g.Sum(Function(t) t.Amount),
-    '                .AccountCodes = g.Select(Function(t) t.AccountCode).Distinct().ToList() ' Collect account codes
-    '            }).
-    '            Where(Function(g) g.TotalAmount <> 0). ' Filter out zero balances
-    '            Select(Function(g)
-    '                       Dim instrument = allInstruments.FirstOrDefault(Function(i) i.Code.ToUpperInvariant() = g.InstrumentCode)
-    '                       Dim rate As Decimal = If(instrument?.Rate, 1) ' Default rate to 1
+    '        ' Exclude inter ISA transfers
+    '        Dim isaTransfersInExcInterIsa = isaTransfersIn.Where(Function(c) Not isaAccounts.Any(Function(d) c.Description.ToUpperInvariant.EndsWith(d.AccountCode)))
 
-    '                       ' Get currency exchange rate
-    '                       Dim exchangeRate As Decimal = 1
-    '                       If instrument IsNot Nothing AndAlso Not String.IsNullOrEmpty(instrument.CurrencyCode) Then
-    '                           Dim currency = allCurrencies.FirstOrDefault(Function(c) c.CurrencyCode.Equals(instrument.CurrencyCode, StringComparison.CurrentCultureIgnoreCase))
-    '                           If currency IsNot Nothing AndAlso currency.CurrencyRate.HasValue AndAlso currency.CurrencyRate.Value > 0 Then
-    '                               exchangeRate = currency.CurrencyRate.Value
-    '                           End If
-    '                       End If
-    '                       ' Calculate local currency value
-    '                       Dim currentValue As Decimal = If(g.InstrumentCode = INSTRUMENT_CASH, g.TotalAmount, g.TotalAmount * rate / exchangeRate)
+    '        Dim sb = New StringBuilder
 
-    '                       ' Get the NetworkId (assuming multiple accounts might be involved)
-    '                       Dim networkIds = g.AccountCodes.
-    '                           Select(Function(ac) allAccounts.FirstOrDefault(Function(a) a.AccountCode = ac)?.NetworkId).
-    '                           Where(Function(nid) nid IsNot Nothing).
-    '                           Distinct().
-    '                           ToList()
+    '        For iTaxYear = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
+    '            Dim taxYearTotal As Decimal = 0
 
-    '                       ' Get AccountTypes (descriptions)
-    '                       Dim accountTypes = g.AccountCodes.
-    '                           Select(Function(ac) allAccounts.FirstOrDefault(Function(a) a.AccountCode = ac)?.AccountType).
-    '                           Where(Function(nid) nid IsNot Nothing).
-    '                           Distinct().
-    '                           ToList()
+    '            Dim transfersForTaxYear = isaTransfersInExcInterIsa.Where(Function(c) c.TaxYear = iTaxYear)
 
-    '                       ' If multiple NetworkIds exist, join them into a string; otherwise, use the single one
-    '                       Dim networkIdDisplay As String = If(networkIds.Count > 0, String.Join(", ", networkIds), "N/A")
-    '                       Dim accountTypeDisplay As String = If(accountTypes.Count > 0, String.Join(", ", accountTypes), "N/A")
+    '            sb.AppendLine($"TAX YEAR {iTaxYear}")
+    '            sb.AppendLine($"=============")
 
-    '                       Return New With {
-    '                            .InstrumentCode = g.InstrumentCode,
-    '                            .TotalAmount = g.TotalAmount,
-    '                            .CurrentValue = currentValue,
-    '                            .NetworkId = networkIdDisplay,
-    '                            .AccountType = accountTypeDisplay
-    '                        }
-    '                   End Function).
-    '            ToList()
+    '            For Each t In transfersForTaxYear
+    '                taxYearTotal += t.Amount
+    '                sb.AppendLine($"    {t.TransDate.ToShortDateString}   {LSet(t.Amount.ToString("c2"), 15)} {t.AccountCode}")
+    '            Next
 
-    '        ' Display results
-    '        'For Each item In totalAmountsByInstrument.Where(Function(c) c.InstrumentCode <> INSTRUMENT_CASH)
-    '        '    Console.WriteLine($"Instrument: {item.InstrumentCode,-20} Total Amount: {item.TotalAmount,-15:0.0000000} Current Value: {item.CurrentValue,-15:C2} Account Type: {item.AccountType,-20} Network ID: {item.NetworkId,-20}")
-    '        'Next
-
-    '        Dim nonCashItems = totalAmountsByInstrument.Where(Function(c) Not c.InstrumentCode.Equals(INSTRUMENT_CASH, StringComparison.CurrentCultureIgnoreCase))
-    '        Dim metals = nonCashItems.Where(Function(c) c.NetworkId.Equals(NETWORK_METALS, StringComparison.CurrentCultureIgnoreCase))
-    '        Dim crypto = nonCashItems.Where(Function(c) Not c.NetworkId.Equals(NETWORK_METALS, StringComparison.CurrentCultureIgnoreCase) And c.AccountType.Contains(ACCOUNT_TYPE_CRYPTO))
-    '        Dim stock = nonCashItems.Where(Function(c) Not c.NetworkId.Equals(NETWORK_METALS, StringComparison.CurrentCultureIgnoreCase) And Not c.AccountType.Contains(ACCOUNT_TYPE_CRYPTO))
-
-    '        Console.WriteLine($"Metals: {metals.Sum(Function(c) c.CurrentValue):c2}")
-    '        Console.WriteLine($"Crypto: {crypto.Sum(Function(c) c.CurrentValue):c2}")
-    '        For Each item In crypto.OrderByDescending(Function(c) c.CurrentValue)
-    '            Console.WriteLine($"  ->  Instrument: {item.InstrumentCode,-20} Total Amount: {item.TotalAmount,-15:0.0000000} Current Value: {item.CurrentValue,-15:C2}")
-    '        Next
-    '        Console.WriteLine($"Shares: {stock.Sum(Function(c) c.CurrentValue):c2}")
-    '        For Each item In stock.OrderByDescending(Function(c) c.CurrentValue)
-    '            Console.WriteLine($"  ->  Instrument: {item.InstrumentCode,-20} Total Amount: {item.TotalAmount,-15:0.0000000} Current Value: {item.CurrentValue,-15:C2}")
+    '            sb.AppendLine($"TOTALS FOR TAX YEAR {iTaxYear}: {taxYearTotal:c}")
+    '            sb.AppendLine("")
     '        Next
 
-    '        ' TODO - Add SAVINGS
-
-    '        'Add savings
-    '        Dim cashBalances = transactions.Where(Function(t) String.IsNullOrEmpty(t.InstrumentCode)).
-    '            GroupBy(Function(t) t.AccountCode). ' Group by AccountCode
-    '            Select(Function(g) New With {
-    '                .AccountCode = g.Key,
-    '                .TotalCashBalance = g.Sum(Function(t) t.Amount)
-    '            }).ToList()
-    '        Dim savings = From account In allAccounts
-    '                      Where account.NetworkId.Equals(NETWORK_SAVINGS, StringComparison.CurrentCultureIgnoreCase)
-    '                      Join cash In cashBalances On account.AccountCode Equals cash.AccountCode
-    '                      Where cash.TotalCashBalance <> 0
-    '                      Select New With {
-    '                            .AccountCode = account.AccountCode,
-    '                            .TotalCashBalance = cash.TotalCashBalance
-    '                        }
-    '        Console.WriteLine($"Savings: {savings.Sum(Function(c) c.TotalCashBalance):c2}")
-    '        For Each item In savings.OrderByDescending(Function(c) c.TotalCashBalance)
-    '            Console.WriteLine($"  ->  Savings Account: {item.AccountCode,-20} Total Amount: {item.TotalCashBalance,-15:c2}")
-    '        Next
-
-    '        ' Add - run for specific dates to show on chart
-    '        Dim grandTotal = metals.Sum(Function(c) c.CurrentValue) + crypto.Sum(Function(c) c.CurrentValue) +
-    '            stock.Sum(Function(c) c.CurrentValue) + savings.Sum(Function(c) c.TotalCashBalance)
-    '        Console.WriteLine($"GRAND TOTAL: {grandTotal,-15:c2}")
+    '        MessageBox.Show(sb.ToString, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
 
     '    Catch ex As Exception
     '        m_commonObjects.Errors.Handle(ex)

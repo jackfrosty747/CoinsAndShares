@@ -70,7 +70,7 @@ Partial Class FMdi
         Me.MnuAssets = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuInterest = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuReportsSavingsTax = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MnuReportsIsaTransfers = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuReportsIsaTransfersNew = New System.Windows.Forms.ToolStripMenuItem()
         Me.NoptesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -257,12 +257,12 @@ Partial Class FMdi
         'MnuSnapshotsTakeSnapshot
         '
         Me.MnuSnapshotsTakeSnapshot.Name = "MnuSnapshotsTakeSnapshot"
-        Me.MnuSnapshotsTakeSnapshot.Size = New System.Drawing.Size(180, 22)
+        Me.MnuSnapshotsTakeSnapshot.Size = New System.Drawing.Size(144, 22)
         Me.MnuSnapshotsTakeSnapshot.Text = "Snapshot List"
         '
         'ChartsToolStripMenuItem
         '
-        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsIsaTransfers})
+        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsIsaTransfersNew})
         Me.ChartsToolStripMenuItem.Name = "ChartsToolStripMenuItem"
         Me.ChartsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ChartsToolStripMenuItem.Text = "Reports"
@@ -291,11 +291,11 @@ Partial Class FMdi
         Me.MnuReportsSavingsTax.Size = New System.Drawing.Size(188, 22)
         Me.MnuReportsSavingsTax.Text = "Savings Tax Summary"
         '
-        'MnuReportsIsaTransfers
+        'MnuReportsIsaTransfersNew
         '
-        Me.MnuReportsIsaTransfers.Name = "MnuReportsIsaTransfers"
-        Me.MnuReportsIsaTransfers.Size = New System.Drawing.Size(188, 22)
-        Me.MnuReportsIsaTransfers.Text = "ISA Transfers"
+        Me.MnuReportsIsaTransfersNew.Name = "MnuReportsIsaTransfersNew"
+        Me.MnuReportsIsaTransfersNew.Size = New System.Drawing.Size(188, 22)
+        Me.MnuReportsIsaTransfersNew.Text = "ISA Transfers New"
         '
         'NoptesToolStripMenuItem
         '
@@ -406,6 +406,6 @@ Partial Class FMdi
     Friend WithEvents MnuHelpAbout As ToolStripMenuItem
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
-    Friend WithEvents MnuReportsIsaTransfers As ToolStripMenuItem
     Friend WithEvents TsslPortfolioValue As ToolStripStatusLabel
+    Friend WithEvents MnuReportsIsaTransfersNew As ToolStripMenuItem
 End Class

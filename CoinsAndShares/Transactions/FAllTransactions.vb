@@ -1,6 +1,7 @@
 ﻿Imports System.Globalization
 Imports CoinsAndShares.Accounts
 Imports CoinsAndShares.Instruments
+Imports Infragistics.Win.UltraWinGrid
 
 Namespace Transactions
     Friend Class FAllTransactions : Implements IDataRefresh : Implements ITransactionsForm
@@ -9,9 +10,11 @@ Namespace Transactions
         Private ReadOnly m_transactions As CTransactions
         Private ReadOnly m_accounts As CAccounts
         Private ReadOnly m_instruments As CInstruments
+
         Private m_allTransactions As IEnumerable(Of CTransaction)
         Private m_allAccounts As IEnumerable(Of CAccount)
         Private m_allInstruments As IEnumerable(Of CInstrument)
+
         Friend Sub New(commonObjects As CCommonObjects)
             ' This call is required by the designer.
             InitializeComponent()
@@ -38,6 +41,8 @@ Namespace Transactions
             LoadDataToMemory()
             UpdateGrid()
 
+            TaxYearsDropdown.Setup(CmbTaxYear, m_allTransactions.Min(Function(c) c.TaxYear), m_allTransactions.Max(Function(c) c.TaxYear))
+
             AddHandler DtpFrom.ValueChanged, AddressOf Filter_ValueChanged
             AddHandler DtpTo.ValueChanged, AddressOf Filter_ValueChanged
             AddHandler TxtDescription.TextChanged, AddressOf Filter_ValueChanged
@@ -56,9 +61,35 @@ Namespace Transactions
             AddHandler CmbType.TextChanged, AddressOf Filter_ValueChanged
             AddHandler ChkTaxable.CheckedChanged, AddressOf Filter_ValueChanged
             AddHandler TxtAccountCodeNameFilter.TextChanged, AddressOf Filter_ValueChanged
+            AddHandler CmbTaxYear.TextChanged, AddressOf Filter_ValueChanged
 
             SelectChanged(0, 0, 0)
         End Sub
+
+        Private NotInheritable Class TaxYearsDropdown
+            Private Const COL_YEAR = "theYear"
+            Friend Shared Sub Setup(cmb As UltraCombo, min As Integer, max As Integer)
+                Dim dt = New DataTable
+                dt.Columns.Add(COL_YEAR)
+                For iYear = min To max
+                    Dim dr = dt.NewRow
+                    dr(COL_YEAR) = iYear
+                    dt.Rows.Add(dr)
+                Next
+                RemoveHandler cmb.InitializeLayout, AddressOf InitializeLayout
+                AddHandler cmb.InitializeLayout, AddressOf InitializeLayout
+                cmb.DataSource = dt
+            End Sub
+
+            Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
+                Dim cmb = DirectCast(sender, UltraCombo)
+                GridDefaults(e.Layout)
+                With cmb.DisplayLayout.Bands(0)
+                    .Columns(COL_YEAR).Header.Caption = "Tax Year"
+                    .Columns(COL_YEAR).Width = 150
+                End With
+            End Sub
+        End Class
 
         Private Sub RefreshData() Implements IDataRefresh.RefreshData
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbInstrumentCode, m_instruments.GetAll, m_commonObjects, Nothing)
@@ -142,7 +173,12 @@ Namespace Transactions
                 rowsToShow = rowsToShow.Where(Function(c) accounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.CurrentCultureIgnoreCase)))
             End If
 
-
+            If CmbTaxYear.Text.Length > 0 Then
+                Dim taxYear As Integer
+                If Integer.TryParse(CmbTaxYear.Text, taxYear) Then
+                    rowsToShow = rowsToShow.Where(Function(c) c.TaxYear = taxYear)
+                End If
+            End If
 
             Return rowsToShow
 
@@ -261,9 +297,6 @@ Namespace Transactions
             End Try
         End Sub
 
-        Private Sub TxtDescription_TextChanged(sender As Object, e As EventArgs) Handles TxtDescription.TextChanged
-
-        End Sub
     End Class
 End Namespace
 

@@ -73,6 +73,8 @@
             Me.BtnExport = New System.Windows.Forms.Button()
             Me.Label5 = New System.Windows.Forms.Label()
             Me.BtnEdit = New System.Windows.Forms.Button()
+            Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+            Me.CmbTaxYear = New Infragistics.Win.UltraWinGrid.UltraCombo()
             CType(Me.GrdTransactions, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.GroupBox5.SuspendLayout()
@@ -93,6 +95,8 @@
             Me.PnlInstrumentCode.SuspendLayout()
             CType(Me.CmbInstrumentCode, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel2.SuspendLayout()
+            Me.GroupBox6.SuspendLayout()
+            CType(Me.CmbTaxYear, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'GrdTransactions
@@ -106,6 +110,7 @@
             '
             'Panel1
             '
+            Me.Panel1.Controls.Add(Me.GroupBox6)
             Me.Panel1.Controls.Add(Me.GroupBox5)
             Me.Panel1.Controls.Add(Me.GroupBox3)
             Me.Panel1.Controls.Add(Me.GroupBox4)
@@ -672,6 +677,27 @@
             Me.BtnEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
             Me.BtnEdit.UseVisualStyleBackColor = False
             '
+            'GroupBox6
+            '
+            Me.GroupBox6.Controls.Add(Me.CmbTaxYear)
+            Me.GroupBox6.Location = New System.Drawing.Point(706, 12)
+            Me.GroupBox6.Name = "GroupBox6"
+            Me.GroupBox6.Size = New System.Drawing.Size(71, 102)
+            Me.GroupBox6.TabIndex = 16
+            Me.GroupBox6.TabStop = False
+            Me.GroupBox6.Text = "Tax Year"
+            '
+            'CmbTaxYear
+            '
+            Me.CmbTaxYear.BorderStyle = Infragistics.Win.UIElementBorderStyle.Solid
+            Me.CmbTaxYear.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal
+            Me.CmbTaxYear.DisplayMember = ""
+            Me.CmbTaxYear.Location = New System.Drawing.Point(6, 21)
+            Me.CmbTaxYear.Name = "CmbTaxYear"
+            Me.CmbTaxYear.Size = New System.Drawing.Size(60, 22)
+            Me.CmbTaxYear.TabIndex = 9
+            Me.CmbTaxYear.ValueMember = ""
+            '
             'FAllTransactions
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -712,6 +738,8 @@
             CType(Me.CmbInstrumentCode, System.ComponentModel.ISupportInitialize).EndInit()
             Me.Panel2.ResumeLayout(False)
             Me.Panel2.PerformLayout()
+            Me.GroupBox6.ResumeLayout(False)
+            CType(Me.CmbTaxYear, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
 
         End Sub
@@ -766,6 +794,8 @@
         Friend WithEvents ChkTaxable As CheckBox
         Friend WithEvents Label11 As Label
         Friend WithEvents TxtAccountCodeNameFilter As TextBox
+        Friend WithEvents GroupBox6 As GroupBox
+        Friend WithEvents CmbTaxYear As Infragistics.Win.UltraWinGrid.UltraCombo
     End Class
 
 End Namespace

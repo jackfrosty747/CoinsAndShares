@@ -40,6 +40,9 @@
             Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
             Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
             Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series7 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
             Me.TabControl1 = New System.Windows.Forms.TabControl()
             Me.TabPage1 = New System.Windows.Forms.TabPage()
             Me.ChartPl = New System.Windows.Forms.DataVisualization.Charting.Chart()
@@ -89,8 +92,11 @@
             Me.TabPage6 = New System.Windows.Forms.TabPage()
             Me.ChartSavings = New System.Windows.Forms.DataVisualization.Charting.Chart()
             Me.TabPage7 = New System.Windows.Forms.TabPage()
-            Me.PnlBonusDescriptions = New System.Windows.Forms.Panel()
             Me.TxtBonuses = New System.Windows.Forms.TextBox()
+            Me.PnlBonusDescriptions = New System.Windows.Forms.Panel()
+            Me.TpIsaDeposits = New System.Windows.Forms.TabPage()
+            Me.ChartIsaDeposits = New System.Windows.Forms.DataVisualization.Charting.Chart()
+            Me.TxtIsaDeposits = New System.Windows.Forms.TextBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             Me.TabControl1.SuspendLayout()
@@ -114,6 +120,8 @@
             Me.TabPage6.SuspendLayout()
             CType(Me.ChartSavings, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabPage7.SuspendLayout()
+            Me.TpIsaDeposits.SuspendLayout()
+            CType(Me.ChartIsaDeposits, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
@@ -126,6 +134,7 @@
             Me.TabControl1.Controls.Add(Me.TabPage5)
             Me.TabControl1.Controls.Add(Me.TabPage6)
             Me.TabControl1.Controls.Add(Me.TabPage7)
+            Me.TabControl1.Controls.Add(Me.TpIsaDeposits)
             Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
             Me.TabControl1.Location = New System.Drawing.Point(5, 5)
             Me.TabControl1.Name = "TabControl1"
@@ -727,14 +736,6 @@
             Me.TabPage7.Text = "Bonuses"
             Me.TabPage7.UseVisualStyleBackColor = True
             '
-            'PnlBonusDescriptions
-            '
-            Me.PnlBonusDescriptions.Dock = System.Windows.Forms.DockStyle.Top
-            Me.PnlBonusDescriptions.Location = New System.Drawing.Point(3, 3)
-            Me.PnlBonusDescriptions.Name = "PnlBonusDescriptions"
-            Me.PnlBonusDescriptions.Size = New System.Drawing.Size(760, 20)
-            Me.PnlBonusDescriptions.TabIndex = 11
-            '
             'TxtBonuses
             '
             Me.TxtBonuses.Dock = System.Windows.Forms.DockStyle.Fill
@@ -746,6 +747,56 @@
             Me.TxtBonuses.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
             Me.TxtBonuses.Size = New System.Drawing.Size(760, 499)
             Me.TxtBonuses.TabIndex = 0
+            '
+            'PnlBonusDescriptions
+            '
+            Me.PnlBonusDescriptions.Dock = System.Windows.Forms.DockStyle.Top
+            Me.PnlBonusDescriptions.Location = New System.Drawing.Point(3, 3)
+            Me.PnlBonusDescriptions.Name = "PnlBonusDescriptions"
+            Me.PnlBonusDescriptions.Size = New System.Drawing.Size(760, 20)
+            Me.PnlBonusDescriptions.TabIndex = 11
+            '
+            'TpIsaDeposits
+            '
+            Me.TpIsaDeposits.Controls.Add(Me.ChartIsaDeposits)
+            Me.TpIsaDeposits.Controls.Add(Me.TxtIsaDeposits)
+            Me.TpIsaDeposits.Location = New System.Drawing.Point(4, 22)
+            Me.TpIsaDeposits.Name = "TpIsaDeposits"
+            Me.TpIsaDeposits.Padding = New System.Windows.Forms.Padding(3)
+            Me.TpIsaDeposits.Size = New System.Drawing.Size(766, 525)
+            Me.TpIsaDeposits.TabIndex = 7
+            Me.TpIsaDeposits.Text = "ISA Deposits"
+            Me.TpIsaDeposits.UseVisualStyleBackColor = True
+            '
+            'ChartIsaDeposits
+            '
+            ChartArea7.Name = "ChartArea1"
+            Me.ChartIsaDeposits.ChartAreas.Add(ChartArea7)
+            Me.ChartIsaDeposits.Dock = System.Windows.Forms.DockStyle.Fill
+            Legend5.Name = "Legend1"
+            Me.ChartIsaDeposits.Legends.Add(Legend5)
+            Me.ChartIsaDeposits.Location = New System.Drawing.Point(291, 3)
+            Me.ChartIsaDeposits.Name = "ChartIsaDeposits"
+            Series7.ChartArea = "ChartArea1"
+            Series7.Legend = "Legend1"
+            Series7.Name = "Series1"
+            Me.ChartIsaDeposits.Series.Add(Series7)
+            Me.ChartIsaDeposits.Size = New System.Drawing.Size(472, 519)
+            Me.ChartIsaDeposits.TabIndex = 1
+            Me.ChartIsaDeposits.Text = "Chart1"
+            '
+            'TxtIsaDeposits
+            '
+            Me.TxtIsaDeposits.Dock = System.Windows.Forms.DockStyle.Left
+            Me.TxtIsaDeposits.Font = New System.Drawing.Font("Lucida Console", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.TxtIsaDeposits.Location = New System.Drawing.Point(3, 3)
+            Me.TxtIsaDeposits.Multiline = True
+            Me.TxtIsaDeposits.Name = "TxtIsaDeposits"
+            Me.TxtIsaDeposits.ReadOnly = True
+            Me.TxtIsaDeposits.ScrollBars = System.Windows.Forms.ScrollBars.Both
+            Me.TxtIsaDeposits.Size = New System.Drawing.Size(288, 519)
+            Me.TxtIsaDeposits.TabIndex = 0
+            Me.TxtIsaDeposits.WordWrap = False
             '
             'Panel1
             '
@@ -795,6 +846,9 @@
             CType(Me.ChartSavings, System.ComponentModel.ISupportInitialize).EndInit()
             Me.TabPage7.ResumeLayout(False)
             Me.TabPage7.PerformLayout()
+            Me.TpIsaDeposits.ResumeLayout(False)
+            Me.TpIsaDeposits.PerformLayout()
+            CType(Me.ChartIsaDeposits, System.ComponentModel.ISupportInitialize).EndInit()
             Me.Panel1.ResumeLayout(False)
             Me.ResumeLayout(False)
 
@@ -853,6 +907,9 @@
         Friend WithEvents TabPage7 As TabPage
         Friend WithEvents TxtBonuses As TextBox
         Friend WithEvents PnlBonusDescriptions As Panel
+        Friend WithEvents TpIsaDeposits As TabPage
+        Friend WithEvents TxtIsaDeposits As TextBox
+        Friend WithEvents ChartIsaDeposits As DataVisualization.Charting.Chart
     End Class
 
 End Namespace
