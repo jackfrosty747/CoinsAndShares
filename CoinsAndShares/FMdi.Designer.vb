@@ -78,6 +78,7 @@ Partial Class FMdi
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.TsslPortfolioValue = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.MnuReportsSavingsAndTaxPredictor = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -262,7 +263,7 @@ Partial Class FMdi
         '
         'ChartsToolStripMenuItem
         '
-        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsIsaTransfersNew})
+        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsIsaTransfersNew, Me.MnuReportsSavingsAndTaxPredictor})
         Me.ChartsToolStripMenuItem.Name = "ChartsToolStripMenuItem"
         Me.ChartsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ChartsToolStripMenuItem.Text = "Reports"
@@ -270,31 +271,31 @@ Partial Class FMdi
         'MnuReports
         '
         Me.MnuReports.Name = "MnuReports"
-        Me.MnuReports.Size = New System.Drawing.Size(188, 22)
+        Me.MnuReports.Size = New System.Drawing.Size(210, 22)
         Me.MnuReports.Text = "Reports"
         '
         'MnuAssets
         '
         Me.MnuAssets.Name = "MnuAssets"
-        Me.MnuAssets.Size = New System.Drawing.Size(188, 22)
+        Me.MnuAssets.Size = New System.Drawing.Size(210, 22)
         Me.MnuAssets.Text = "Assets"
         '
         'MnuInterest
         '
         Me.MnuInterest.Name = "MnuInterest"
-        Me.MnuInterest.Size = New System.Drawing.Size(188, 22)
+        Me.MnuInterest.Size = New System.Drawing.Size(210, 22)
         Me.MnuInterest.Text = "Interest"
         '
         'MnuReportsSavingsTax
         '
         Me.MnuReportsSavingsTax.Name = "MnuReportsSavingsTax"
-        Me.MnuReportsSavingsTax.Size = New System.Drawing.Size(188, 22)
+        Me.MnuReportsSavingsTax.Size = New System.Drawing.Size(210, 22)
         Me.MnuReportsSavingsTax.Text = "Savings Tax Summary"
         '
         'MnuReportsIsaTransfersNew
         '
         Me.MnuReportsIsaTransfersNew.Name = "MnuReportsIsaTransfersNew"
-        Me.MnuReportsIsaTransfersNew.Size = New System.Drawing.Size(188, 22)
+        Me.MnuReportsIsaTransfersNew.Size = New System.Drawing.Size(210, 22)
         Me.MnuReportsIsaTransfersNew.Text = "ISA Transfers New"
         '
         'NoptesToolStripMenuItem
@@ -342,6 +343,12 @@ Partial Class FMdi
         Me.TsslPortfolioValue.Name = "TsslPortfolioValue"
         Me.TsslPortfolioValue.Size = New System.Drawing.Size(120, 17)
         Me.TsslPortfolioValue.Text = "ToolStripStatusLabel1"
+        '
+        'MnuReportsSavingsAndTaxPredictor
+        '
+        Me.MnuReportsSavingsAndTaxPredictor.Name = "MnuReportsSavingsAndTaxPredictor"
+        Me.MnuReportsSavingsAndTaxPredictor.Size = New System.Drawing.Size(210, 22)
+        Me.MnuReportsSavingsAndTaxPredictor.Text = "Savings And Tax Predictor"
         '
         'FMdi
         '
@@ -408,4 +415,5 @@ Partial Class FMdi
     Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
     Friend WithEvents TsslPortfolioValue As ToolStripStatusLabel
     Friend WithEvents MnuReportsIsaTransfersNew As ToolStripMenuItem
+    Friend WithEvents MnuReportsSavingsAndTaxPredictor As ToolStripMenuItem
 End Class

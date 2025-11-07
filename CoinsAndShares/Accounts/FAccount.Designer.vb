@@ -41,6 +41,9 @@
             Me.Label5 = New System.Windows.Forms.Label()
             Me.LblBalance = New System.Windows.Forms.Label()
             Me.ChkIncludeOnShortcuts = New System.Windows.Forms.CheckBox()
+            Me.Label21 = New System.Windows.Forms.Label()
+            Me.TxtCashSavingsRate = New System.Windows.Forms.TextBox()
+            Me.Label22 = New System.Windows.Forms.Label()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.BtnReconcile = New System.Windows.Forms.Button()
             Me.Label20 = New System.Windows.Forms.Label()
@@ -95,9 +98,6 @@
             Me.LblMining = New System.Windows.Forms.Label()
             Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-            Me.Label21 = New System.Windows.Forms.Label()
-            Me.TxtCashSavingsRate = New System.Windows.Forms.TextBox()
-            Me.Label22 = New System.Windows.Forms.Label()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -315,6 +315,33 @@
             Me.ChkIncludeOnShortcuts.Text = "Shortcut"
             Me.ToolTip1.SetToolTip(Me.ChkIncludeOnShortcuts, "Create a shortcut button to this account on the left panel")
             Me.ChkIncludeOnShortcuts.UseVisualStyleBackColor = True
+            '
+            'Label21
+            '
+            Me.Label21.AutoSize = True
+            Me.Label21.Location = New System.Drawing.Point(23, 117)
+            Me.Label21.Name = "Label21"
+            Me.Label21.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
+            Me.Label21.Size = New System.Drawing.Size(72, 21)
+            Me.Label21.TabIndex = 12
+            Me.Label21.Text = "Savings Rate"
+            '
+            'TxtCashSavingsRate
+            '
+            Me.TxtCashSavingsRate.Location = New System.Drawing.Point(108, 120)
+            Me.TxtCashSavingsRate.Name = "TxtCashSavingsRate"
+            Me.TxtCashSavingsRate.Size = New System.Drawing.Size(79, 22)
+            Me.TxtCashSavingsRate.TabIndex = 13
+            '
+            'Label22
+            '
+            Me.Label22.AutoSize = True
+            Me.Label22.Location = New System.Drawing.Point(193, 117)
+            Me.Label22.Name = "Label22"
+            Me.Label22.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
+            Me.Label22.Size = New System.Drawing.Size(16, 21)
+            Me.Label22.TabIndex = 14
+            Me.Label22.Text = "%"
             '
             'Panel1
             '
@@ -695,7 +722,7 @@
             Me.Analysis.Location = New System.Drawing.Point(4, 22)
             Me.Analysis.Name = "Analysis"
             Me.Analysis.Padding = New System.Windows.Forms.Padding(3)
-            Me.Analysis.Size = New System.Drawing.Size(776, 290)
+            Me.Analysis.Size = New System.Drawing.Size(776, 273)
             Me.Analysis.TabIndex = 1
             Me.Analysis.Text = "Analysis"
             Me.Analysis.UseVisualStyleBackColor = True
@@ -742,7 +769,7 @@
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-            Me.TableLayoutPanel2.Size = New System.Drawing.Size(241, 284)
+            Me.TableLayoutPanel2.Size = New System.Drawing.Size(241, 267)
             Me.TableLayoutPanel2.TabIndex = 1
             '
             'LblProfitLoss
@@ -752,7 +779,7 @@
             Me.LblProfitLoss.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.LblProfitLoss.Location = New System.Drawing.Point(163, 108)
             Me.LblProfitLoss.Name = "LblProfitLoss"
-            Me.LblProfitLoss.Size = New System.Drawing.Size(75, 176)
+            Me.LblProfitLoss.Size = New System.Drawing.Size(75, 159)
             Me.LblProfitLoss.TabIndex = 9
             Me.LblProfitLoss.Text = "LblProfitLoss"
             '
@@ -959,33 +986,6 @@
             Me.SplitContainer1.Size = New System.Drawing.Size(784, 523)
             Me.SplitContainer1.SplitterDistance = 220
             Me.SplitContainer1.TabIndex = 6
-            '
-            'Label21
-            '
-            Me.Label21.AutoSize = True
-            Me.Label21.Location = New System.Drawing.Point(23, 117)
-            Me.Label21.Name = "Label21"
-            Me.Label21.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
-            Me.Label21.Size = New System.Drawing.Size(72, 21)
-            Me.Label21.TabIndex = 12
-            Me.Label21.Text = "Savings Rate"
-            '
-            'TxtCashSavingsRate
-            '
-            Me.TxtCashSavingsRate.Location = New System.Drawing.Point(108, 120)
-            Me.TxtCashSavingsRate.Name = "TxtCashSavingsRate"
-            Me.TxtCashSavingsRate.Size = New System.Drawing.Size(79, 22)
-            Me.TxtCashSavingsRate.TabIndex = 13
-            '
-            'Label22
-            '
-            Me.Label22.AutoSize = True
-            Me.Label22.Location = New System.Drawing.Point(193, 117)
-            Me.Label22.Name = "Label22"
-            Me.Label22.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
-            Me.Label22.Size = New System.Drawing.Size(16, 21)
-            Me.Label22.TabIndex = 14
-            Me.Label22.Text = "%"
             '
             'FAccount
             '

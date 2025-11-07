@@ -746,6 +746,21 @@ Projected Tax: {projectedTax:c2}"
         MessageBox.Show("See Reports screen", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
+    Private Sub MnuReportsSavingsAndTaxPredictor_Click(sender As Object, e As EventArgs) Handles MnuReportsSavingsAndTaxPredictor.Click
+        Try
+            Cursor = Cursors.WaitCursor
+            Dim frmSavingsAndTaxPredictor = New FSavingsAndTaxPredictor(m_commonObjects) With {
+                .MdiParent = Me
+                }
+            frmSavingsAndTaxPredictor.Show()
+            frmSavingsAndTaxPredictor.BringToFront()
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        Finally
+            Cursor = Cursors.Default
+        End Try
+    End Sub
+
     'Private Sub MnuReportsIsaTransfersNew_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfersNew.Click
     '    Try
     '        ' All accounts containing ISA in the name

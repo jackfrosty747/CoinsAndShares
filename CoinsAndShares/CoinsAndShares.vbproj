@@ -237,6 +237,12 @@
     <Compile Include="Charts\FReports.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Charts\FSavingsAndTaxPredictor.Designer.vb">
+      <DependentUpon>FSavingsAndTaxPredictor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\FSavingsAndTaxPredictor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Charts\MAssets.vb" />
     <Compile Include="Rates\GoldPrice\CGoldPrice.vb" />
     <Compile Include="Rates\CNBC\CCnbc.vb" />
@@ -494,6 +500,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Charts\FReports.resx">
       <DependentUpon>FReports.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Charts\FSavingsAndTaxPredictor.resx">
+      <DependentUpon>FSavingsAndTaxPredictor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Currencies\FCurrencies.resx">
       <DependentUpon>FCurrencies.vb</DependentUpon>
