@@ -423,6 +423,7 @@ Namespace Accounts
             Const COL_TIME = "Time"
             Const COL_TICKER = "Ticker"
             Const COL_TOTAL = "Total"
+            Const COL_MERCHANTNAME = "Merchant name"
             Const CASH_ACCOUNT = "Cash"
 
             Try
@@ -470,6 +471,11 @@ Namespace Accounts
                                 sTicker = CDatabase.DbToString(dr(COL_TICKER))
                             End If
 
+                            Dim sMerchantName = String.Empty
+                            If dt.Columns.Contains(COL_MERCHANTNAME) Then
+                                sMerchantName = CDatabase.DbToString(dr(COL_MERCHANTNAME))
+                            End If
+
                             Dim transDate As Date
                             If Not Date.TryParse(sDate, transDate) Then
                                 Throw New Exception($"{sDate} is not a valid date")
@@ -497,6 +503,9 @@ Namespace Accounts
                                     Dim sDescriptionSuffix = String.Empty
                                     If sAction.ToUpper.Equals("Card debit", StringComparison.CurrentCultureIgnoreCase) Then
                                         sDescriptionSuffix = "Debit Card Spend"
+                                        If Not String.IsNullOrEmpty(sMerchantName) Then
+                                            sDescriptionSuffix &= $" - {sMerchantName}"
+                                        End If
                                     End If
                                     transfers.Add(New Tuple(Of Date, Decimal, String)(transDate.Date, cTotal, sDescriptionSuffix))
                                 Else
