@@ -40,6 +40,11 @@ Namespace Rates.FMP
             Public Property name As String
         End Class
 
+        Public Class StockInfo
+            Public Property symbol As String
+            Public Property price As String
+        End Class
+
         Friend Function RateTypeSearch(searchText As String) As IEnumerable(Of CRateType) Implements IRateProvider.RateTypeSearch
 
             Dim all = GetAllRateTypes()
@@ -50,37 +55,11 @@ Namespace Rates.FMP
 
         End Function
 
-        'Friend Function GetNewRates(providerIds As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
-
-        '    Dim symbol = providerIds.First
-
-        '    Dim reqUrl As String = $"https://financialmodelingprep.com/api/v3/quote-short/{String.Join(",", providerIds)}?apikey={API_KEY}"
-        '    Dim req As HttpWebRequest = CType(WebRequest.Create(reqUrl), HttpWebRequest)
-        '    req.Method = "GET"
-
-        '    Dim res As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
-        '    Dim resStream As Stream = res.GetResponseStream()
-        '    Dim reader As New StreamReader(resStream)
-        '    Dim responseBody As String = reader.ReadToEnd()
-
-        '    res.Close()
-        '    reader.Close()
-
-        '    Dim stockList As List(Of StockInfo) = JsonConvert.DeserializeObject(Of List(Of StockInfo))(responseBody)
-
-        '    Dim rates As New List(Of CRate)
-        '    For Each stockListItem In stockList
-        '        Dim rate = New CRate(stockListItem.Symbol, CDec(stockListItem.Price))
-        '        rates.Add(rate)
-        '    Next
-
-        '    Return rates
-
-        'End Function
-
         Friend Function GetNewRates(providerIds As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
 
-            Dim reqUrl As String = $"https://financialmodelingprep.com/api/v3/stock/list?apikey={API_KEY}"
+            Dim symbol = providerIds.First
+
+            Dim reqUrl As String = $"https://financialmodelingprep.com/stable/quote-short?symbol={String.Join(",", providerIds)}&apikey={API_KEY}"
             Dim req As HttpWebRequest = CType(WebRequest.Create(reqUrl), HttpWebRequest)
             req.Method = "GET"
 
@@ -92,20 +71,49 @@ Namespace Rates.FMP
             res.Close()
             reader.Close()
 
-            Dim out = New List(Of CRate)
+            Dim stockList As List(Of StockInfo) = JsonConvert.DeserializeObject(Of List(Of StockInfo))(responseBody)
 
-            Dim stockInfoList As List(Of AllStockInfo) = JsonConvert.DeserializeObject(Of List(Of AllStockInfo))(responseBody)
-
-            For Each providerId In providerIds
-                Dim r = stockInfoList.FirstOrDefault(Function(c) c.symbol.ToUpper.Equals(providerId, StringComparison.CurrentCultureIgnoreCase))
-                If r IsNot Nothing Then
-                    out.Add(New CRate(r.symbol, CDec(r.price)))
-                End If
+            Dim rates As New List(Of CRate)
+            For Each stockListItem In stockList
+                Dim rate = New CRate(stockListItem.Symbol, CDec(stockListItem.Price))
+                rates.Add(rate)
             Next
 
-            Return out
+            Return rates
 
         End Function
+
+        'Friend Function GetNewRates(providerIds As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
+
+        '    Dim reqUrl As String = $"https://financialmodelingprep.com/api/v3/stock/list?apikey={API_KEY}"
+
+        '    'Dim reqUrl As String = $"https://financialmodelingprep.com/stable/stock-list?apikey={API_KEY}"
+
+        '    Dim req As HttpWebRequest = CType(WebRequest.Create(reqUrl), HttpWebRequest)
+        '    req.Method = "GET"
+
+        '    Dim res As HttpWebResponse = CType(req.GetResponse(), HttpWebResponse)
+        '    Dim resStream As Stream = res.GetResponseStream()
+        '    Dim reader As New StreamReader(resStream)
+        '    Dim responseBody As String = reader.ReadToEnd()
+
+        '    res.Close()
+        '    reader.Close()
+
+        '    Dim out = New List(Of CRate)
+
+        '    Dim stockInfoList As List(Of AllStockInfo) = JsonConvert.DeserializeObject(Of List(Of AllStockInfo))(responseBody)
+
+        '    For Each providerId In providerIds
+        '        Dim r = stockInfoList.FirstOrDefault(Function(c) c.symbol.ToUpper.Equals(providerId, StringComparison.CurrentCultureIgnoreCase))
+        '        If r IsNot Nothing Then
+        '            out.Add(New CRate(r.symbol, CDec(r.price)))
+        '        End If
+        '    Next
+
+        '    Return out
+
+        'End Function
 
         Friend Function GetName() As String Implements IRateProvider.GetName
             Return "Financial Modeling Prep"
