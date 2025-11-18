@@ -71,14 +71,16 @@ Partial Class FMdi
         Me.MnuInterest = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuReportsSavingsTax = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuReportsIsaTransfersNew = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MnuReportsSavingsAndTaxPredictor = New System.Windows.Forms.ToolStripMenuItem()
         Me.NoptesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuHelpAbout = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TsmiHelpIpAddress = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.TsslPortfolioValue = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.MnuReportsSavingsAndTaxPredictor = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TsslIpAddress = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -298,6 +300,12 @@ Partial Class FMdi
         Me.MnuReportsIsaTransfersNew.Size = New System.Drawing.Size(210, 22)
         Me.MnuReportsIsaTransfersNew.Text = "ISA Transfers New"
         '
+        'MnuReportsSavingsAndTaxPredictor
+        '
+        Me.MnuReportsSavingsAndTaxPredictor.Name = "MnuReportsSavingsAndTaxPredictor"
+        Me.MnuReportsSavingsAndTaxPredictor.Size = New System.Drawing.Size(210, 22)
+        Me.MnuReportsSavingsAndTaxPredictor.Text = "Savings And Tax Predictor"
+        '
         'NoptesToolStripMenuItem
         '
         Me.NoptesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuNotes})
@@ -313,7 +321,7 @@ Partial Class FMdi
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuHelpAbout})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuHelpAbout, Me.TsmiHelpIpAddress})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "Help"
@@ -321,8 +329,14 @@ Partial Class FMdi
         'MnuHelpAbout
         '
         Me.MnuHelpAbout.Name = "MnuHelpAbout"
-        Me.MnuHelpAbout.Size = New System.Drawing.Size(107, 22)
+        Me.MnuHelpAbout.Size = New System.Drawing.Size(180, 22)
         Me.MnuHelpAbout.Text = "About"
+        '
+        'TsmiHelpIpAddress
+        '
+        Me.TsmiHelpIpAddress.Name = "TsmiHelpIpAddress"
+        Me.TsmiHelpIpAddress.Size = New System.Drawing.Size(180, 22)
+        Me.TsmiHelpIpAddress.Text = "Get MY IP Address"
         '
         'ContextMenuStrip1
         '
@@ -331,7 +345,7 @@ Partial Class FMdi
         '
         'StatusStrip1
         '
-        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TsslPortfolioValue})
+        Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TsslPortfolioValue, Me.TsslIpAddress})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 428)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(800, 22)
@@ -341,14 +355,14 @@ Partial Class FMdi
         'TsslPortfolioValue
         '
         Me.TsslPortfolioValue.Name = "TsslPortfolioValue"
-        Me.TsslPortfolioValue.Size = New System.Drawing.Size(120, 17)
-        Me.TsslPortfolioValue.Text = "ToolStripStatusLabel1"
+        Me.TsslPortfolioValue.Size = New System.Drawing.Size(100, 17)
+        Me.TsslPortfolioValue.Text = "TsslPortfolioValue"
         '
-        'MnuReportsSavingsAndTaxPredictor
+        'TsslIpAddress
         '
-        Me.MnuReportsSavingsAndTaxPredictor.Name = "MnuReportsSavingsAndTaxPredictor"
-        Me.MnuReportsSavingsAndTaxPredictor.Size = New System.Drawing.Size(210, 22)
-        Me.MnuReportsSavingsAndTaxPredictor.Text = "Savings And Tax Predictor"
+        Me.TsslIpAddress.Name = "TsslIpAddress"
+        Me.TsslIpAddress.Size = New System.Drawing.Size(78, 17)
+        Me.TsslIpAddress.Text = "TsslIpAddress"
         '
         'FMdi
         '
@@ -416,4 +430,6 @@ Partial Class FMdi
     Friend WithEvents TsslPortfolioValue As ToolStripStatusLabel
     Friend WithEvents MnuReportsIsaTransfersNew As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsAndTaxPredictor As ToolStripMenuItem
+    Friend WithEvents TsmiHelpIpAddress As ToolStripMenuItem
+    Friend WithEvents TsslIpAddress As ToolStripStatusLabel
 End Class

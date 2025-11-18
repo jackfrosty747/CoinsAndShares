@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Globalization
+Imports System.Net
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Infragistics.Win
@@ -149,6 +150,11 @@ Module PublicFunctions
 
         Return Nothing
 
+    End Function
+
+    Public Function GetSimplePublicIP() As String
+        Dim client As New WebClient()
+        Return client.DownloadString("https://api.ipify.org").Trim()
     End Function
 
 End Module

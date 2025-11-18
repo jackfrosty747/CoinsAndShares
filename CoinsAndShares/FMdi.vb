@@ -18,6 +18,8 @@ Imports CoinsAndShares.Transactions
 
 Friend Class FMdi
 
+    Private Const SETTING_IP_ADDRESS = "IpAddress"
+
     Private Const SHOW_SHORTCUTS = True
 
     Private ReadOnly m_commonObjects As CCommonObjects
@@ -54,6 +56,23 @@ Friend Class FMdi
         End If
 
         ShowPortfolioValue()
+
+        Try
+            Dim ipAddress = GetSimplePublicIP()
+
+            TsslIpAddress.Text = $"IP Address: {ipAddress}"
+
+            Dim oldIpAddress = GetSetting(Application.ProductName, Name, SETTING_IP_ADDRESS)
+            If Not String.IsNullOrEmpty(oldIpAddress) AndAlso Not ipAddress.Equals(oldIpAddress) Then
+                TsslIpAddress.Text &= "IP ADDRESS CHANGED - May need to create new Trading 212 Keys"
+                TsslIpAddress.BackColor = Color.Red
+                TsslIpAddress.ForeColor = Color.White
+            End If
+
+            SaveSetting(Application.ProductName, Name, SETTING_IP_ADDRESS, ipAddress)
+        Catch ex As Exception
+            TsslIpAddress.Text = "IP Address: Error"
+        End Try
 
     End Sub
 
@@ -761,43 +780,15 @@ Projected Tax: {projectedTax:c2}"
         End Try
     End Sub
 
-    'Private Sub MnuReportsIsaTransfersNew_Click(sender As Object, e As EventArgs) Handles MnuReportsIsaTransfersNew.Click
-    '    Try
-    '        ' All accounts containing ISA in the name
-    '        Dim isaAccounts = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountName.ToUpperInvariant.Contains("ISA"))
-
-    '        ' All transfers IN to ISA accounts
-    '        Dim isaTransfersIn = m_commonObjects.Transactions.GetAll.Where(Function(c) c.TransactionType = ETransactionType.Transfer AndAlso
-    '                                                                         c.Amount > 0 AndAlso
-    '                                                                         isaAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.OrdinalIgnoreCase)))
-
-    '        ' Exclude inter ISA transfers
-    '        Dim isaTransfersInExcInterIsa = isaTransfersIn.Where(Function(c) Not isaAccounts.Any(Function(d) c.Description.ToUpperInvariant.EndsWith(d.AccountCode)))
-
-    '        Dim sb = New StringBuilder
-
-    '        For iTaxYear = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
-    '            Dim taxYearTotal As Decimal = 0
-
-    '            Dim transfersForTaxYear = isaTransfersInExcInterIsa.Where(Function(c) c.TaxYear = iTaxYear)
-
-    '            sb.AppendLine($"TAX YEAR {iTaxYear}")
-    '            sb.AppendLine($"=============")
-
-    '            For Each t In transfersForTaxYear
-    '                taxYearTotal += t.Amount
-    '                sb.AppendLine($"    {t.TransDate.ToShortDateString}   {LSet(t.Amount.ToString("c2"), 15)} {t.AccountCode}")
-    '            Next
-
-    '            sb.AppendLine($"TOTALS FOR TAX YEAR {iTaxYear}: {taxYearTotal:c}")
-    '            sb.AppendLine("")
-    '        Next
-
-    '        MessageBox.Show(sb.ToString, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-    '    Catch ex As Exception
-    '        m_commonObjects.Errors.Handle(ex)
-    '    End Try
-    'End Sub
+    Private Sub TsmiHelpIpAddress_Click(sender As Object, e As EventArgs) Handles TsmiHelpIpAddress.Click
+        Try
+            Cursor = Cursors.WaitCursor
+            MessageBox.Show($"Your IP Address is: {GetSimplePublicIP()}", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+        Finally
+            Cursor = Cursors.Default
+        End Try
+    End Sub
 
 End Class
