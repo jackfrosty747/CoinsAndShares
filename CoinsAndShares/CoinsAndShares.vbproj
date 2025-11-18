@@ -367,6 +367,7 @@
     </Compile>
     <Compile Include="Rates\MarketWatch\CMarketWatch.vb" />
     <Compile Include="Rates\MRates.vb" />
+    <Compile Include="Rates\Trading212\CTrading212.vb" />
     <Compile Include="Rates\YahooFinance\CYahooFinance.vb" />
     <Compile Include="Settings\CSettings.vb" />
     <Compile Include="Settings\FSettings.Designer.vb">

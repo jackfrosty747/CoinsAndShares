@@ -13,6 +13,7 @@ Namespace Rates
             MorningStar = 7
             YahooFinance = 8
             GoldPrice = 9
+            Trading212 = 10
         End Enum
 
         'Friend Function GetRateProviderToUse(instrumentType As EInstrumentType) As IRateProvider
@@ -64,6 +65,8 @@ Namespace Rates
                     Return New YahooFinance.CYahooFinance()
                 Case ERateProvider.GoldPrice
                     Return New GoldPrice.CGoldPrice()
+                Case ERateProvider.Trading212
+                    Return New Trading212.CTrading212()
                 Case Else
                     Throw New ArgumentOutOfRangeException(NameOf(rateProvider))
             End Select
