@@ -502,22 +502,38 @@ Namespace Rates
                     m_fStop = False
                     m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
 
+                    Dim errors = New List(Of String)
+
                     For Each rateProviderCode In scrapes.Select(Function(c) c.RateProvider).Distinct
                         Dim rateProvider = GetRateProvider(m_commonObjects, CType(rateProviderCode, ERateProvider))
-                        Dim newRates = rateProvider.GetNewRates(scrapes.Where(Function(c) c.RateProvider = rateProviderCode).Select(Function(c) c.LinkCode))
-                        For Each newRate In newRates
-                            GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
-                        Next
+
+                        Try
+                            Dim newRates = rateProvider.GetNewRates(scrapes.Where(Function(c) c.RateProvider = rateProviderCode).Select(Function(c) c.LinkCode))
+                            For Each newRate In newRates
+                                GridHelper.SetScrapedRate(GrdInstruments, newRate.ID, newRate.Rate)
+                            Next
+                        Catch ex As Exception
+                            errors.Add($"Provider: {rateProvider.GetName};  Error:{ex.Message}")
+                        End Try
+
                         If m_fStop Then
                             Exit For
                         End If
                     Next
 
+                    Dim sMessage As String
+
                     If m_fStop Then
-                        MessageBox.Show("Process stopped", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        sMessage = "Process stopped"
                     Else
-                        MessageBox.Show("Process completed", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        sMessage = "Process completed"
                     End If
+
+                    If errors.Any Then
+                        sMessage &= Environment.NewLine & "However, the following errors occurred:" & Environment.NewLine & String.Join(Environment.NewLine, errors)
+                    End If
+
+                    MessageBox.Show(sMessage, Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
