@@ -74,6 +74,8 @@ Namespace Charts
             Dim allCurrencies = currencies.GetAll()
             Dim allAccounts = accounts.GetAll()
 
+            Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+
             LoadDataPl()
             LoadDataHoldings(allTransactions, allInstruments, allCurrencies)
             LoadDataPlPerInstrument(allTransactions, allInstruments, allCurrencies)
@@ -550,6 +552,8 @@ Namespace Charts
         Private Sub LoadDataPlPerInstrument(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
                                      allCurrencies As IEnumerable(Of CCurrencyDetail))
 
+            Const MIN_PL As Decimal = 20
+
             Const SERIES_INSTRUMENT = "Instrument"
 
             ChartPlPerInstrument.Series.Clear()
@@ -558,7 +562,7 @@ Namespace Charts
             With ChartPlPerInstrument.Titles.Add("P & L Per Instrument")
                 .Font = New Font(Font, FontStyle.Bold)
             End With
-            With ChartPlPerInstrument.Titles.Add("Instruments only, not inc. dividend, fees etc")
+            With ChartPlPerInstrument.Titles.Add($"Instruments only, not inc. dividend, fees etc.  P/L >= {MIN_PL:c2}")
                 .Font = New Font(Font, FontStyle.Italic)
             End With
             ChartPlPerInstrument.AntiAliasing = AntiAliasingStyles.All
@@ -585,7 +589,7 @@ Namespace Charts
             End With
 
             Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
-            Dim allAnalysis = analysis.InstrumentAnalysis()
+            Dim allAnalysis = analysis.InstrumentAnalysis().ToList
 
             If CmbAccountPlPerInstrument.Text.Length > 0 Then
                 ' We only want to see instruments that are used by the account selected
@@ -594,7 +598,7 @@ Namespace Charts
                                                                     Return Not String.IsNullOrEmpty(c.InstrumentCode) AndAlso c.AccountCode.Equals(CmbAccountPlPerInstrument.Text)
                                                                 End Function).Select(Function(c) c.InstrumentCode.ToUpper).Distinct
                 ' Filter analysis to show only those codes
-                allAnalysis = allAnalysis.Where(Function(c) instrumentCodesOnly.Contains(c.InstrumentCode.ToUpper))
+                allAnalysis = allAnalysis.Where(Function(c) instrumentCodesOnly.Contains(c.InstrumentCode.ToUpper)).ToList
             End If
 
             Dim analysisOfRequiredType = allAnalysis.Where(Function(c)
@@ -604,7 +608,10 @@ Namespace Charts
                                                                     (OptPlPerInstrumentCrypto.Checked AndAlso i.InstrumentType = EInstrumentType.Crypto) OrElse
                                                                     (OptPlPerInstrumentShares.Checked AndAlso i.InstrumentType = EInstrumentType.Share)
                                                                 )
-                                                           End Function).OrderByDescending(Function(c) c.CurrentWorth)
+                                                           End Function).OrderByDescending(Function(c) c.CurrentWorth).ToList
+
+            analysisOfRequiredType = analysisOfRequiredType.Where(Function(c) c.Pl >= MIN_PL OrElse c.Pl <= (MIN_PL * -1)).ToList
+
 
             '   Dim iBar As Integer
             For Each instrumentAnalysis In analysisOfRequiredType.OrderByDescending(Function(c) c.Pl)

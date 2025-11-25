@@ -156,6 +156,8 @@ Namespace Transactions
 
         Private Shared Sub InitializeLayout(sender As Object, e As InitializeLayoutEventArgs)
 
+            Const CURRENCY_WIDTH = 68
+
             Dim grid As UltraGrid = CType(sender, UltraGrid)
             Dim tagBits As TagBits = CType(grid.Tag, TagBits)
             Try
@@ -192,11 +194,16 @@ Namespace Transactions
                     .SummaryFooterCaption = "Total"
                 End With
 
+                e.Layout.AutoFitColumns = True
+
                 For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
                     Select Case col.Key
                         Case Columns.InstrumentCode.ToString
                             col.Header.Caption = "Instr"
-                            col.Width = 90
+                            'col.Width = 90
+                            'col.Width = 110
+                            col.MinWidth = 45
+                            col.MaxWidth = 45
                         Case Columns.InstrumentName.ToString
                             col.Header.Caption = "Name"
                             col.Width = 120
@@ -208,29 +215,39 @@ Namespace Transactions
                             col.Style = ColumnStyle.Button
                         Case Columns.CurrentRate.ToString
                             col.Header.Caption = "Cur Rate"
-                            col.Width = 100
+                            'col.Width = 100
+                            col.MinWidth = 50
+                            col.MaxWidth = 50
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = FORMAT_RATE
                         Case Columns.CurrentValue.ToString
                             col.Header.Caption = "Value"
-                            col.Width = 110
+                            'col.Width = 110
+                            col.MinWidth = CURRENCY_WIDTH
+                            col.MaxWidth = CURRENCY_WIDTH
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = "c2"
 
                         Case Columns.NetCash.ToString
                             col.Header.Caption = "Net Cash"
-                            col.Width = 100
+                            'col.Width = 110
+                            col.MinWidth = CURRENCY_WIDTH
+                            col.MaxWidth = CURRENCY_WIDTH
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = "c2"
                         Case Columns.Pl.ToString
                             col.Header.Caption = "P/L"
-                            col.Width = 100
+                            'col.Width = 110
+                            col.MinWidth = CURRENCY_WIDTH
+                            col.MaxWidth = CURRENCY_WIDTH
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = "c2"
 
                         Case Columns.TWRR.ToString
                             col.Header.Caption = "TWRR"
-                            col.Width = 90
+                            'col.Width = 90
+                            col.MinWidth = 45
+                            col.MaxWidth = 45
                             col.CellAppearance.TextHAlign = HAlign.Right
                             col.Format = "0.0%"
 

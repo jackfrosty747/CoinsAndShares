@@ -2,10 +2,14 @@
 
 Namespace Instruments
     Module MInstuments
+        Friend InstrumentsAtTop As New List(Of String) From {"BTC", "USDC", "ETH"}
         Friend Enum EInstrumentType
             <Description("C")> Crypto
             <Description("S")> Share
         End Enum
+        Friend Function IsAtTop(instrumentCode As String) As Boolean
+            Return InstrumentsAtTop.Any(Function(c) c.Equals(instrumentCode, StringComparison.InvariantCultureIgnoreCase))
+        End Function
         Friend Function GetInstrumentTypeFromCode(sCode As String, fSilent As Boolean) As EInstrumentType
             For Each i As EInstrumentType In [Enum].GetValues(GetType(EInstrumentType))
                 If i.Code.Equals(sCode, StringComparison.CurrentCultureIgnoreCase) Then

@@ -123,8 +123,8 @@
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
+            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
             Me.TableLayoutPanel1.Controls.Add(Me.ChkNonTaxable, 4, 3)
@@ -162,7 +162,7 @@
             'ChkNonTaxable
             '
             Me.ChkNonTaxable.AutoSize = True
-            Me.ChkNonTaxable.Location = New System.Drawing.Point(233, 64)
+            Me.ChkNonTaxable.Location = New System.Drawing.Point(221, 64)
             Me.ChkNonTaxable.Name = "ChkNonTaxable"
             Me.ChkNonTaxable.Size = New System.Drawing.Size(67, 17)
             Me.ChkNonTaxable.TabIndex = 8
@@ -226,7 +226,7 @@
             Me.TxtAccountName.Dock = System.Windows.Forms.DockStyle.Top
             Me.TxtAccountName.Location = New System.Drawing.Point(108, 36)
             Me.TxtAccountName.Name = "TxtAccountName"
-            Me.TxtAccountName.Size = New System.Drawing.Size(204, 22)
+            Me.TxtAccountName.Size = New System.Drawing.Size(187, 22)
             Me.TxtAccountName.TabIndex = 5
             Me.TxtAccountName.Text = "TxtAccountName"
             '
@@ -243,10 +243,10 @@
             'GrdHoldings
             '
             Me.GrdHoldings.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.GrdHoldings.Location = New System.Drawing.Point(323, 3)
+            Me.GrdHoldings.Location = New System.Drawing.Point(306, 3)
             Me.GrdHoldings.Name = "GrdHoldings"
             Me.TableLayoutPanel1.SetRowSpan(Me.GrdHoldings, 7)
-            Me.GrdHoldings.Size = New System.Drawing.Size(458, 214)
+            Me.GrdHoldings.Size = New System.Drawing.Size(475, 214)
             Me.GrdHoldings.TabIndex = 12
             Me.GrdHoldings.Text = "Holdings"
             '
@@ -258,7 +258,7 @@
             Me.TxtNotes.Multiline = True
             Me.TxtNotes.Name = "TxtNotes"
             Me.TxtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-            Me.TxtNotes.Size = New System.Drawing.Size(204, 69)
+            Me.TxtNotes.Size = New System.Drawing.Size(187, 69)
             Me.TxtNotes.TabIndex = 16
             Me.TxtNotes.Text = "TxtNotes"
             '
@@ -298,7 +298,7 @@
             '
             Me.LblBalance.AutoSize = True
             Me.LblBalance.ForeColor = System.Drawing.Color.Blue
-            Me.LblBalance.Location = New System.Drawing.Point(233, 5)
+            Me.LblBalance.Location = New System.Drawing.Point(221, 5)
             Me.LblBalance.Name = "LblBalance"
             Me.LblBalance.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.LblBalance.Size = New System.Drawing.Size(62, 16)
@@ -308,7 +308,7 @@
             'ChkIncludeOnShortcuts
             '
             Me.ChkIncludeOnShortcuts.AutoSize = True
-            Me.ChkIncludeOnShortcuts.Location = New System.Drawing.Point(233, 92)
+            Me.ChkIncludeOnShortcuts.Location = New System.Drawing.Point(221, 92)
             Me.ChkIncludeOnShortcuts.Name = "ChkIncludeOnShortcuts"
             Me.ChkIncludeOnShortcuts.Size = New System.Drawing.Size(70, 17)
             Me.ChkIncludeOnShortcuts.TabIndex = 11

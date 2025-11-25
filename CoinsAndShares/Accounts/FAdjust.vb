@@ -31,6 +31,9 @@ Namespace Accounts
             Else
                 validInstrumentOptions = validInstrumentOptions.Where(Function(c) False)
             End If
+
+            validInstrumentOptions = validInstrumentOptions.OrderByDescending(Function(c) IsAtTop(c.Code)).ThenBy(Function(c) c.Code)
+
             CDropdowns.CInstrumentsDropdown.SetupDropdown(CmbInstrumentCode, validInstrumentOptions, commonObjects, Me)
 
             DtpDateTime.Value = Now

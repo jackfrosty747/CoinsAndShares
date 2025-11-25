@@ -371,6 +371,12 @@ Friend Class CDropdowns
             Try
                 Dim instrument As CInstrument = GetInstrumentFromRow(e.Row)
                 e.Row.CellAppearance.ForeColor = CColours.InstrumentType(instrument.InstrumentType)
+
+                e.Row.CellAppearance.FontData.Bold =
+                    If(IsAtTop(e.Row.Cells(Columns.Code.ToString).Text),
+                    Infragistics.Win.DefaultableBoolean.True,
+                    Infragistics.Win.DefaultableBoolean.False)
+
             Catch ex As Exception
                 tagBits.CommonObjects.Errors.Handle(ex)
             End Try
