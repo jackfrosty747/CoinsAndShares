@@ -336,12 +336,13 @@
             'Label22
             '
             Me.Label22.AutoSize = True
+            Me.TableLayoutPanel1.SetColumnSpan(Me.Label22, 2)
             Me.Label22.Location = New System.Drawing.Point(193, 117)
             Me.Label22.Name = "Label22"
             Me.Label22.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
-            Me.Label22.Size = New System.Drawing.Size(16, 21)
+            Me.Label22.Size = New System.Drawing.Size(39, 21)
             Me.Label22.TabIndex = 14
-            Me.Label22.Text = "%"
+            Me.Label22.Text = "% AER"
             '
             'Panel1
             '

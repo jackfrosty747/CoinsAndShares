@@ -77,10 +77,10 @@ Namespace Charts
             Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
 
             LoadDataPl()
-            LoadDataHoldings(allTransactions, allInstruments, allCurrencies)
-            LoadDataPlPerInstrument(allTransactions, allInstruments, allCurrencies)
+            LoadDataHoldings(allTransactions, allInstruments, allCurrencies, analysis)
+            LoadDataPlPerInstrument(allTransactions, allInstruments, allCurrencies, analysis)
             LoadMining(allTransactions, allInstruments, allCurrencies)
-            LoadNetworks(allTransactions, allInstruments, allCurrencies, allAccounts)
+            LoadNetworks(allTransactions, allInstruments, allCurrencies, allAccounts, analysis)
             LoadSavings(allAccounts, allInstruments, allCurrencies)
             LoadBonuses(allTransactions, Nothing)
 
@@ -230,7 +230,8 @@ Namespace Charts
         End Sub
 
         Private Sub LoadNetworks(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                 allCurrencies As IEnumerable(Of CCurrencyDetail), allAccounts As IEnumerable(Of CAccount))
+                                 allCurrencies As IEnumerable(Of CCurrencyDetail), allAccounts As IEnumerable(Of CAccount),
+                                 analysis As CTransactionAnalyserResult)
 
             Const COL1 = 35
             Const COL2 = 15
@@ -268,8 +269,8 @@ Namespace Charts
                     End If
 
                     ' Calculate assets
-                    Dim accountAnalysis = CTransactions.Analyse(accountTransactions, allInstruments, allCurrencies)
-                    Dim cAccountAssets = accountAnalysis.CurrentValue()
+                    'Dim accountAnalysis = CTransactions.Analyse(accountTransactions, allInstruments, allCurrencies)
+                    Dim cAccountAssets = analysis.CurrentValue()
 
                     ' AccountP/L
                     Dim cAccountPl = cAccountAssets - cAccountTransfers
@@ -550,7 +551,7 @@ Namespace Charts
         End Class
 
         Private Sub LoadDataPlPerInstrument(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                     allCurrencies As IEnumerable(Of CCurrencyDetail))
+                                     allCurrencies As IEnumerable(Of CCurrencyDetail), analysis As CTransactionAnalyserResult)
 
             Const MIN_PL As Decimal = 20
 
@@ -588,7 +589,7 @@ Namespace Charts
                 .AxisY.MajorGrid.LineColor = Color.LightGray
             End With
 
-            Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+            'Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
             Dim allAnalysis = analysis.InstrumentAnalysis().ToList
 
             If CmbAccountPlPerInstrument.Text.Length > 0 Then
@@ -707,7 +708,7 @@ Namespace Charts
         End Sub
 
         Private Sub LoadDataHoldings(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                     allCurrencies As IEnumerable(Of CCurrencyDetail))
+                                     allCurrencies As IEnumerable(Of CCurrencyDetail), analysis As CTransactionAnalyserResult)
 
             Const SERIES_HOLDINGS = "holdings"
 
@@ -735,7 +736,7 @@ Namespace Charts
                 .LegendText = "#VALX : #VALY{c2}"
             End With
 
-            Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+            'Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
 
             Dim allAnalysis = analysis.InstrumentAnalysis()
 
