@@ -29,14 +29,14 @@
             Me.GrdHoldings = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.Panel2 = New System.Windows.Forms.Panel()
+            Me.LblToPay = New System.Windows.Forms.Label()
+            Me.Label5 = New System.Windows.Forms.Label()
+            Me.TxtTaxRate = New System.Windows.Forms.TextBox()
+            Me.Label4 = New System.Windows.Forms.Label()
+            Me.TxtAllowance = New System.Windows.Forms.TextBox()
+            Me.Label3 = New System.Windows.Forms.Label()
             Me.LblTaxable = New System.Windows.Forms.Label()
             Me.Label2 = New System.Windows.Forms.Label()
-            Me.Label3 = New System.Windows.Forms.Label()
-            Me.TxtAllowance = New System.Windows.Forms.TextBox()
-            Me.Label4 = New System.Windows.Forms.Label()
-            Me.TxtTaxRate = New System.Windows.Forms.TextBox()
-            Me.Label5 = New System.Windows.Forms.Label()
-            Me.LblToPay = New System.Windows.Forms.Label()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.Panel2.SuspendLayout()
@@ -116,6 +116,69 @@
             Me.Panel2.Size = New System.Drawing.Size(624, 38)
             Me.Panel2.TabIndex = 15
             '
+            'LblToPay
+            '
+            Me.LblToPay.AutoSize = True
+            Me.LblToPay.Dock = System.Windows.Forms.DockStyle.Left
+            Me.LblToPay.ForeColor = System.Drawing.Color.Red
+            Me.LblToPay.Location = New System.Drawing.Point(502, 5)
+            Me.LblToPay.Name = "LblToPay"
+            Me.LblToPay.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
+            Me.LblToPay.Size = New System.Drawing.Size(50, 18)
+            Me.LblToPay.TabIndex = 7
+            Me.LblToPay.Text = "LblToPay"
+            '
+            'Label5
+            '
+            Me.Label5.AutoSize = True
+            Me.Label5.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label5.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label5.ForeColor = System.Drawing.Color.Red
+            Me.Label5.Location = New System.Drawing.Point(445, 5)
+            Me.Label5.Name = "Label5"
+            Me.Label5.Padding = New System.Windows.Forms.Padding(10, 5, 0, 0)
+            Me.Label5.Size = New System.Drawing.Size(57, 18)
+            Me.Label5.TabIndex = 6
+            Me.Label5.Text = "TO PAY:"
+            '
+            'TxtTaxRate
+            '
+            Me.TxtTaxRate.Dock = System.Windows.Forms.DockStyle.Left
+            Me.TxtTaxRate.Location = New System.Drawing.Point(347, 5)
+            Me.TxtTaxRate.Name = "TxtTaxRate"
+            Me.TxtTaxRate.Size = New System.Drawing.Size(98, 22)
+            Me.TxtTaxRate.TabIndex = 5
+            '
+            'Label4
+            '
+            Me.Label4.AutoSize = True
+            Me.Label4.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label4.Location = New System.Drawing.Point(289, 5)
+            Me.Label4.Name = "Label4"
+            Me.Label4.Padding = New System.Windows.Forms.Padding(10, 5, 0, 0)
+            Me.Label4.Size = New System.Drawing.Size(58, 18)
+            Me.Label4.TabIndex = 4
+            Me.Label4.Text = "Tax Rate"
+            '
+            'TxtAllowance
+            '
+            Me.TxtAllowance.Dock = System.Windows.Forms.DockStyle.Left
+            Me.TxtAllowance.Location = New System.Drawing.Point(191, 5)
+            Me.TxtAllowance.Name = "TxtAllowance"
+            Me.TxtAllowance.Size = New System.Drawing.Size(98, 22)
+            Me.TxtAllowance.TabIndex = 3
+            '
+            'Label3
+            '
+            Me.Label3.AutoSize = True
+            Me.Label3.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label3.Location = New System.Drawing.Point(121, 5)
+            Me.Label3.Name = "Label3"
+            Me.Label3.Padding = New System.Windows.Forms.Padding(10, 5, 0, 0)
+            Me.Label3.Size = New System.Drawing.Size(70, 18)
+            Me.Label3.TabIndex = 2
+            Me.Label3.Text = "Allowance"
+            '
             'LblTaxable
             '
             Me.LblTaxable.AutoSize = True
@@ -140,69 +203,6 @@
             Me.Label2.Size = New System.Drawing.Size(57, 18)
             Me.Label2.TabIndex = 0
             Me.Label2.Text = "TAXABLE:"
-            '
-            'Label3
-            '
-            Me.Label3.AutoSize = True
-            Me.Label3.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label3.Location = New System.Drawing.Point(121, 5)
-            Me.Label3.Name = "Label3"
-            Me.Label3.Padding = New System.Windows.Forms.Padding(10, 5, 0, 0)
-            Me.Label3.Size = New System.Drawing.Size(70, 18)
-            Me.Label3.TabIndex = 2
-            Me.Label3.Text = "Allowance"
-            '
-            'TxtAllowance
-            '
-            Me.TxtAllowance.Dock = System.Windows.Forms.DockStyle.Left
-            Me.TxtAllowance.Location = New System.Drawing.Point(191, 5)
-            Me.TxtAllowance.Name = "TxtAllowance"
-            Me.TxtAllowance.Size = New System.Drawing.Size(98, 22)
-            Me.TxtAllowance.TabIndex = 3
-            '
-            'Label4
-            '
-            Me.Label4.AutoSize = True
-            Me.Label4.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label4.Location = New System.Drawing.Point(289, 5)
-            Me.Label4.Name = "Label4"
-            Me.Label4.Padding = New System.Windows.Forms.Padding(10, 5, 0, 0)
-            Me.Label4.Size = New System.Drawing.Size(58, 18)
-            Me.Label4.TabIndex = 4
-            Me.Label4.Text = "Tax Rate"
-            '
-            'TxtTaxRate
-            '
-            Me.TxtTaxRate.Dock = System.Windows.Forms.DockStyle.Left
-            Me.TxtTaxRate.Location = New System.Drawing.Point(347, 5)
-            Me.TxtTaxRate.Name = "TxtTaxRate"
-            Me.TxtTaxRate.Size = New System.Drawing.Size(98, 22)
-            Me.TxtTaxRate.TabIndex = 5
-            '
-            'Label5
-            '
-            Me.Label5.AutoSize = True
-            Me.Label5.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label5.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label5.ForeColor = System.Drawing.Color.Red
-            Me.Label5.Location = New System.Drawing.Point(445, 5)
-            Me.Label5.Name = "Label5"
-            Me.Label5.Padding = New System.Windows.Forms.Padding(10, 5, 0, 0)
-            Me.Label5.Size = New System.Drawing.Size(57, 18)
-            Me.Label5.TabIndex = 6
-            Me.Label5.Text = "TO PAY:"
-            '
-            'LblToPay
-            '
-            Me.LblToPay.AutoSize = True
-            Me.LblToPay.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblToPay.ForeColor = System.Drawing.Color.Red
-            Me.LblToPay.Location = New System.Drawing.Point(502, 5)
-            Me.LblToPay.Name = "LblToPay"
-            Me.LblToPay.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
-            Me.LblToPay.Size = New System.Drawing.Size(50, 18)
-            Me.LblToPay.TabIndex = 7
-            Me.LblToPay.Text = "LblToPay"
             '
             'FSavingsAndTaxPredictor
             '

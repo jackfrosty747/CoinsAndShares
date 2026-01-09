@@ -177,6 +177,7 @@ Namespace Charts
                     .AllowUpdate = DefaultableBoolean.False
                     .RowSelectors = DefaultableBoolean.False
                     .CellClickAction = CellClickAction.RowSelect
+                    .HeaderClickAction = HeaderClickAction.SortSingle
                 End With
 
                 For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
@@ -187,7 +188,7 @@ Namespace Charts
                             col.Header.Caption = "Name"
                         Case NameOf(Output.InterestRate)
                             col.Header.Caption = "Cur Rate"
-                            col.Format = "00.00"
+                            col.Format = "##0.00\%"
                         Case NameOf(Output.CashBalance)
                             col.Header.Caption = "Balance"
                             col.Format = "c2"
