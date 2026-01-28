@@ -11,6 +11,8 @@ Namespace Rates.CoinGecko
 
     Friend Class CCoinGecko : Implements IRateProvider
 
+        Private Const COINGECKO_API_KEY As String = "CG-N2GdsQLGJXKUqJb6bshP1muA"
+
         Private Const BASE_URL As String = "https://api.coingecko.com/api/v3/"
 
         Friend Function GetAllRateTypes() As IEnumerable(Of CRateType) Implements IRateProvider.GetAllRateTypes
@@ -28,7 +30,8 @@ Namespace Rates.CoinGecko
 
         Private Shared Function GetAllRateTypesNow() As IEnumerable(Of CCoinGeckoCoin)
             Using webClient As New WebClient()
-                Dim sUrl As String = Url.Combine(BASE_URL, "coins", "list")
+                Dim sUrl As String = Url.Combine(BASE_URL, "coins", "list").
+                    SetQueryParam("x_cg_demo_api_key", COINGECKO_API_KEY)
                 Dim responseBytes As Byte() = webClient.DownloadData(sUrl)
                 Dim responseString As String = Encoding.Default.GetString(responseBytes)
                 Dim allCoinGeckoCoins = JsonConvert.DeserializeObject(Of List(Of CCoinGeckoCoin))(responseString)
@@ -50,7 +53,8 @@ Namespace Rates.CoinGecko
 
             Dim sUrl As String = Url.Combine(BASE_URL, "simple", "price").
                 SetQueryParam("vs_currencies", sLocalCurrencyIso).
-                SetQueryParam("ids", sIdsToGet)
+                SetQueryParam("ids", sIdsToGet).
+                SetQueryParam("x_cg_demo_api_key", COINGECKO_API_KEY)
 
             Dim rates As New List(Of CRate)
 

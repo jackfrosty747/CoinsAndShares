@@ -191,7 +191,11 @@ Namespace Instruments
         End Sub
         Private Sub SearchNow()
             Dim results = m_rateProvider.RateTypeSearch(TxtFilter.Text)
-            GridHelper.LoadData(GrdCoins, results, m_commonObjects, Me)
+            If results Is Nothing Then
+                MessageBox.Show("No results", Text, MessageBoxButtons.OK, MessageBoxIcon.Question)
+            Else
+                GridHelper.LoadData(GrdCoins, results, m_commonObjects, Me)
+            End If
         End Sub
 
         Private Sub BtnSearch_Click(sender As Object, e As EventArgs) Handles BtnSearch.Click

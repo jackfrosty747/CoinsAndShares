@@ -7,8 +7,8 @@ Imports Newtonsoft.Json
 Namespace Rates.Trading212
     Friend Class CTrading212 : Implements IRateProvider
 
-        Private Const API_KEY = "1994934ZBuLAKliEQHazroAtiCCcSlsNmCJH"
-        Private Const API_SECRET = "qBYJAGCtY2PoGyxLxCOfGVkJEXF_S_DyagLxLwz4AVk"
+        Private Const API_KEY = "1994934ZkMkVofGeQagDuGUUtfnxlkwcgIcK"
+        Private Const API_SECRET = "GzkQbMKQr6Jk4e9NmnJv7ZSGHGPlNr0ZikVFw_snwMU"
 
         Private Const BaseUrl As String = "https://live.trading212.com"
 
@@ -99,6 +99,40 @@ Namespace Rates.Trading212
         End Class
 
         Public Function GetNewRates(providerIds As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
+            '    Using client As New HttpClient()
+            '        client.BaseAddress = New Uri("https://live.trading212.com")
+
+            '        client.DefaultRequestHeaders.Authorization =
+            'New AuthenticationHeaderValue(
+            '    "Basic",
+            '    Convert.ToBase64String(Encoding.UTF8.GetBytes($"{API_KEY}:{API_SECRET}"))
+            ')
+
+            '        client.DefaultRequestHeaders.UserAgent.ParseAdd("MyApp/1.0")
+
+            '        'Dim response = client.GetAsync("/api/v0/equity/account/cash").Result
+            '        'Dim body = response.Content.ReadAsStringAsync().Result
+
+            '        Dim instrumentsJson = client.GetAsync("/api/v0/equity/metadata/instruments").Result.Content.ReadAsStringAsync().Result
+            '        Dim instruments = JsonConvert.DeserializeObject(Of List(Of InstrumentData))(instrumentsJson)
+
+
+            '        'MessageBox.Show($"{response.StatusCode}{Environment.NewLine}{body}")
+            '        MessageBox.Show(instruments.ToString)
+
+            '    End Using
+
+
+
+
+
+
+
+
+
+
+
+
             Using client As New HttpClient()
                 client.BaseAddress = New Uri(BaseUrl)
 
