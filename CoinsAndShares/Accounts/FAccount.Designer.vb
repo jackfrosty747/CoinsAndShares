@@ -45,12 +45,14 @@
             Me.TxtCashSavingsRate = New System.Windows.Forms.TextBox()
             Me.Label22 = New System.Windows.Forms.Label()
             Me.Panel1 = New System.Windows.Forms.Panel()
-            Me.BtnReconcile = New System.Windows.Forms.Button()
-            Me.Label20 = New System.Windows.Forms.Label()
+            Me.Panel3 = New System.Windows.Forms.Panel()
+            Me.LblTransCount = New System.Windows.Forms.Label()
+            Me.LblAmount = New System.Windows.Forms.Label()
             Me.LblSelected = New System.Windows.Forms.Label()
             Me.Label15 = New System.Windows.Forms.Label()
-            Me.LblAmount = New System.Windows.Forms.Label()
-            Me.LblTransCount = New System.Windows.Forms.Label()
+            Me.Label23 = New System.Windows.Forms.Label()
+            Me.BtnReconcile = New System.Windows.Forms.Button()
+            Me.Label20 = New System.Windows.Forms.Label()
             Me.BtnSave = New System.Windows.Forms.Button()
             Me.Label13 = New System.Windows.Forms.Label()
             Me.Btn212 = New System.Windows.Forms.Button()
@@ -98,10 +100,13 @@
             Me.LblMining = New System.Windows.Forms.Label()
             Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+            Me.BtnTransferFiat = New System.Windows.Forms.Button()
+            Me.Label24 = New System.Windows.Forms.Label()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
+            Me.Panel3.SuspendLayout()
             CType(Me.GrdTransactions, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabControl1.SuspendLayout()
             Me.Transactions.SuspendLayout()
@@ -156,7 +161,7 @@
             Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-            Me.TableLayoutPanel1.Size = New System.Drawing.Size(784, 220)
+            Me.TableLayoutPanel1.Size = New System.Drawing.Size(784, 219)
             Me.TableLayoutPanel1.TabIndex = 0
             '
             'ChkNonTaxable
@@ -246,7 +251,7 @@
             Me.GrdHoldings.Location = New System.Drawing.Point(306, 3)
             Me.GrdHoldings.Name = "GrdHoldings"
             Me.TableLayoutPanel1.SetRowSpan(Me.GrdHoldings, 7)
-            Me.GrdHoldings.Size = New System.Drawing.Size(475, 214)
+            Me.GrdHoldings.Size = New System.Drawing.Size(475, 213)
             Me.GrdHoldings.TabIndex = 12
             Me.GrdHoldings.Text = "Holdings"
             '
@@ -258,7 +263,7 @@
             Me.TxtNotes.Multiline = True
             Me.TxtNotes.Name = "TxtNotes"
             Me.TxtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-            Me.TxtNotes.Size = New System.Drawing.Size(187, 69)
+            Me.TxtNotes.Size = New System.Drawing.Size(187, 68)
             Me.TxtNotes.TabIndex = 16
             Me.TxtNotes.Text = "TxtNotes"
             '
@@ -347,12 +352,12 @@
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.Panel3)
+            Me.Panel1.Controls.Add(Me.Label24)
+            Me.Panel1.Controls.Add(Me.BtnTransferFiat)
+            Me.Panel1.Controls.Add(Me.Label23)
             Me.Panel1.Controls.Add(Me.BtnReconcile)
             Me.Panel1.Controls.Add(Me.Label20)
-            Me.Panel1.Controls.Add(Me.LblSelected)
-            Me.Panel1.Controls.Add(Me.Label15)
-            Me.Panel1.Controls.Add(Me.LblAmount)
-            Me.Panel1.Controls.Add(Me.LblTransCount)
             Me.Panel1.Controls.Add(Me.BtnSave)
             Me.Panel1.Controls.Add(Me.Label13)
             Me.Panel1.Controls.Add(Me.Btn212)
@@ -372,13 +377,75 @@
             Me.Panel1.Size = New System.Drawing.Size(784, 38)
             Me.Panel1.TabIndex = 3
             '
+            'Panel3
+            '
+            Me.Panel3.Controls.Add(Me.LblTransCount)
+            Me.Panel3.Controls.Add(Me.LblAmount)
+            Me.Panel3.Controls.Add(Me.LblSelected)
+            Me.Panel3.Controls.Add(Me.Label15)
+            Me.Panel3.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Panel3.Location = New System.Drawing.Point(566, 5)
+            Me.Panel3.Name = "Panel3"
+            Me.Panel3.Size = New System.Drawing.Size(307, 28)
+            Me.Panel3.TabIndex = 7
+            '
+            'LblTransCount
+            '
+            Me.LblTransCount.AutoSize = True
+            Me.LblTransCount.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.LblTransCount.Location = New System.Drawing.Point(3, -6)
+            Me.LblTransCount.Name = "LblTransCount"
+            Me.LblTransCount.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
+            Me.LblTransCount.Size = New System.Drawing.Size(87, 18)
+            Me.LblTransCount.TabIndex = 12
+            Me.LblTransCount.Text = "LblTransCount"
+            '
+            'LblAmount
+            '
+            Me.LblAmount.AutoSize = True
+            Me.LblAmount.Location = New System.Drawing.Point(96, -6)
+            Me.LblAmount.Name = "LblAmount"
+            Me.LblAmount.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
+            Me.LblAmount.Size = New System.Drawing.Size(68, 18)
+            Me.LblAmount.TabIndex = 13
+            Me.LblAmount.Text = "LblAmount"
+            '
+            'LblSelected
+            '
+            Me.LblSelected.AutoSize = True
+            Me.LblSelected.Location = New System.Drawing.Point(94, 10)
+            Me.LblSelected.Name = "LblSelected"
+            Me.LblSelected.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
+            Me.LblSelected.Size = New System.Drawing.Size(70, 18)
+            Me.LblSelected.TabIndex = 15
+            Me.LblSelected.Text = "LblSelected"
+            '
+            'Label15
+            '
+            Me.Label15.AutoSize = True
+            Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label15.Location = New System.Drawing.Point(3, 10)
+            Me.Label15.Name = "Label15"
+            Me.Label15.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
+            Me.Label15.Size = New System.Drawing.Size(66, 18)
+            Me.Label15.TabIndex = 14
+            Me.Label15.Text = "SELECTED:"
+            '
+            'Label23
+            '
+            Me.Label23.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label23.Location = New System.Drawing.Point(504, 5)
+            Me.Label23.Name = "Label23"
+            Me.Label23.Size = New System.Drawing.Size(5, 28)
+            Me.Label23.TabIndex = 27
+            '
             'BtnReconcile
             '
             Me.BtnReconcile.AutoSize = True
             Me.BtnReconcile.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
             Me.BtnReconcile.BackColor = System.Drawing.SystemColors.ButtonFace
             Me.BtnReconcile.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnReconcile.Location = New System.Drawing.Point(771, 5)
+            Me.BtnReconcile.Location = New System.Drawing.Point(480, 5)
             Me.BtnReconcile.Name = "BtnReconcile"
             Me.BtnReconcile.Size = New System.Drawing.Size(24, 28)
             Me.BtnReconcile.TabIndex = 26
@@ -390,56 +457,10 @@
             'Label20
             '
             Me.Label20.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label20.Location = New System.Drawing.Point(766, 5)
+            Me.Label20.Location = New System.Drawing.Point(475, 5)
             Me.Label20.Name = "Label20"
             Me.Label20.Size = New System.Drawing.Size(5, 28)
             Me.Label20.TabIndex = 25
-            '
-            'LblSelected
-            '
-            Me.LblSelected.AutoSize = True
-            Me.LblSelected.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblSelected.Location = New System.Drawing.Point(696, 5)
-            Me.LblSelected.Name = "LblSelected"
-            Me.LblSelected.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
-            Me.LblSelected.Size = New System.Drawing.Size(70, 18)
-            Me.LblSelected.TabIndex = 15
-            Me.LblSelected.Text = "LblSelected"
-            '
-            'Label15
-            '
-            Me.Label15.AutoSize = True
-            Me.Label15.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label15.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label15.Location = New System.Drawing.Point(630, 5)
-            Me.Label15.Name = "Label15"
-            Me.Label15.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
-            Me.Label15.Size = New System.Drawing.Size(66, 18)
-            Me.Label15.TabIndex = 14
-            Me.Label15.Text = "SELECTED:"
-            '
-            'LblAmount
-            '
-            Me.LblAmount.AutoSize = True
-            Me.LblAmount.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblAmount.Location = New System.Drawing.Point(562, 5)
-            Me.LblAmount.Name = "LblAmount"
-            Me.LblAmount.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
-            Me.LblAmount.Size = New System.Drawing.Size(68, 18)
-            Me.LblAmount.TabIndex = 13
-            Me.LblAmount.Text = "LblAmount"
-            '
-            'LblTransCount
-            '
-            Me.LblTransCount.AutoSize = True
-            Me.LblTransCount.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblTransCount.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.LblTransCount.Location = New System.Drawing.Point(475, 5)
-            Me.LblTransCount.Name = "LblTransCount"
-            Me.LblTransCount.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
-            Me.LblTransCount.Size = New System.Drawing.Size(87, 18)
-            Me.LblTransCount.TabIndex = 12
-            Me.LblTransCount.Text = "LblTransCount"
             '
             'BtnSave
             '
@@ -593,7 +614,7 @@
             Me.GrdTransactions.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdTransactions.Location = New System.Drawing.Point(3, 3)
             Me.GrdTransactions.Name = "GrdTransactions"
-            Me.GrdTransactions.Size = New System.Drawing.Size(770, 229)
+            Me.GrdTransactions.Size = New System.Drawing.Size(770, 230)
             Me.GrdTransactions.TabIndex = 4
             Me.GrdTransactions.Text = "Transactions"
             '
@@ -605,7 +626,7 @@
             Me.TabControl1.Location = New System.Drawing.Point(0, 0)
             Me.TabControl1.Name = "TabControl1"
             Me.TabControl1.SelectedIndex = 0
-            Me.TabControl1.Size = New System.Drawing.Size(784, 299)
+            Me.TabControl1.Size = New System.Drawing.Size(784, 300)
             Me.TabControl1.TabIndex = 0
             '
             'Transactions
@@ -615,7 +636,7 @@
             Me.Transactions.Location = New System.Drawing.Point(4, 22)
             Me.Transactions.Name = "Transactions"
             Me.Transactions.Padding = New System.Windows.Forms.Padding(3)
-            Me.Transactions.Size = New System.Drawing.Size(776, 273)
+            Me.Transactions.Size = New System.Drawing.Size(776, 274)
             Me.Transactions.TabIndex = 0
             Me.Transactions.Text = "Transactions"
             Me.Transactions.UseVisualStyleBackColor = True
@@ -631,7 +652,7 @@
             Me.Panel2.Controls.Add(Me.Label17)
             Me.Panel2.Controls.Add(Me.BtnDelete)
             Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-            Me.Panel2.Location = New System.Drawing.Point(3, 232)
+            Me.Panel2.Location = New System.Drawing.Point(3, 233)
             Me.Panel2.Name = "Panel2"
             Me.Panel2.Padding = New System.Windows.Forms.Padding(5)
             Me.Panel2.Size = New System.Drawing.Size(770, 38)
@@ -723,7 +744,7 @@
             Me.Analysis.Location = New System.Drawing.Point(4, 22)
             Me.Analysis.Name = "Analysis"
             Me.Analysis.Padding = New System.Windows.Forms.Padding(3)
-            Me.Analysis.Size = New System.Drawing.Size(776, 273)
+            Me.Analysis.Size = New System.Drawing.Size(966, 291)
             Me.Analysis.TabIndex = 1
             Me.Analysis.Text = "Analysis"
             Me.Analysis.UseVisualStyleBackColor = True
@@ -770,7 +791,7 @@
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-            Me.TableLayoutPanel2.Size = New System.Drawing.Size(241, 267)
+            Me.TableLayoutPanel2.Size = New System.Drawing.Size(241, 285)
             Me.TableLayoutPanel2.TabIndex = 1
             '
             'LblProfitLoss
@@ -780,7 +801,7 @@
             Me.LblProfitLoss.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.LblProfitLoss.Location = New System.Drawing.Point(163, 108)
             Me.LblProfitLoss.Name = "LblProfitLoss"
-            Me.LblProfitLoss.Size = New System.Drawing.Size(75, 159)
+            Me.LblProfitLoss.Size = New System.Drawing.Size(75, 177)
             Me.LblProfitLoss.TabIndex = 9
             Me.LblProfitLoss.Text = "LblProfitLoss"
             '
@@ -985,8 +1006,32 @@
             '
             Me.SplitContainer1.Panel2.Controls.Add(Me.TabControl1)
             Me.SplitContainer1.Size = New System.Drawing.Size(784, 523)
-            Me.SplitContainer1.SplitterDistance = 220
+            Me.SplitContainer1.SplitterDistance = 219
             Me.SplitContainer1.TabIndex = 6
+            '
+            'BtnTransferFiat
+            '
+            Me.BtnTransferFiat.AutoSize = True
+            Me.BtnTransferFiat.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnTransferFiat.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnTransferFiat.Dock = System.Windows.Forms.DockStyle.Left
+            Me.BtnTransferFiat.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
+            Me.BtnTransferFiat.Location = New System.Drawing.Point(509, 5)
+            Me.BtnTransferFiat.Name = "BtnTransferFiat"
+            Me.BtnTransferFiat.Size = New System.Drawing.Size(52, 28)
+            Me.BtnTransferFiat.TabIndex = 29
+            Me.BtnTransferFiat.Text = "Fiat"
+            Me.BtnTransferFiat.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.ToolTip1.SetToolTip(Me.BtnTransferFiat, "Reconcile or unreconcile selected transactions")
+            Me.BtnTransferFiat.UseVisualStyleBackColor = False
+            '
+            'Label24
+            '
+            Me.Label24.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label24.Location = New System.Drawing.Point(561, 5)
+            Me.Label24.Name = "Label24"
+            Me.Label24.Size = New System.Drawing.Size(5, 28)
+            Me.Label24.TabIndex = 28
             '
             'FAccount
             '
@@ -1004,6 +1049,8 @@
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).EndInit()
             Me.Panel1.ResumeLayout(False)
             Me.Panel1.PerformLayout()
+            Me.Panel3.ResumeLayout(False)
+            Me.Panel3.PerformLayout()
             CType(Me.GrdTransactions, System.ComponentModel.ISupportInitialize).EndInit()
             Me.TabControl1.ResumeLayout(False)
             Me.Transactions.ResumeLayout(False)
@@ -1096,6 +1143,10 @@
         Friend WithEvents Label21 As Label
         Friend WithEvents TxtCashSavingsRate As TextBox
         Friend WithEvents Label22 As Label
+        Friend WithEvents Label23 As Label
+        Friend WithEvents Panel3 As Panel
+        Friend WithEvents Label24 As Label
+        Friend WithEvents BtnTransferFiat As Button
     End Class
 
 End Namespace

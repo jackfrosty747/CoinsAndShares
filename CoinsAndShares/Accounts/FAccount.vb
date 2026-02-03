@@ -586,6 +586,18 @@ Namespace Accounts
             End Try
         End Sub
 
+        Private Sub BtnTransferFiat_Click(sender As Object, e As EventArgs) Handles BtnTransferFiat.Click
+            Try
+                Cursor = Cursors.WaitCursor
+                Using frmTransfer As New FTransferFiat(m_commonObjects, AccountCode)
+                    frmTransfer.ShowDialog()
+                End Using
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+        End Sub
     End Class
 
 End Namespace
