@@ -244,6 +244,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Charts\MAssets.vb" />
+    <Compile Include="HintTextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Rates\GoldPrice\CGoldPrice.vb" />
     <Compile Include="Rates\CNBC\CCnbc.vb" />
     <Compile Include="Rates\FMP\CFmp.vb" />

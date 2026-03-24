@@ -27,7 +27,6 @@
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FAccount))
             Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
             Me.ChkNonTaxable = New System.Windows.Forms.CheckBox()
-            Me.Label16 = New System.Windows.Forms.Label()
             Me.Label3 = New System.Windows.Forms.Label()
             Me.Label2 = New System.Windows.Forms.Label()
             Me.Label1 = New System.Windows.Forms.Label()
@@ -35,7 +34,6 @@
             Me.TxtAccountName = New System.Windows.Forms.TextBox()
             Me.TxtAccountType = New System.Windows.Forms.TextBox()
             Me.GrdHoldings = New Infragistics.Win.UltraWinGrid.UltraGrid()
-            Me.TxtNotes = New System.Windows.Forms.TextBox()
             Me.Label19 = New System.Windows.Forms.Label()
             Me.CmbNetworkId = New Infragistics.Win.UltraWinGrid.UltraCombo()
             Me.Label5 = New System.Windows.Forms.Label()
@@ -44,12 +42,15 @@
             Me.Label21 = New System.Windows.Forms.Label()
             Me.TxtCashSavingsRate = New System.Windows.Forms.TextBox()
             Me.Label22 = New System.Windows.Forms.Label()
+            Me.TxtNotes = New CoinsAndShares.HintTextBox()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.Panel3 = New System.Windows.Forms.Panel()
             Me.LblTransCount = New System.Windows.Forms.Label()
             Me.LblAmount = New System.Windows.Forms.Label()
             Me.LblSelected = New System.Windows.Forms.Label()
             Me.Label15 = New System.Windows.Forms.Label()
+            Me.Label24 = New System.Windows.Forms.Label()
+            Me.BtnTransferFiat = New System.Windows.Forms.Button()
             Me.Label23 = New System.Windows.Forms.Label()
             Me.BtnReconcile = New System.Windows.Forms.Button()
             Me.Label20 = New System.Windows.Forms.Label()
@@ -100,8 +101,6 @@
             Me.LblMining = New System.Windows.Forms.Label()
             Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-            Me.BtnTransferFiat = New System.Windows.Forms.Button()
-            Me.Label24 = New System.Windows.Forms.Label()
             Me.TableLayoutPanel1.SuspendLayout()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbNetworkId, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -125,15 +124,14 @@
             Me.TableLayoutPanel1.AutoSize = True
             Me.TableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
             Me.TableLayoutPanel1.ColumnCount = 7
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
+            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
-            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
+            Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5.0!))
             Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
             Me.TableLayoutPanel1.Controls.Add(Me.ChkNonTaxable, 4, 3)
-            Me.TableLayoutPanel1.Controls.Add(Me.Label16, 1, 6)
             Me.TableLayoutPanel1.Controls.Add(Me.Label3, 1, 3)
             Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 2)
             Me.TableLayoutPanel1.Controls.Add(Me.Label1, 1, 1)
@@ -141,7 +139,6 @@
             Me.TableLayoutPanel1.Controls.Add(Me.TxtAccountName, 2, 2)
             Me.TableLayoutPanel1.Controls.Add(Me.TxtAccountType, 2, 3)
             Me.TableLayoutPanel1.Controls.Add(Me.GrdHoldings, 6, 0)
-            Me.TableLayoutPanel1.Controls.Add(Me.TxtNotes, 2, 6)
             Me.TableLayoutPanel1.Controls.Add(Me.Label19, 1, 4)
             Me.TableLayoutPanel1.Controls.Add(Me.CmbNetworkId, 2, 4)
             Me.TableLayoutPanel1.Controls.Add(Me.Label5, 3, 1)
@@ -150,6 +147,7 @@
             Me.TableLayoutPanel1.Controls.Add(Me.Label21, 1, 5)
             Me.TableLayoutPanel1.Controls.Add(Me.TxtCashSavingsRate, 2, 5)
             Me.TableLayoutPanel1.Controls.Add(Me.Label22, 3, 5)
+            Me.TableLayoutPanel1.Controls.Add(Me.TxtNotes, 1, 6)
             Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
             Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
             Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
@@ -167,7 +165,7 @@
             'ChkNonTaxable
             '
             Me.ChkNonTaxable.AutoSize = True
-            Me.ChkNonTaxable.Location = New System.Drawing.Point(221, 64)
+            Me.ChkNonTaxable.Location = New System.Drawing.Point(211, 64)
             Me.ChkNonTaxable.Name = "ChkNonTaxable"
             Me.ChkNonTaxable.Size = New System.Drawing.Size(67, 17)
             Me.ChkNonTaxable.TabIndex = 8
@@ -175,20 +173,10 @@
             Me.ToolTip1.SetToolTip(Me.ChkNonTaxable, "Non-taxable account.  Interest is not taxed, e.g. ISA")
             Me.ChkNonTaxable.UseVisualStyleBackColor = True
             '
-            'Label16
-            '
-            Me.Label16.AutoSize = True
-            Me.Label16.Location = New System.Drawing.Point(23, 145)
-            Me.Label16.Name = "Label16"
-            Me.Label16.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
-            Me.Label16.Size = New System.Drawing.Size(37, 16)
-            Me.Label16.TabIndex = 15
-            Me.Label16.Text = "Notes"
-            '
             'Label3
             '
             Me.Label3.AutoSize = True
-            Me.Label3.Location = New System.Drawing.Point(23, 61)
+            Me.Label3.Location = New System.Drawing.Point(8, 61)
             Me.Label3.Name = "Label3"
             Me.Label3.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.Label3.Size = New System.Drawing.Size(29, 16)
@@ -198,7 +186,7 @@
             'Label2
             '
             Me.Label2.AutoSize = True
-            Me.Label2.Location = New System.Drawing.Point(23, 33)
+            Me.Label2.Location = New System.Drawing.Point(8, 33)
             Me.Label2.Name = "Label2"
             Me.Label2.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.Label2.Size = New System.Drawing.Size(36, 16)
@@ -208,7 +196,7 @@
             'Label1
             '
             Me.Label1.AutoSize = True
-            Me.Label1.Location = New System.Drawing.Point(23, 5)
+            Me.Label1.Location = New System.Drawing.Point(8, 5)
             Me.Label1.Name = "Label1"
             Me.Label1.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.Label1.Size = New System.Drawing.Size(79, 16)
@@ -218,10 +206,10 @@
             'TxtAccountCode
             '
             Me.TxtAccountCode.Dock = System.Windows.Forms.DockStyle.Top
-            Me.TxtAccountCode.Location = New System.Drawing.Point(108, 8)
+            Me.TxtAccountCode.Location = New System.Drawing.Point(93, 8)
             Me.TxtAccountCode.Name = "TxtAccountCode"
             Me.TxtAccountCode.ReadOnly = True
-            Me.TxtAccountCode.Size = New System.Drawing.Size(79, 22)
+            Me.TxtAccountCode.Size = New System.Drawing.Size(84, 22)
             Me.TxtAccountCode.TabIndex = 1
             Me.TxtAccountCode.Text = "TxtAccountCode"
             '
@@ -229,48 +217,36 @@
             '
             Me.TableLayoutPanel1.SetColumnSpan(Me.TxtAccountName, 3)
             Me.TxtAccountName.Dock = System.Windows.Forms.DockStyle.Top
-            Me.TxtAccountName.Location = New System.Drawing.Point(108, 36)
+            Me.TxtAccountName.Location = New System.Drawing.Point(93, 36)
             Me.TxtAccountName.Name = "TxtAccountName"
-            Me.TxtAccountName.Size = New System.Drawing.Size(187, 22)
+            Me.TxtAccountName.Size = New System.Drawing.Size(212, 22)
             Me.TxtAccountName.TabIndex = 5
             Me.TxtAccountName.Text = "TxtAccountName"
             '
             'TxtAccountType
             '
             Me.TxtAccountType.Dock = System.Windows.Forms.DockStyle.Top
-            Me.TxtAccountType.Location = New System.Drawing.Point(108, 64)
+            Me.TxtAccountType.Location = New System.Drawing.Point(93, 64)
             Me.TxtAccountType.Name = "TxtAccountType"
             Me.TxtAccountType.ReadOnly = True
-            Me.TxtAccountType.Size = New System.Drawing.Size(79, 22)
+            Me.TxtAccountType.Size = New System.Drawing.Size(84, 22)
             Me.TxtAccountType.TabIndex = 7
             Me.TxtAccountType.Text = "TxtAccountType"
             '
             'GrdHoldings
             '
             Me.GrdHoldings.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.GrdHoldings.Location = New System.Drawing.Point(306, 3)
+            Me.GrdHoldings.Location = New System.Drawing.Point(316, 3)
             Me.GrdHoldings.Name = "GrdHoldings"
             Me.TableLayoutPanel1.SetRowSpan(Me.GrdHoldings, 7)
-            Me.GrdHoldings.Size = New System.Drawing.Size(475, 213)
+            Me.GrdHoldings.Size = New System.Drawing.Size(465, 213)
             Me.GrdHoldings.TabIndex = 12
             Me.GrdHoldings.Text = "Holdings"
-            '
-            'TxtNotes
-            '
-            Me.TableLayoutPanel1.SetColumnSpan(Me.TxtNotes, 3)
-            Me.TxtNotes.Dock = System.Windows.Forms.DockStyle.Fill
-            Me.TxtNotes.Location = New System.Drawing.Point(108, 148)
-            Me.TxtNotes.Multiline = True
-            Me.TxtNotes.Name = "TxtNotes"
-            Me.TxtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-            Me.TxtNotes.Size = New System.Drawing.Size(187, 68)
-            Me.TxtNotes.TabIndex = 16
-            Me.TxtNotes.Text = "TxtNotes"
             '
             'Label19
             '
             Me.Label19.AutoSize = True
-            Me.Label19.Location = New System.Drawing.Point(23, 89)
+            Me.Label19.Location = New System.Drawing.Point(8, 89)
             Me.Label19.Name = "Label19"
             Me.Label19.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
             Me.Label19.Size = New System.Drawing.Size(65, 21)
@@ -283,16 +259,16 @@
             Me.CmbNetworkId.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal
             Me.CmbNetworkId.DisplayMember = ""
             Me.CmbNetworkId.Dock = System.Windows.Forms.DockStyle.Top
-            Me.CmbNetworkId.Location = New System.Drawing.Point(108, 92)
+            Me.CmbNetworkId.Location = New System.Drawing.Point(93, 92)
             Me.CmbNetworkId.Name = "CmbNetworkId"
-            Me.CmbNetworkId.Size = New System.Drawing.Size(79, 22)
+            Me.CmbNetworkId.Size = New System.Drawing.Size(84, 22)
             Me.CmbNetworkId.TabIndex = 10
             Me.CmbNetworkId.ValueMember = ""
             '
             'Label5
             '
             Me.Label5.AutoSize = True
-            Me.Label5.Location = New System.Drawing.Point(193, 5)
+            Me.Label5.Location = New System.Drawing.Point(183, 5)
             Me.Label5.Name = "Label5"
             Me.Label5.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
             Me.Label5.Size = New System.Drawing.Size(22, 21)
@@ -303,7 +279,7 @@
             '
             Me.LblBalance.AutoSize = True
             Me.LblBalance.ForeColor = System.Drawing.Color.Blue
-            Me.LblBalance.Location = New System.Drawing.Point(221, 5)
+            Me.LblBalance.Location = New System.Drawing.Point(211, 5)
             Me.LblBalance.Name = "LblBalance"
             Me.LblBalance.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
             Me.LblBalance.Size = New System.Drawing.Size(62, 16)
@@ -313,7 +289,7 @@
             'ChkIncludeOnShortcuts
             '
             Me.ChkIncludeOnShortcuts.AutoSize = True
-            Me.ChkIncludeOnShortcuts.Location = New System.Drawing.Point(221, 92)
+            Me.ChkIncludeOnShortcuts.Location = New System.Drawing.Point(211, 92)
             Me.ChkIncludeOnShortcuts.Name = "ChkIncludeOnShortcuts"
             Me.ChkIncludeOnShortcuts.Size = New System.Drawing.Size(70, 17)
             Me.ChkIncludeOnShortcuts.TabIndex = 11
@@ -324,7 +300,7 @@
             'Label21
             '
             Me.Label21.AutoSize = True
-            Me.Label21.Location = New System.Drawing.Point(23, 117)
+            Me.Label21.Location = New System.Drawing.Point(8, 117)
             Me.Label21.Name = "Label21"
             Me.Label21.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
             Me.Label21.Size = New System.Drawing.Size(72, 21)
@@ -333,7 +309,7 @@
             '
             'TxtCashSavingsRate
             '
-            Me.TxtCashSavingsRate.Location = New System.Drawing.Point(108, 120)
+            Me.TxtCashSavingsRate.Location = New System.Drawing.Point(93, 120)
             Me.TxtCashSavingsRate.Name = "TxtCashSavingsRate"
             Me.TxtCashSavingsRate.Size = New System.Drawing.Size(79, 22)
             Me.TxtCashSavingsRate.TabIndex = 13
@@ -342,12 +318,26 @@
             '
             Me.Label22.AutoSize = True
             Me.TableLayoutPanel1.SetColumnSpan(Me.Label22, 2)
-            Me.Label22.Location = New System.Drawing.Point(193, 117)
+            Me.Label22.Location = New System.Drawing.Point(183, 117)
             Me.Label22.Name = "Label22"
             Me.Label22.Padding = New System.Windows.Forms.Padding(0, 3, 0, 5)
             Me.Label22.Size = New System.Drawing.Size(39, 21)
             Me.Label22.TabIndex = 14
             Me.Label22.Text = "% AER"
+            '
+            'TxtNotes
+            '
+            Me.TableLayoutPanel1.SetColumnSpan(Me.TxtNotes, 4)
+            Me.TxtNotes.Dock = System.Windows.Forms.DockStyle.Fill
+            Me.TxtNotes.EditorTitle = "Account Notes"
+            Me.TxtNotes.EnableLargeEditor = True
+            Me.TxtNotes.HintText = "Notes..."
+            Me.TxtNotes.Location = New System.Drawing.Point(8, 148)
+            Me.TxtNotes.Multiline = True
+            Me.TxtNotes.Name = "TxtNotes"
+            Me.TxtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+            Me.TxtNotes.Size = New System.Drawing.Size(297, 68)
+            Me.TxtNotes.TabIndex = 15
             '
             'Panel1
             '
@@ -430,6 +420,30 @@
             Me.Label15.Size = New System.Drawing.Size(66, 18)
             Me.Label15.TabIndex = 14
             Me.Label15.Text = "SELECTED:"
+            '
+            'Label24
+            '
+            Me.Label24.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label24.Location = New System.Drawing.Point(561, 5)
+            Me.Label24.Name = "Label24"
+            Me.Label24.Size = New System.Drawing.Size(5, 28)
+            Me.Label24.TabIndex = 28
+            '
+            'BtnTransferFiat
+            '
+            Me.BtnTransferFiat.AutoSize = True
+            Me.BtnTransferFiat.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnTransferFiat.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnTransferFiat.Dock = System.Windows.Forms.DockStyle.Left
+            Me.BtnTransferFiat.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
+            Me.BtnTransferFiat.Location = New System.Drawing.Point(509, 5)
+            Me.BtnTransferFiat.Name = "BtnTransferFiat"
+            Me.BtnTransferFiat.Size = New System.Drawing.Size(52, 28)
+            Me.BtnTransferFiat.TabIndex = 29
+            Me.BtnTransferFiat.Text = "Fiat"
+            Me.BtnTransferFiat.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+            Me.ToolTip1.SetToolTip(Me.BtnTransferFiat, "Reconcile or unreconcile selected transactions")
+            Me.BtnTransferFiat.UseVisualStyleBackColor = False
             '
             'Label23
             '
@@ -744,7 +758,7 @@
             Me.Analysis.Location = New System.Drawing.Point(4, 22)
             Me.Analysis.Name = "Analysis"
             Me.Analysis.Padding = New System.Windows.Forms.Padding(3)
-            Me.Analysis.Size = New System.Drawing.Size(966, 291)
+            Me.Analysis.Size = New System.Drawing.Size(776, 274)
             Me.Analysis.TabIndex = 1
             Me.Analysis.Text = "Analysis"
             Me.Analysis.UseVisualStyleBackColor = True
@@ -791,7 +805,7 @@
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
             Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle())
-            Me.TableLayoutPanel2.Size = New System.Drawing.Size(241, 285)
+            Me.TableLayoutPanel2.Size = New System.Drawing.Size(241, 268)
             Me.TableLayoutPanel2.TabIndex = 1
             '
             'LblProfitLoss
@@ -801,7 +815,7 @@
             Me.LblProfitLoss.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.LblProfitLoss.Location = New System.Drawing.Point(163, 108)
             Me.LblProfitLoss.Name = "LblProfitLoss"
-            Me.LblProfitLoss.Size = New System.Drawing.Size(75, 177)
+            Me.LblProfitLoss.Size = New System.Drawing.Size(75, 160)
             Me.LblProfitLoss.TabIndex = 9
             Me.LblProfitLoss.Text = "LblProfitLoss"
             '
@@ -1009,30 +1023,6 @@
             Me.SplitContainer1.SplitterDistance = 219
             Me.SplitContainer1.TabIndex = 6
             '
-            'BtnTransferFiat
-            '
-            Me.BtnTransferFiat.AutoSize = True
-            Me.BtnTransferFiat.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-            Me.BtnTransferFiat.BackColor = System.Drawing.SystemColors.ButtonFace
-            Me.BtnTransferFiat.Dock = System.Windows.Forms.DockStyle.Left
-            Me.BtnTransferFiat.Image = Global.CoinsAndShares.My.Resources.Resources.arrow_resize
-            Me.BtnTransferFiat.Location = New System.Drawing.Point(509, 5)
-            Me.BtnTransferFiat.Name = "BtnTransferFiat"
-            Me.BtnTransferFiat.Size = New System.Drawing.Size(52, 28)
-            Me.BtnTransferFiat.TabIndex = 29
-            Me.BtnTransferFiat.Text = "Fiat"
-            Me.BtnTransferFiat.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-            Me.ToolTip1.SetToolTip(Me.BtnTransferFiat, "Reconcile or unreconcile selected transactions")
-            Me.BtnTransferFiat.UseVisualStyleBackColor = False
-            '
-            'Label24
-            '
-            Me.Label24.Dock = System.Windows.Forms.DockStyle.Left
-            Me.Label24.Location = New System.Drawing.Point(561, 5)
-            Me.Label24.Name = "Label24"
-            Me.Label24.Size = New System.Drawing.Size(5, 28)
-            Me.Label24.TabIndex = 28
-            '
             'FAccount
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1110,8 +1100,6 @@
         Friend WithEvents LblAdjustmentsCaption As Label
         Friend WithEvents LblAdjustments As Label
         Friend WithEvents SplitContainer1 As SplitContainer
-        Friend WithEvents Label16 As Label
-        Friend WithEvents TxtNotes As TextBox
         Friend WithEvents TxtFilter As TextBox
         Friend WithEvents Label17 As Label
         Friend WithEvents LblMiningCaption As Label
@@ -1147,6 +1135,7 @@
         Friend WithEvents Panel3 As Panel
         Friend WithEvents Label24 As Label
         Friend WithEvents BtnTransferFiat As Button
+        Friend WithEvents TxtNotes As HintTextBox
     End Class
 
 End Namespace

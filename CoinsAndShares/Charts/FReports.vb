@@ -171,7 +171,7 @@ Namespace Charts
                 .MonthlyInterest = .YearlyInterest / 12,
                 .WeeklyInterest = .YearlyInterest / 52,
                 .DailyInterest = .YearlyInterest / 365
-            }).ToList()
+            }).Where(Function(c) c.Balance > 0).ToList()
 
             ' Clear previous data
             ChartSavings.Series.Clear()
