@@ -101,7 +101,7 @@ Namespace Accounts
                         dr(ColumnsAccount.NetworkId.ToString) = account.NetworkId
                         dr(ColumnsAccount.LocalCurrencyBalance.ToString) = cBalance
 
-                        Dim analysis = CTransactions.Analyse(account.Transactions, allInstrumentsDict.Values, allCurrenciesDict.Values)
+                        Dim analysis = CTransactions.Analyse(account.Transactions, allInstrumentsDict, allCurrenciesDict)
                         dr(ColumnsAccount.Pl.ToString) = analysis.ProfitLoss
                         dr(ColumnsAccount.Notes.ToString) = account.Notes
 

@@ -18,26 +18,27 @@ Namespace Transactions
             TWRR
         End Enum
         Private NotInheritable Class LocalTagBits : Inherits TagBits
-            Friend ReadOnly Property AllInstruments As IEnumerable(Of CInstrument)
-            Friend Sub New(commonObjects As CCommonObjects, allInstruments As IEnumerable(Of CInstrument))
+            Friend ReadOnly Property AllInstrumentsDict As Dictionary(Of String, CInstrument)
+            Friend Sub New(commonObjects As CCommonObjects, allInstrumentsDict As Dictionary(Of String, CInstrument))
                 MyBase.New(commonObjects)
-                Me.AllInstruments = allInstruments
+                Me.AllInstrumentsDict = allInstrumentsDict
             End Sub
         End Class
         Friend Shared Sub LoadData(grid As UltraGrid, transactions As IEnumerable(Of CTransaction),
                                    commonObjects As CCommonObjects, batches As IEnumerable(Of CBatch),
-                                   allInstruments As IEnumerable(Of CInstrument))
+                                   allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                   allCurrencyDict As Dictionary(Of String, Currencies.CCurrencyDetail))
 
             Dim currencies = commonObjects.Currencies
-            Dim allCurrencies = currencies.GetAll
+            'Dim allCurrencies = currencies.GetAll
 
-            grid.Tag = New LocalTagBits(commonObjects, allInstruments)
+            grid.Tag = New LocalTagBits(commonObjects, allInstrumentsDict)
             Dim dt As DataTable = GetBlankDt()
 
             Dim totalsByInstrument = From t In transactions
                                      Group t By t.InstrumentCode Into Group
                                      Select InstrumentCode, TotalQuantity = Group.Sum(Function(c) c.Amount),
-                                         LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                         LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrencyDict))
 
             For Each t In totalsByInstrument.OrderBy(Function(c) Not String.IsNullOrEmpty(c.InstrumentCode)).ThenByDescending(Function(c) c.LocalCurrencyValue)
                 Dim dr = dt.NewRow
@@ -45,11 +46,17 @@ Namespace Transactions
                 If String.IsNullOrEmpty(t.InstrumentCode) Then
                     dr(Columns.InstrumentName.ToString) = GetLocalCurrencyName()
                 Else
-                    Dim i = allInstruments.Where(Function(c) c.Code.Equals(t.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                    If i IsNot Nothing Then
+                    Dim i As CInstrument = Nothing
+                    If allInstrumentsDict.TryGetValue(t.InstrumentCode, i) Then
                         dr(Columns.InstrumentName.ToString) = i.Description
                         dr(Columns.CurrentRate.ToString) = i.Rate
                     End If
+                    'Dim i = allInstrumentsDict.Values.Where(Function(c) c.Code.Equals(t.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+
+                    'If i IsNot Nothing Then
+                    '    dr(Columns.InstrumentName.ToString) = i.Description
+                    '    dr(Columns.CurrentRate.ToString) = i.Rate
+                    'End If
                     dr(Columns.Quantity.ToString) = t.TotalQuantity
 
                     Dim cPurchasedNetLocalCurrency =
@@ -62,16 +69,20 @@ Namespace Transactions
 
                     dr(Columns.Pl.ToString) = cPurchasedNetLocalCurrency + t.LocalCurrencyValue
 
-                    If Math.Round(t.LocalCurrencyValue, 2) > 0 AndAlso Not String.IsNullOrEmpty(t.InstrumentCode) Then
-                        ' TODO
-                        Dim currentRate = allInstruments.Single(Function(c) c.Code.Equals(t.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).Rate
+                    If Math.Round(t.LocalCurrencyValue, 2) > 0 AndAlso i IsNot Nothing Then
+                        Dim currentRate = i.Rate
                         Dim instrumentTransactions = transactions.Where(Function(c) c.InstrumentCode.Equals(t.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
                         Dim exchangeRate As Decimal = 1
                         If Not String.IsNullOrEmpty(i.CurrencyCode) Then
-                            Dim curr = allCurrencies.SingleOrDefault(Function(c) c.CurrencyCode.Equals(i.CurrencyCode, StringComparison.CurrentCultureIgnoreCase))
-                            If curr IsNot Nothing AndAlso curr.CurrencyRate.HasValue Then
+
+                            'Dim curr = allCurrencies.SingleOrDefault(Function(c) c.CurrencyCode.Equals(i.CurrencyCode, StringComparison.CurrentCultureIgnoreCase))
+                            Dim curr As Currencies.CCurrencyDetail = Nothing
+                            If allCurrencyDict.TryGetValue(i.CurrencyCode, curr) Then
                                 exchangeRate = curr.CurrencyRate.Value
                             End If
+                            'If curr IsNot Nothing AndAlso curr.CurrencyRate.HasValue Then
+                            '    exchangeRate = curr.CurrencyRate.Value
+                            'End If
                         End If
                         Dim twrrRate = CTwrr.CalculateTwrr(instrumentTransactions, currentRate, exchangeRate)
                         dr(Columns.TWRR.ToString) = twrrRate
@@ -132,13 +143,19 @@ Namespace Transactions
 
                 Dim foreColour As Color = Color.Black
                 If Not String.IsNullOrEmpty(sInstrumentCode) Then
-                    Dim instrument = tagBits.AllInstruments.Where(Function(c) c.Code.Equals(sInstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                    Dim instrumentType As EInstrumentType
-
-                    If instrument IsNot Nothing Then
-                        instrumentType = instrument.InstrumentType
+                    Dim instrument As CInstrument = Nothing
+                    If tagBits.AllInstrumentsDict.TryGetValue(sInstrumentCode, instrument) Then
+                        Dim instrumentType As EInstrumentType = instrument.InstrumentType
                         foreColour = CColours.InstrumentType(instrumentType)
                     End If
+
+                    'Dim instrument = tagBits.AllInstruments.Where(Function(c) c.Code.Equals(sInstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+                    'Dim instrumentType As EInstrumentType
+
+                    'If instrument IsNot Nothing Then
+                    '    instrumentType = instrument.InstrumentType
+                    '    foreColour = CColours.InstrumentType(instrumentType)
+                    'End If
                 End If
 
                 Dim cValue = CDatabase.DbToDecimal(e.Row.Cells(Columns.CurrentValue).Value)

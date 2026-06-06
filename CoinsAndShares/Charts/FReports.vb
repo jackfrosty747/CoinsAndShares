@@ -70,18 +70,18 @@ Namespace Charts
             Dim currencies = m_commonObjects.Currencies
             Dim accounts = m_commonObjects.Accounts
             Dim allTransactions = transactions.GetAll()
-            Dim allInstruments = instruments.GetAll()
-            Dim allCurrencies = currencies.GetAll()
+            Dim allInstrumentsDict = instruments.GetAllDict()
+            Dim allCurrenciesDict = currencies.GetAllDict()
             Dim allAccounts = accounts.GetAll()
 
-            Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+            Dim analysis = CTransactions.Analyse(allTransactions, allInstrumentsDict, allCurrenciesDict)
 
             LoadDataPl()
-            LoadDataHoldings(allTransactions, allInstruments, allCurrencies, analysis)
-            LoadDataPlPerInstrument(allTransactions, allInstruments, allCurrencies, analysis)
-            LoadMining(allTransactions, allInstruments, allCurrencies)
-            LoadNetworks(allTransactions, allInstruments, allCurrencies, allAccounts, analysis)
-            LoadSavings(allAccounts, allInstruments, allCurrencies)
+            LoadDataHoldings(allTransactions, allInstrumentsDict, analysis)
+            LoadDataPlPerInstrument(allTransactions, allInstrumentsDict, analysis)
+            LoadMining(allTransactions, allInstrumentsDict)
+            LoadNetworks(allTransactions, allAccounts, analysis)
+            LoadSavings(allAccounts, allInstrumentsDict, allCurrenciesDict)
             LoadBonuses(allTransactions, Nothing)
 
         End Sub
@@ -160,13 +160,14 @@ Namespace Charts
             TxtBonuses.Text = output.ToString()
         End Sub
 
-        Private Sub LoadSavings(allAccounts As IEnumerable(Of CAccount), allInstruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail))
+        Private Sub LoadSavings(allAccounts As IEnumerable(Of CAccount), allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                allCurrenciesDict As Dictionary(Of String, CCurrencyDetail))
 
             Dim accountSummaries = allAccounts.Where(Function(c) c.CashSavingsRate > 0).Select(Function(account) New With {
                 .Code = account.AccountCode,
                 .Name = account.AccountName,
                 .Rate = account.CashSavingsRate,
-                .Balance = account.GetLocalCurrencyBalance(allInstruments, allCurrencies),
+                .Balance = account.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict),
                 .YearlyInterest = .Balance / 100 * .Rate,
                 .MonthlyInterest = .YearlyInterest / 12,
                 .WeeklyInterest = .YearlyInterest / 52,
@@ -229,8 +230,8 @@ Namespace Charts
 
         End Sub
 
-        Private Sub LoadNetworks(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                 allCurrencies As IEnumerable(Of CCurrencyDetail), allAccounts As IEnumerable(Of CAccount),
+        Private Sub LoadNetworks(allTransactions As IEnumerable(Of CTransaction),
+                                 allAccounts As IEnumerable(Of CAccount),
                                  analysis As CTransactionAnalyserResult)
 
             Const COL1 = 35
@@ -311,8 +312,7 @@ Namespace Charts
 
         End Sub
 
-        Private Sub LoadMining(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                       allCurrencies As IEnumerable(Of CCurrencyDetail))
+        Private Sub LoadMining(allTransactions As IEnumerable(Of CTransaction), allInstrumentsDict As Dictionary(Of String, CInstrument))
 
             Const SERIES_MINING = "Mining"
             Const PART_DESCRIPTION = "Mining" ' Used to match transactions
@@ -516,7 +516,8 @@ Namespace Charts
                 Dim cFeeAmount = t.myGroup.Where(Function(c) c.TransactionType = ETransactionType.Fee).Sum(Function(c) c.Amount)
                 Dim cTotalAmount = cMinedAmount + cFeeAmount
 
-                Dim instrument = allInstruments.First(Function(c) c.Code.Equals(t.InstrumentCode, StringComparison.InvariantCulture))
+                Dim instrument As CInstrument = Nothing
+                allInstrumentsDict.TryGetValue(t.InstrumentCode.ToUpper, instrument)
 
                 Dim cMinedValue = cMinedAmount * instrument.Rate
                 Dim cFeeValue = cFeeAmount * instrument.Rate
@@ -550,8 +551,8 @@ Namespace Charts
             Friend Property PaymentValue As Decimal
         End Class
 
-        Private Sub LoadDataPlPerInstrument(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                     allCurrencies As IEnumerable(Of CCurrencyDetail), analysis As CTransactionAnalyserResult)
+        Private Sub LoadDataPlPerInstrument(allTransactions As IEnumerable(Of CTransaction), allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                     analysis As CTransactionAnalyserResult)
 
             Const MIN_PL As Decimal = 20
 
@@ -603,7 +604,8 @@ Namespace Charts
             End If
 
             Dim analysisOfRequiredType = allAnalysis.Where(Function(c)
-                                                               Dim i = allInstruments.Where(Function(d) d.Code.Equals(c.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+                                                               Dim i As CInstrument = Nothing
+                                                               allInstrumentsDict.TryGetValue(c.InstrumentCode.ToUpper, i)
                                                                Return i IsNot Nothing AndAlso (
                                                                     OptPlPerInstrumentTypeAll.Checked OrElse
                                                                     (OptPlPerInstrumentCrypto.Checked AndAlso i.InstrumentType = EInstrumentType.Crypto) OrElse
@@ -707,8 +709,8 @@ Namespace Charts
 
         End Sub
 
-        Private Sub LoadDataHoldings(allTransactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                     allCurrencies As IEnumerable(Of CCurrencyDetail), analysis As CTransactionAnalyserResult)
+        Private Sub LoadDataHoldings(allTransactions As IEnumerable(Of CTransaction), allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                     analysis As CTransactionAnalyserResult)
 
             Const SERIES_HOLDINGS = "holdings"
 
@@ -751,7 +753,8 @@ Namespace Charts
             End If
 
             Dim analysisOfRequiredType = allAnalysis.Where(Function(c)
-                                                               Dim i = allInstruments.Where(Function(d) d.Code.Equals(c.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+                                                               Dim i As CInstrument = Nothing
+                                                               allInstrumentsDict.TryGetValue(c.InstrumentCode.ToUpper, i)
                                                                If i Is Nothing Then
                                                                    Return False
                                                                End If

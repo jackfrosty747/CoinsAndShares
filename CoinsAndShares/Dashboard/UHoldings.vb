@@ -14,7 +14,7 @@ Namespace Dashboard
 
         Private m_settings As CSettings
 
-        Private m_allInstruments As IEnumerable(Of CInstrument)
+        Private m_allInstrumentsDict As Dictionary(Of String, CInstrument)
 
         Private m_analysis As CTransactionAnalyserResult
 
@@ -41,10 +41,10 @@ Namespace Dashboard
         Private Sub LoadData()
 
             Dim allTransactions = m_commonObjects.Transactions.GetAll().ToList
-            m_allInstruments = m_commonObjects.Instruments.GetAll().ToList
-            Dim allCurrencies = m_commonObjects.Currencies.GetAll().ToList
+            m_allInstrumentsDict = m_commonObjects.Instruments.GetAllDict()
+            Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict
             m_settings = New CSettings(m_commonObjects)
-            m_analysis = CTransactions.Analyse(allTransactions, m_allInstruments, allCurrencies)
+            m_analysis = CTransactions.Analyse(allTransactions, m_allInstrumentsDict, allCurrenciesDict)
 
             ' Redraw
             Invalidate()
@@ -145,8 +145,7 @@ Namespace Dashboard
                                     If instrumentType.HasValue Then
                                         'If a.CurrentHolding <> 0 Then
                                         If True Then
-                                            i = m_allInstruments.Where(Function(c) c.Code.Equals(a.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                                            If i IsNot Nothing Then
+                                            If m_allInstrumentsDict.TryGetValue(a.InstrumentCode, i) Then
                                                 fOutputRow = i.InstrumentType.Equals(instrumentType.Value)
                                                 If fOutputRow Then
                                                     sInstrumentName = i.Description
@@ -154,8 +153,12 @@ Namespace Dashboard
                                                     fDisplayRateWarning = Not i.RateUpdated.HasValue OrElse i.RateUpdated.Value < Now.AddHours(iHoursWarning * -1)
                                                 End If
                                             End If
+                                            'i = m_allInstruments.Where(Function(c) c.Code.Equals(a.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+                                            '    If i IsNot Nothing Then
+
+                                            'End If
                                         End If
-                                    Else
+                                        Else
                                         fOutputRow = String.IsNullOrEmpty(a.InstrumentCode)
                                         If fOutputRow Then
                                             sInstrumentName = GetLocalCurrencyName()

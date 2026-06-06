@@ -65,8 +65,8 @@ Module MTransactions
         Dim accounts = commonObjects.Accounts
 
         Dim allTransactions = transactions.GetAll()
-        Dim allInstruments = instruments.GetAll()
-        Dim allCurrencies = currencies.GetAll()
+        Dim allInstruments = instruments.GetAllDict()
+        Dim allCurrencies = currencies.GetAllDict()
         Dim allAccounts = accounts.GetAll()
 
 
@@ -138,7 +138,13 @@ Module MTransactions
 
         For Each ia In instrumentAnalysis1
             If Not String.IsNullOrEmpty(ia.InstrumentCode) Then
-                Dim instrument = allInstruments.First(Function(c) c.Code.Equals(ia.InstrumentCode, StringComparison.InvariantCultureIgnoreCase))
+
+                Dim instrument As CInstrument = Nothing
+                If allInstruments.TryGetValue(ia.InstrumentCode, instrument) Then
+                    Throw New WarningException($"Transaction analysis contains an instrument code {ia.InstrumentCode} that is not in the instruments list")
+                End If
+
+                'Dim instrument = allInstruments.First(Function(c) c.Code.Equals(ia.InstrumentCode, StringComparison.InvariantCultureIgnoreCase))
                 Select Case instrument.InstrumentType
                     Case EInstrumentType.Crypto : cCryptoAssets += ia.CurrentWorth
                     Case EInstrumentType.Share : cShareAssets += ia.CurrentWorth

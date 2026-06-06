@@ -222,8 +222,8 @@ Namespace Transactions
             m_commonObjects.RefreshForms()
         End Sub
 
-        Friend Shared Function Analyse(transactions As IEnumerable(Of CTransaction), allInstruments As IEnumerable(Of CInstrument),
-                                       allCurrencies As IEnumerable(Of CCurrencyDetail)) As CTransactionAnalyserResult
+        Friend Shared Function Analyse(transactions As IEnumerable(Of CTransaction), allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                       allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)) As CTransactionAnalyserResult
 
             ' Analyse the "transactions" specified.  allInstruments is just used to get the current rates
 
@@ -239,34 +239,37 @@ Namespace Transactions
 
             Dim cFees As Decimal = transactions.Where(Function(c)
                                                           Return c.TransactionType = ETransactionType.Fee
-                                                      End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                                      End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
             Dim cMining As Decimal = transactions.Where(Function(c)
                                                             Return c.TransactionType = ETransactionType.Mining
-                                                        End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                                        End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
 
             Dim cBonus As Decimal = transactions.Where(Function(c)
                                                            Return c.TransactionType = ETransactionType.Bonus
-                                                       End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                                       End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
             Dim cAdjustments As Decimal = transactions.Where(Function(c)
                                                                  Return c.TransactionType = ETransactionType.Adjustment
-                                                             End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                                             End Function).Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
 
 
-            Dim cCurrentValue As Decimal = transactions.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+            Dim cCurrentValue As Decimal = transactions.Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
             Dim cProfitLoss As Decimal = cCurrentValue - cNetTransfers
 
             Dim balanceByInstrument = From trans In transactions
                                       Order By trans.InstrumentCode
                                       Group By trans.InstrumentCode
-                                        Into myGroup = Group, Sum(trans.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                        Into myGroup = Group, Sum(trans.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
                                       Order By InstrumentCode
 
             Dim currentValues As New List(Of CInstrumentBalance)
             For Each b In balanceByInstrument
                 Dim instrument As CInstrument = Nothing
-                If Not String.IsNullOrEmpty(b.InstrumentCode) Then
-                    instrument = allInstruments.Where(Function(c) c.Code.Equals(b.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+                If allInstrumentsDict.TryGetValue(b.InstrumentCode, instrument) Then
+                    ' found
                 End If
+                'If Not String.IsNullOrEmpty(b.InstrumentCode) Then
+                ' instrument = allInstruments.Where(Function(c) c.Code.Equals(b.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
+                'End If
                 Dim instrumentBalance = New CInstrumentBalance(instrument, b.Sum)
                 currentValues.Add(instrumentBalance)
             Next
@@ -301,7 +304,7 @@ Namespace Transactions
                                          Select
                                              InstrumentCode,
                                              TotalQuantity = Group.Sum(Function(c) c.Amount),
-                                             LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                             LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
                 For Each t In totalsByInstrument.ToList
                     Dim netCash = batches.Where(Function(c)
                                                     If String.IsNullOrEmpty(c.InstrumentCode) Then

@@ -86,10 +86,10 @@ Namespace Accounts
 
             'Dim networksInUse = all.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
 
-            Dim allInstruments = m_commonObjects.Instruments.GetAll
-            Dim allCurrencies = m_commonObjects.Currencies.GetAll
+            Dim allInstrumentsDict = m_commonObjects.Instruments.GetAllDict
+            Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict
 
-            Dim analysis = CTransactions.Analyse(account.Transactions, allInstruments, allCurrencies)
+            Dim analysis = CTransactions.Analyse(account.Transactions, allInstrumentsDict, allCurrenciesDict)
 
             LblBalance.Text = FormatCurrency(analysis.CurrentValue)
 
@@ -97,7 +97,7 @@ Namespace Accounts
 
             FilterTransactions()
 
-            CHoldingsGridHelper.LoadData(GrdHoldings, account.Transactions, m_commonObjects, analysis.Batches, allInstruments)
+            CHoldingsGridHelper.LoadData(GrdHoldings, account.Transactions, m_commonObjects, analysis.Batches, allInstrumentsDict, allCurrenciesDict)
 
             LblTransfersIn.Text = FormatCurrency(analysis.TransfersIn)
             LblTransfersOut.Text = FormatCurrency(analysis.TransfersOut)

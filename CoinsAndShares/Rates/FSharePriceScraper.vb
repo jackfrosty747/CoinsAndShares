@@ -20,15 +20,20 @@ Namespace Rates
         Private Sub LoadData()
 
             Dim allTransactions = m_commonObjects.Transactions.GetAll
-            Dim allInstruments = m_commonObjects.Instruments.GetAll
-            Dim allCurrencies = m_commonObjects.Currencies.GetAll
+            Dim allInstrumentsDict = m_commonObjects.Instruments.GetAllDict
+            Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict
 
-            Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+            Dim analysis = CTransactions.Analyse(allTransactions, allInstrumentsDict, allCurrenciesDict)
 
             Dim ratesToUpdate As New List(Of RateToUpdate)
 
             For Each instrumentAnalysis In analysis.InstrumentAnalysis().Where(Function(c) c.CurrentHolding > 0)
-                Dim instrument = allInstruments.FirstOrDefault(Function(c) c.Code.Equals(instrumentAnalysis.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
+                Dim instrument As CInstrument = Nothing
+                If allInstrumentsDict.TryGetValue(instrumentAnalysis.InstrumentCode, instrument) Then
+
+                End If
+
+                'Dim instrument = allInstrumentsDict.Values.FirstOrDefault(Function(c) c.Code.Equals(instrumentAnalysis.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
                 'If instrument IsNot Nothing AndAlso (instrument.InstrumentType = EInstrumentType.Share or instrument.InstrumentType = EInstrumentType.Crypto)Then
                 Dim rateToUpdate = New RateToUpdate(instrument, instrumentAnalysis)
                 ratesToUpdate.Add(rateToUpdate)
