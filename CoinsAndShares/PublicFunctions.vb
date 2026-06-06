@@ -3,6 +3,11 @@ Imports System.Globalization
 Imports System.Net
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports CoinsAndShares.Accounts
+Imports CoinsAndShares.Accounts.MAccounts
+Imports CoinsAndShares.Instruments
+Imports CoinsAndShares.Instruments.MInstuments
+Imports CoinsAndShares.Transactions
 Imports Infragistics.Win
 Imports Infragistics.Win.UltraWinGrid
 
@@ -165,6 +170,58 @@ Module PublicFunctions
         Next
 
         Return ordinals
+    End Function
+
+    Friend Function GetTransactionFromReader(reader As IDataReader, ords As Dictionary(Of String, Integer)) As CTransaction
+        Dim id = CDatabase.DbToLong(reader(ords(CDatabase.FIELD_TRANSACTIONS_ID)))
+        Dim transDate = If(reader.IsDBNull(ords(CDatabase.FIELD_TRANSACTIONS_TRANSDATE)),
+            Date.MinValue,
+            CDate(reader(ords(CDatabase.FIELD_TRANSACTIONS_TRANSDATE))))
+        Dim transType As ETransactionType = GetTransactionTypeFromCode(CDatabase.DbToString(reader(ords(CDatabase.FIELD_TRANSACTIONS_TRANSTYPE))), True)
+        Dim accountCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE)))
+        Dim instrumentCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE)))
+        Dim rate As Decimal = CDatabase.DbToDecimal(reader(ords(CDatabase.FIELD_TRANSACTIONS_RATE)))
+        Dim amount As Decimal = CDatabase.DbToDecimal(reader(ords(CDatabase.FIELD_TRANSACTIONS_AMOUNT)))
+        Dim description As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_TRANSACTIONS_DESCRIPTION)))
+        Dim batchId As Long = CDatabase.DbToLong(reader(ords(CDatabase.FIELD_TRANSACTIONS_BATCH)))
+        Dim exchangeRate As Decimal = CDatabase.DbToDecimal(reader(ords(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE)))
+        Dim reconciled As Boolean = CDatabase.DbToBool(reader(ords(CDatabase.FIELD_TRANSACTIONS_RECONCILED)))
+        Return New CTransaction(id, transDate, transType, accountCode, instrumentCode, rate, amount, description, batchId, exchangeRate, reconciled)
+    End Function
+
+    Friend Function GetInstrumentFromReader(reader As IDataReader, ords As Dictionary(Of String, Integer)) As CInstrument
+        Dim sInstrumentCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE)))
+        Dim sTypeCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE)))
+        Dim instrumentType As EInstrumentType = GetInstrumentTypeFromCode(sTypeCode, True)
+        Dim sDescription As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_DESCRIPTION)))
+        Dim rRate As Decimal = CDatabase.DbToDecimal(reader(ords(CDatabase.FIELD_INSTRUMENT_RATE)))
+        Dim sProviderLinkCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE)))
+        Dim sCurrencyCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_CURRENCYCODE)))
+
+        Dim rateUpdated As Date? = Nothing
+        If Not reader.IsDBNull(ords(CDatabase.FIELD_INSTRUMENT_RATEUPDATED)) Then
+            rateUpdated = CType(reader(ords(CDatabase.FIELD_INSTRUMENT_RATEUPDATED)), Date)
+        End If
+
+        Dim providerMultiplier As Decimal = CDatabase.DbToDecimal(reader(ords(CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER)))
+        Dim sNotes As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_NOTES)))
+        Dim sHedgingGroupCode = CDatabase.DbToString(reader(ords(CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE)))
+        Dim iRateProvider = CDatabase.DbToInt(reader(ords(CDatabase.FIELD_INSTRUMENT_RATEPROVIDER)))
+
+        Return New CInstrument(sInstrumentCode, instrumentType, sDescription, rRate, rateUpdated,
+                       sProviderLinkCode, sCurrencyCode, providerMultiplier, sNotes, sHedgingGroupCode, iRateProvider)
+    End Function
+
+    Friend Function GetAccountFromReader(reader As IDataReader, ords As Dictionary(Of String, Integer)) As CAccount
+        Dim accountCode As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE)))
+        Dim accountName As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME)))
+        Dim accountType As EAccountType = GetAccountTypeFromCode(CDatabase.DbToString(reader(ords(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE))), True)
+        Dim notes As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_ACCOUNTS_NOTES)))
+        Dim networkId As String = CDatabase.DbToString(reader(ords(CDatabase.FIELD_ACCOUNTS_NETWORKID)))
+        Dim includeOnShortcuts = CDatabase.DbToBool(reader(ords(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS)))
+        Dim nonTaxable = CDatabase.DbToBool(reader(ords(CDatabase.FIELD_ACCOUNTS_NONTAXABLE)))
+        Dim cashSavingsRate = CDatabase.DbToDecimal(reader(ords(CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE)))
+        Return New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
     End Function
 
 End Module

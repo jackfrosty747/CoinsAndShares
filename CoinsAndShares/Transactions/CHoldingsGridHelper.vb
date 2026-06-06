@@ -24,7 +24,7 @@ Namespace Transactions
                 Me.AllInstruments = allInstruments
             End Sub
         End Class
-        Friend Shared Sub LoadData(grid As UltraGrid, transactions As Collection(Of CTransaction),
+        Friend Shared Sub LoadData(grid As UltraGrid, transactions As IEnumerable(Of CTransaction),
                                    commonObjects As CCommonObjects, batches As IEnumerable(Of CBatch),
                                    allInstruments As IEnumerable(Of CInstrument))
 

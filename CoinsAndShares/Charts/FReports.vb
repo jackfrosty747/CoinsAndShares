@@ -965,7 +965,9 @@ Namespace Charts
             Dim sb = New StringBuilder
             Dim chartData = New List(Of (YearA As Integer, Amount As Decimal))
 
-            For iTaxYear = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
+            For i = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
+                Dim iTaxYear = i
+
                 Dim taxYearTotal As Decimal = 0
 
                 Dim transfersForTaxYear = isaTransfersInExcInterIsa.Where(Function(c) c.TaxYear = iTaxYear)
