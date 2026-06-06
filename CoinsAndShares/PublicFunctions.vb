@@ -157,4 +157,14 @@ Module PublicFunctions
         Return client.DownloadString("https://api.ipify.org").Trim()
     End Function
 
+    Public Function GetFieldOrdinals(reader As IDataReader) As Dictionary(Of String, Integer)
+        Dim ordinals As New Dictionary(Of String, Integer)(StringComparison.OrdinalIgnoreCase)
+
+        For i As Integer = 0 To reader.FieldCount - 1
+            ordinals.Add(reader.GetName(i), i)
+        Next
+
+        Return ordinals
+    End Function
+
 End Module

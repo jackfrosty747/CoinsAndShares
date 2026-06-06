@@ -15,44 +15,134 @@ Namespace Accounts
             End If
             Return m_all
         End Function
+        'Private Function GetAllNow() As IEnumerable(Of CAccount)
+        '    Dim sql As String = $"              
+        '        SELECT *
+        '        FROM {CDatabase.TABLE_ACCOUNTS} a LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
+        '            a.{CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE}
+        '        ORDER BY a.{CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
+        '    Dim accounts As New Dictionary(Of String, CAccount)
+        '    Dim result As New List(Of CAccount)
+
+        '    Using dt = m_commonObjects.Database.GetDatatable(sql)
+        '        For Each dr As DataRow In dt.Rows
+        '            Dim accountCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE))
+        '            Dim account As CAccount = Nothing
+
+        '            If Not accounts.TryGetValue(accountCode, account) Then
+        '                Dim accountName As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME))
+        '                Dim accountType As EAccountType = GetAccountTypeFromCode(CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE)), True)
+        '                Dim notes As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NOTES))
+        '                Dim networkId As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NETWORKID))
+        '                Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
+        '                Dim nonTaxable = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE))
+        '                Dim cashSavingsRate = CDatabase.DbToDecimal(dr(CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE))
+
+        '                account = New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
+        '                accounts.Add(accountCode, account)
+        '                result.Add(account)
+        '            End If
+
+        '            If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_ID)) Then
+        '                Dim transaction = CTransactions.GetTransactionFromDr(dr)
+        '                account.Transactions.Add(transaction)
+        '            End If
+        '        Next
+        '    End Using
+
+        '    Return result
+        'End Function
         Private Function GetAllNow() As IEnumerable(Of CAccount)
+
+            Dim accounts As New Dictionary(Of String, CAccount)(StringComparison.OrdinalIgnoreCase)
+
             Dim sql As String = $"              
-                SELECT *
-                FROM {CDatabase.TABLE_ACCOUNTS} a LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
-                    a.{CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE}
-                ORDER BY a.{CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
-            Dim accounts As New Dictionary(Of String, CAccount)
-            Dim result As New List(Of CAccount)
+                SELECT {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE},
+                    {CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME},
+                    {CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE},
+                    {CDatabase.FIELD_ACCOUNTS_NOTES},
+                    {CDatabase.FIELD_ACCOUNTS_NETWORKID},
+                    {CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS},
+                    {CDatabase.FIELD_ACCOUNTS_NONTAXABLE},
+                    {CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE}
+                FROM {CDatabase.TABLE_ACCOUNTS}
+                ORDER BY {CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE};"
 
-            Using dt = m_commonObjects.Database.GetDatatable(sql)
-                For Each dr As DataRow In dt.Rows
-                    Dim accountCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE))
-                    Dim account As CAccount = Nothing
+            Using cm = m_commonObjects.Database.GetCommand(sql)
+                Using reader = cm.ExecuteReader
+                    'Dim ords = GetFieldOrdinals(reader)
 
-                    If Not accounts.TryGetValue(accountCode, account) Then
-                        Dim accountName As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME))
-                        Dim accountType As EAccountType = GetAccountTypeFromCode(CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE)), True)
-                        Dim notes As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NOTES))
-                        Dim networkId As String = CDatabase.DbToString(dr(CDatabase.FIELD_ACCOUNTS_NETWORKID))
-                        Dim includeOnShortcuts = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS))
-                        Dim nonTaxable = CDatabase.DbToBool(dr(CDatabase.FIELD_ACCOUNTS_NONTAXABLE))
-                        Dim cashSavingsRate = CDatabase.DbToDecimal(dr(CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE))
-
-                        account = New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
+                    Dim ordinalAccountCode = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_ACCOUNTCODE)
+                    Dim ordinalAccountName = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_ACCOUNTNAME)
+                    Dim ordinalAccountType = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_ACCOUNTTYPE)
+                    Dim ordinalNotes = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_NOTES)
+                    Dim ordinalNetworkId = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_NETWORKID)
+                    Dim ordinalIncludeOnShortcuts = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_INCLUDEONSHORTCUTS)
+                    Dim ordinalNonTaxable = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_NONTAXABLE)
+                    Dim ordinalCashSavingsRate = reader.GetOrdinal(CDatabase.FIELD_ACCOUNTS_CASHSAVINGSRATE)
+                    While reader.Read
+                        Dim accountCode As String = CDatabase.DbToString(reader(ordinalAccountCode))
+                        Dim accountName As String = CDatabase.DbToString(reader(ordinalAccountName))
+                        Dim accountType As EAccountType = GetAccountTypeFromCode(CDatabase.DbToString(reader(ordinalAccountType)), True)
+                        Dim notes As String = CDatabase.DbToString(reader(ordinalNotes))
+                        Dim networkId As String = CDatabase.DbToString(reader(ordinalNetworkId))
+                        Dim includeOnShortcuts = CDatabase.DbToBool(reader(ordinalIncludeOnShortcuts))
+                        Dim nonTaxable = CDatabase.DbToBool(reader(ordinalNonTaxable))
+                        Dim cashSavingsRate = CDatabase.DbToDecimal(reader(ordinalCashSavingsRate))
+                        Dim account = New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
                         accounts.Add(accountCode, account)
-                        result.Add(account)
-                    End If
-
-                    If Not IsDBNull(dr(CDatabase.FIELD_TRANSACTIONS_ID)) Then
-                        Dim transaction = CTransactions.GetTransactionFromDr(dr)
-                        account.Transactions.Add(transaction)
-                    End If
-                Next
+                    End While
+                End Using
             End Using
 
-            Return result
-        End Function
+            sql = $"              
+                SELECT *
+                FROM {CDatabase.TABLE_TRANSACTIONS}
+                ORDER BY {CDatabase.FIELD_TRANSACTIONS_ID};"
+            Using cm = m_commonObjects.Database.GetCommand(sql)
+                Using reader = cm.ExecuteReader
+                    Dim ordinalAccountCode = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_ACCOUNTCODE)
+                    Dim ordinalTransactionId = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_ID)
+                    Dim ordinalTransDate = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_TRANSDATE)
+                    Dim ordinalTransType = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_TRANSTYPE)
+                    Dim ordinalInstrumentCode = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE)
+                    Dim ordinalRate = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_RATE)
+                    Dim ordinalAmount = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_AMOUNT)
+                    Dim ordinalDescription = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_DESCRIPTION)
+                    Dim ordinalBatch = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_BATCH)
+                    Dim ordinalExchangeRate = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_EXCHANGERATE)
+                    Dim ordinalReconciled = reader.GetOrdinal(CDatabase.FIELD_TRANSACTIONS_RECONCILED)
 
+                    While reader.Read
+                        Dim accountCode As String = CDatabase.DbToString(reader(ordinalAccountCode))
+                        Dim account As CAccount = Nothing
+                        If accounts.TryGetValue(accountCode, account) Then
+                            Dim id = CDatabase.DbToLong(reader(ordinalTransactionId))
+                            Dim transDate As Date
+                            If reader.IsDBNull(ordinalTransDate) Then
+                                transDate = Date.MinValue
+                            Else
+                                transDate = CDate(reader(ordinalTransDate))
+                            End If
+                            Dim transType As ETransactionType = GetTransactionTypeFromCode(CDatabase.DbToString(reader(ordinalTransType)), True)
+                            Dim instrumentCode As String = CDatabase.DbToString(reader(ordinalInstrumentCode))
+                            Dim rate As Decimal = CDatabase.DbToDecimal(reader(ordinalRate))
+                            Dim amount As Decimal = CDatabase.DbToDecimal(reader(ordinalAmount))
+                            Dim description As String = CDatabase.DbToString(reader(ordinalDescription))
+                            Dim batchId As Long = CDatabase.DbToLong(reader(ordinalBatch))
+                            Dim exchangeRate As Decimal = CDatabase.DbToDecimal(reader(ordinalExchangeRate))
+                            Dim reconciled As Boolean = CDatabase.DbToBool(reader(ordinalReconciled))
+                            Dim transaction = New CTransaction(id, transDate, transType, account.AccountCode, instrumentCode, rate, amount,
+                                                               description, batchId, exchangeRate, reconciled)
+                            account.Transactions.Add(transaction)
+                        End If
+                    End While
+                End Using
+            End Using
+
+            Return accounts.Values.ToList
+
+        End Function
         Friend Sub CreateNew(sCode As String, sDescription As String, accountType As EAccountType)
             m_commonObjects.Database.TransactionBegin()
             Try

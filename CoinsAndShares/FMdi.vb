@@ -80,12 +80,28 @@ Friend Class FMdi
         TsslPortfolioValue.Text = "Loading Portfolio Value..."
         StatusStrip1.Refresh()
         Task.Run(Sub()
-                     Dim value = MAssets.GetHodlings(m_commonObjects, DateTime.Now.Date).Item2
+                     Try
+                         Dim value = MAssets.GetHodlings(m_commonObjects, DateTime.Now.Date).Item2
 
-                     ' Update UI safely using Invoke
-                     Me.Invoke(Sub()
-                                   TsslPortfolioValue.Text = $"Portfolio Value: {value:c2}"
-                               End Sub)
+                         ' Safely update UI
+                         If Not Me.IsDisposed AndAlso Not Me.Disposing Then
+                             Me.Invoke(Sub()
+                                           If Not Me.IsDisposed Then
+                                               TsslPortfolioValue.Text = $"Portfolio Value: {value:c2}"
+                                           End If
+                                       End Sub)
+                         End If
+                     Catch ex As Exception
+                         ' Catch connection aborts on exit. 
+                         ' Log it if needed, otherwise ignore if the app is closing.
+                         If Not Me.IsDisposed AndAlso Not Me.Disposing Then
+                             Me.Invoke(Sub()
+                                           If Not Me.IsDisposed Then
+                                               TsslPortfolioValue.Text = "Error loading value."
+                                           End If
+                                       End Sub)
+                         End If
+                     End Try
                  End Sub)
     End Sub
 
@@ -278,7 +294,7 @@ Friend Class FMdi
                     If Not String.IsNullOrEmpty(settings.DefaultBackupPath) AndAlso IO.Directory.Exists(settings.DefaultBackupPath) Then
                         .InitialDirectory = settings.DefaultBackupPath
                     End If
-                    .FileName = $"coins {Now.Date:dd}{Now.Date:MM}{Now.Date:yy}.json"
+                    .FileName = GetBackupFilenameToday()
                     .AddExtension = True
                     .DefaultExt = ".json"
                     .Filter = "JSon Files (*.json)|*.json"
@@ -791,4 +807,30 @@ Projected Tax: {projectedTax:c2}"
         End Try
     End Sub
 
+    Private Function GetBackupFilenameToday() As String
+        Return $"coins {Now.Date:dd}{Now.Date:MM}{Now.Date:yy}.json"
+    End Function
+
+    Private Sub FMdi_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        Try
+            Dim settings = New CSettings(m_commonObjects)
+            If Not String.IsNullOrEmpty(settings.DefaultBackupPath) AndAlso IO.Directory.Exists(settings.DefaultBackupPath) Then
+                Dim backupFile = IO.Path.Combine(settings.DefaultBackupPath, GetBackupFilenameToday())
+                If Not IO.File.Exists(backupFile) Then
+                    If MessageBox.Show("Backup data now?", Text, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                        Cursor = Cursors.WaitCursor
+                        Try
+                            CBackupRestore.Backup(m_commonObjects, backupFile)
+                        Finally
+                            Cursor = Cursors.Default
+                        End Try
+                    End If
+                End If
+            End If
+
+        Catch ex As Exception
+            m_commonObjects.Errors.Handle(ex)
+            'e.Cancel = True
+        End Try
+    End Sub
 End Class

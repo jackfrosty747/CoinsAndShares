@@ -71,23 +71,23 @@ Namespace Instruments
         'End Function
         Private Function GetAllNow() As IEnumerable(Of CInstrument)
             Const TEMP_INSTRUMENT_RATE As String = "instrumentRate"
-            Dim sql As String = $"
-        SELECT
-            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
-            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE},
-            i.{CDatabase.FIELD_INSTRUMENT_DESCRIPTION},
-            i.{CDatabase.FIELD_INSTRUMENT_RATE} {TEMP_INSTRUMENT_RATE},
-            i.{CDatabase.FIELD_INSTRUMENT_RATEUPDATED},
-            i.{CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE},
-            i.{CDatabase.FIELD_INSTRUMENT_CURRENCYCODE},
-            i.{CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER},
-            i.{CDatabase.FIELD_INSTRUMENT_NOTES},
-            i.{CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE},
-            i.{CDatabase.FIELD_INSTRUMENT_RATEPROVIDER},
-            t.*
-        FROM {CDatabase.TABLE_INSTRUMENT} i LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
-            i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE}
-        ORDER BY i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
+            Dim sql = $"
+                SELECT
+                    i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE},
+                    i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTTYPE},
+                    i.{CDatabase.FIELD_INSTRUMENT_DESCRIPTION},
+                    i.{CDatabase.FIELD_INSTRUMENT_RATE} {TEMP_INSTRUMENT_RATE},
+                    i.{CDatabase.FIELD_INSTRUMENT_RATEUPDATED},
+                    i.{CDatabase.FIELD_INSTRUMENT_PROVIDERLINKCODE},
+                    i.{CDatabase.FIELD_INSTRUMENT_CURRENCYCODE},
+                    i.{CDatabase.FIELD_INSTRUMENT_PROVIDERMULTIPLIER},
+                    i.{CDatabase.FIELD_INSTRUMENT_NOTES},
+                    i.{CDatabase.FIELD_INSTRUMENT_HEDGINGGROUPCODE},
+                    i.{CDatabase.FIELD_INSTRUMENT_RATEPROVIDER},
+                    t.*
+                FROM {CDatabase.TABLE_INSTRUMENT} i LEFT JOIN {CDatabase.TABLE_TRANSACTIONS} t ON
+                    i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE} = t.{CDatabase.FIELD_TRANSACTIONS_INSTRUMENTCODE}
+                ORDER BY i.{CDatabase.FIELD_INSTRUMENT_INSTRUMENTCODE}, t.{CDatabase.FIELD_TRANSACTIONS_ID};"
             Dim col As New Dictionary(Of String, CInstrument)
             Using dt = m_commonObjects.Database.GetDatatable(sql)
                 For Each dr As DataRow In dt.Rows
