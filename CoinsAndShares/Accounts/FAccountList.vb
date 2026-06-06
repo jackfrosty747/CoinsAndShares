@@ -30,11 +30,11 @@ Namespace Accounts
             AddHandler ChkShowZero.CheckedChanged, AddressOf ChkShowZeroCheckedChanged
         End Sub
         Private Sub LoadData()
-            Dim allInstruments = m_commonObjects.Instruments.GetAll()
+            Dim allInstruments = m_commonObjects.Instruments.GetAllDict()
             Dim allAccounts = m_commonObjects.Accounts.GetAll().ToList
-            Dim allCurrencies = m_commonObjects.Currencies.GetAll()
-            GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstruments, allCurrencies, ChkShowZero.Checked, m_commonObjects.Networks, Me)
-            LblGrandTotal.Text = FormatCurrency(allAccounts.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies)))
+            Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict()
+            GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstruments, allCurrenciesDict, ChkShowZero.Checked, m_commonObjects.Networks, Me)
+            LblGrandTotal.Text = FormatCurrency(allAccounts.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrenciesDict)))
             SelectChanged()
         End Sub
         Private Sub SelectChanged()
@@ -73,8 +73,8 @@ Namespace Accounts
                 NonTaxable
             End Enum
             Friend Shared Sub LoadData(grid As UltraGrid, accounts As IEnumerable(Of CAccount), commonObjects As CCommonObjects,
-                                       frmAccountList As FAccountList, allInstruments As IEnumerable(Of CInstrument),
-                                       allCurrencies As IEnumerable(Of CCurrencyDetail), fShowZeroBalanceAccounts As Boolean,
+                                       frmAccountList As FAccountList, allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                       allCurrenciesDict As Dictionary(Of String, CCurrencyDetail), fShowZeroBalanceAccounts As Boolean,
                                        networks As CNetworks, hostForm As FAccountList)
                 grid.Tag = New LocalTagBits(commonObjects, frmAccountList, networks, hostForm)
 
@@ -84,7 +84,7 @@ Namespace Accounts
 
                 Dim dtAccounts As DataTable = GetBlankDt()
                 For Each account In accounts
-                    Dim cBalance = account.GetLocalCurrencyBalance(allInstruments, allCurrencies)
+                    Dim cBalance = account.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict)
                     cBalance = Decimal.Round(cBalance, 2)
 
                     If cBalance <> 0 OrElse fShowZeroBalanceAccounts Then
@@ -101,7 +101,7 @@ Namespace Accounts
                         dr(ColumnsAccount.NetworkId.ToString) = account.NetworkId
                         dr(ColumnsAccount.LocalCurrencyBalance.ToString) = cBalance
 
-                        Dim analysis = CTransactions.Analyse(account.Transactions, allInstruments, allCurrencies)
+                        Dim analysis = CTransactions.Analyse(account.Transactions, allInstrumentsDict.Values, allCurrenciesDict.Values)
                         dr(ColumnsAccount.Pl.ToString) = analysis.ProfitLoss
                         dr(ColumnsAccount.Notes.ToString) = account.Notes
 

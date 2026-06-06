@@ -6,15 +6,18 @@ Imports CoinsAndShares.Transactions
 Namespace Accounts
     Friend Class CAccounts
         Private ReadOnly m_commonObjects As CCommonObjects
-        Private m_all As IEnumerable(Of CAccount)
+        Private m_allDict As Dictionary(Of String, CAccount)
         Friend Sub New(commonObjects As CCommonObjects)
             m_commonObjects = commonObjects
         End Sub
-        Friend Function GetAll() As IEnumerable(Of CAccount)
-            If m_all Is Nothing Then
-                m_all = GetAllNow()
+        Friend Function GetAllDict() As Dictionary(Of String, CAccount)
+            If m_allDict Is Nothing Then
+                m_allDict = GetAllNow()
             End If
-            Return m_all
+            Return m_allDict
+        End Function
+        Friend Function GetAll() As IEnumerable(Of CAccount)
+            Return GetAllDict().Values
         End Function
         'Private Function GetAllNow() As IEnumerable(Of CAccount)
         '    Dim sql As String = $"              
@@ -54,7 +57,7 @@ Namespace Accounts
         '    Return result
         'End Function
 
-        Private Function GetAllNow() As IEnumerable(Of CAccount)
+        Private Function GetAllNow() As Dictionary(Of String, CAccount)
 
             Dim accounts As New Dictionary(Of String, CAccount)(StringComparison.OrdinalIgnoreCase)
 
@@ -91,7 +94,7 @@ Namespace Accounts
                 End Using
             End Using
 
-            Return accounts.Values
+            Return accounts
 
         End Function
 
@@ -323,7 +326,7 @@ Namespace Accounts
         End Sub
 
         Private Sub DataChanged()
-            m_all = Nothing
+            m_allDict = Nothing
             m_commonObjects.ClearCache()
             m_commonObjects.RefreshForms()
         End Sub

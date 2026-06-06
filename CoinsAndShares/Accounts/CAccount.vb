@@ -33,5 +33,12 @@ Namespace Accounts
             Dim cashTransactions = Transactions.Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode))
             Return cashTransactions.Sum(Function(c) c.GetLocalCurrencyBalance(instruments, allCurrencies))
         End Function
+        Friend Function GetLocalCurrencyBalance(instrumentsDict As Dictionary(Of String, CInstrument), allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)) As Decimal
+            Return Transactions.Sum(Function(c) c.GetLocalCurrencyBalance(instrumentsDict, allCurrenciesDict))
+        End Function
+        Friend Function GetLocalCashBalance(instrumentsDict As Dictionary(Of String, CInstrument), allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)) As Decimal
+            Dim cashTransactions = Transactions.Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode))
+            Return cashTransactions.Sum(Function(c) c.GetLocalCurrencyBalance(instrumentsDict, allCurrenciesDict))
+        End Function
     End Class
 End Namespace

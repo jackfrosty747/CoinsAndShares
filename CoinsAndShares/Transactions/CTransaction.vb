@@ -1,5 +1,7 @@
 ﻿Imports CoinsAndShares.Currencies
+Imports CoinsAndShares.Dashboard
 Imports CoinsAndShares.Instruments
+Imports CoinsAndShares.Rates.Trading212.CTrading212
 
 Namespace Transactions
     Friend Class CTransaction
@@ -56,6 +58,34 @@ Namespace Transactions
             ' where we might be round more one way than the order
 
             Return cLocal
+
+        End Function
+        Friend Function GetLocalCurrencyBalance(instrumentsDict As Dictionary(Of String, CInstrument),
+                                                currenciesDict As Dictionary(Of String, CCurrencyDetail)) As Decimal
+
+            If String.IsNullOrEmpty(InstrumentCode) Then
+                Return Amount
+            End If
+
+            Dim instrument As CInstrument = Nothing
+            If Not instrumentsDict.TryGetValue(InstrumentCode, instrument) Then
+                Return 0
+            End If
+
+            Dim rRate As Double = instrument.Rate
+            Dim rExchangeRate As Decimal = 1
+
+            If Not String.IsNullOrEmpty(instrument.CurrencyCode) Then
+                Dim currency As CCurrencyDetail = Nothing
+                If currenciesDict.TryGetValue(instrument.CurrencyCode, currency) Then
+                    Dim cr = currency.CurrencyRate
+                    If cr.HasValue AndAlso cr.Value > 0 AndAlso cr.Value <> 1 Then
+                        rExchangeRate = cr.Value
+                    End If
+                End If
+            End If
+
+            Return CDec(rRate * Amount / rExchangeRate)
 
         End Function
         Friend Function Sterling() As Decimal

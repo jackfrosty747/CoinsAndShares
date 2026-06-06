@@ -3,18 +3,21 @@
 Namespace Currencies
     Friend Class CCurrencies
         Private ReadOnly m_commonObjects As CCommonObjects
-        Private m_all As IEnumerable(Of CCurrencyDetail)
+        Private m_allDict As Dictionary(Of String, CCurrencyDetail)
         Friend Sub New(commonObjects As CCommonObjects)
             m_commonObjects = commonObjects
         End Sub
-        Friend Function GetAll() As IEnumerable(Of CCurrencyDetail)
-            If m_all Is Nothing Then
-                m_all = GetAllNow()
+        Friend Function GetAllDict() As Dictionary(Of String, CCurrencyDetail)
+            If m_allDict Is Nothing Then
+                m_allDict = GetAllNow()
             End If
-            Return m_all
+            Return m_allDict
         End Function
-        Private Function GetAllNow() As IEnumerable(Of CCurrencyDetail)
-            Dim all As New List(Of CCurrencyDetail)
+        Friend Function GetAll() As IEnumerable(Of CCurrencyDetail)
+            Return GetAllDict().Values
+        End Function
+        Private Function GetAllNow() As Dictionary(Of String, CCurrencyDetail)
+            Dim allDict As New Dictionary(Of String, CCurrencyDetail)(StringComparer.CurrentCultureIgnoreCase)
 
             Dim sLocalCurrencyIso = GetLocalCurrencyIso()
             Dim favourites As New List(Of String) From {
@@ -31,8 +34,8 @@ Namespace Currencies
                     Dim sIso As String = ri.ISOCurrencySymbol.ToUpper
                     Dim fFavourite As Boolean = favourites.Contains(sIso)
                     Dim currency As New CCurrencyDetail(sIso, ri.CurrencyEnglishName, Nothing, fFavourite)
-                    If Not all.Where(Function(c) c.CurrencyCode.Equals(sIso, StringComparison.CurrentCultureIgnoreCase)).Any Then
-                        all.Add(currency)
+                    If Not allDict.ContainsKey(sIso) Then
+                        allDict.Add(sIso, currency)
                     End If
                 End If
             Next
@@ -46,13 +49,14 @@ Namespace Currencies
                 For Each dr As DataRow In dt.Rows
                     Dim sCode As String = CDatabase.DbToString(dr(CDatabase.FIELD_CURRENCIES_CURRENCYCODE))
                     Dim rRate As Decimal = CDatabase.DbToDecimal(dr(CDatabase.FIELD_CURRENCIES_CURRENCYRATE))
-                    Dim r = all.Where(Function(c) c.CurrencyCode.Equals(sCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                    If r IsNot Nothing Then
+
+                    Dim r As CCurrencyDetail = Nothing
+                    If allDict.TryGetValue(sCode, r) Then
                         r.CurrencyRate = rRate
                     End If
                 Next
             End Using
-            Return all
+            Return allDict
         End Function
         Friend Sub SaveAll(all As IEnumerable(Of CCurrencyDetail))
             m_commonObjects.Database.TransactionBegin()
@@ -91,7 +95,7 @@ Namespace Currencies
         End Sub
         Private Sub RefreshForms()
             m_commonObjects.ClearCache()
-            m_all = Nothing
+            m_allDict = Nothing
             m_commonObjects.RefreshForms()
         End Sub
         Friend Sub UpdateRatesFromApi(currencyRateApi As ICurrencyRateApi)

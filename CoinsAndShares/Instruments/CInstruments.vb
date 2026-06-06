@@ -1,20 +1,22 @@
 ﻿Imports System.Data.SqlServerCe
 Imports CoinsAndShares.Currencies
 Imports CoinsAndShares.Rates
-Imports CoinsAndShares.Transactions
 
 Namespace Instruments
     Friend Class CInstruments
         Private ReadOnly m_commonObjects As CCommonObjects
-        Private m_all As IEnumerable(Of CInstrument)
+        Private m_allDict As Dictionary(Of String, CInstrument)
         Friend Sub New(commonObjects As CCommonObjects)
             m_commonObjects = commonObjects
         End Sub
-        Friend Function GetAll() As IEnumerable(Of CInstrument)
-            If m_all Is Nothing Then
-                m_all = GetAllNow()
+        Friend Function GetAllDict() As Dictionary(Of String, CInstrument)
+            If m_allDict Is Nothing Then
+                m_allDict = GetAllNow()
             End If
-            Return m_all
+            Return m_allDict
+        End Function
+        Friend Function GetAll() As IEnumerable(Of CInstrument)
+            Return GetAllDict.Values
         End Function
         ' Replacing all with ChatGPT optimised below
         'Private Function GetAllNow() As IEnumerable(Of CInstrument)
@@ -176,7 +178,7 @@ Namespace Instruments
         '    Next
 
         'End Sub
-        Private Function GetAllNow() As IEnumerable(Of CInstrument)
+        Private Function GetAllNow() As Dictionary(Of String, CInstrument)
 
             Dim instruments As New Dictionary(Of String, CInstrument)(StringComparison.OrdinalIgnoreCase)
 
@@ -215,7 +217,7 @@ Namespace Instruments
                 End Using
             End Using
 
-            Return instruments.Values
+            Return instruments
 
         End Function
 
@@ -332,7 +334,7 @@ Namespace Instruments
 
 
         Private Sub DataChanged()
-            m_all = Nothing
+            m_allDict = Nothing
             m_commonObjects.ClearCache()
             m_commonObjects.RefreshForms()
         End Sub
