@@ -60,32 +60,36 @@ Namespace Transactions
             Return cLocal
 
         End Function
+        Private m_localCurrencyBalance As Decimal? = Nothing
         Friend Function GetLocalCurrencyBalance(instrumentsDict As Dictionary(Of String, CInstrument),
                                                 currenciesDict As Dictionary(Of String, CCurrencyDetail)) As Decimal
 
-            If String.IsNullOrEmpty(InstrumentCode) Then
-                Return Amount
-            End If
-
-            Dim instrument As CInstrument = Nothing
-            If Not instrumentsDict.TryGetValue(InstrumentCode, instrument) Then
-                Return 0
-            End If
-
-            Dim rRate As Double = instrument.Rate
-            Dim rExchangeRate As Decimal = 1
-
-            If Not String.IsNullOrEmpty(instrument.CurrencyCode) Then
-                Dim currency As CCurrencyDetail = Nothing
-                If currenciesDict.TryGetValue(instrument.CurrencyCode, currency) Then
-                    Dim cr = currency.CurrencyRate
-                    If cr.HasValue AndAlso cr.Value > 0 AndAlso cr.Value <> 1 Then
-                        rExchangeRate = cr.Value
+            If Not m_localCurrencyBalance.HasValue Then
+                If String.IsNullOrEmpty(InstrumentCode) Then
+                    m_localCurrencyBalance = Amount
+                Else
+                    Dim instrument As CInstrument = Nothing
+                    If Not instrumentsDict.TryGetValue(InstrumentCode, instrument) Then
+                        Return 0
                     End If
+
+                    Dim rRate As Double = instrument.Rate
+                    Dim rExchangeRate As Decimal = 1
+
+                    If Not String.IsNullOrEmpty(instrument.CurrencyCode) Then
+                        Dim currency As CCurrencyDetail = Nothing
+                        If currenciesDict.TryGetValue(instrument.CurrencyCode, currency) Then
+                            Dim cr = currency.CurrencyRate
+                            If cr.HasValue AndAlso cr.Value > 0 AndAlso cr.Value <> 1 Then
+                                rExchangeRate = cr.Value
+                            End If
+                        End If
+                    End If
+
+                    m_localCurrencyBalance = CDec(rRate * Amount / rExchangeRate)
                 End If
             End If
-
-            Return CDec(rRate * Amount / rExchangeRate)
+            Return m_localCurrencyBalance.Value
 
         End Function
         Friend Function Sterling() As Decimal

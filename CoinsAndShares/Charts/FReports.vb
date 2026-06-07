@@ -80,7 +80,7 @@ Namespace Charts
             LoadDataHoldings(allTransactions, allInstrumentsDict, analysis)
             LoadDataPlPerInstrument(allTransactions, allInstrumentsDict, analysis)
             LoadMining(allTransactions, allInstrumentsDict)
-            LoadNetworks(allTransactions, allAccounts, analysis)
+            LoadNetworks(allTransactions, allAccounts, analysis, allInstrumentsDict, allCurrenciesDict)
             LoadSavings(allAccounts, allInstrumentsDict, allCurrenciesDict)
             LoadBonuses(allTransactions, Nothing)
 
@@ -230,9 +230,92 @@ Namespace Charts
 
         End Sub
 
+        'Private Sub LoadNetworksOld(allTransactions As IEnumerable(Of CTransaction),
+        '                         allAccounts As IEnumerable(Of CAccount),
+        '                         analysis As CTransactionAnalyserResult)
+
+        '    Const COL1 = 35
+        '    Const COL2 = 15
+        '    Const COL3 = 8
+        '    Const COL4 = 15
+        '    Const COL5 = 15
+        '    Const COL6 = 8
+
+        '    Const UNDER = "________"
+
+        '    Dim out As New StringBuilder
+
+        '    out.AppendLine("NETWORK ANALYSIS")
+        '    out.AppendLine("________________")
+
+        '    Dim allNetworkIds = allAccounts.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
+
+        '    For Each sNetworkId In allNetworkIds.OrderBy(Function(c) c)
+        '        ' Network header
+        '        out.AppendLine(LSet($"    NETWORK {sNetworkId}", COL1) & RSet("TRANSFERS", COL2) & RSet("", COL3) & RSet("ASSETS", COL4) & RSet("P/L", COL5))
+        '        out.AppendLine(LSet("", COL1) & RSet(UNDER, COL2) & RSet("", COL3) & RSet(UNDER, COL4) & RSet(UNDER, COL4))
+
+        '        Dim cNetworkTransfers As Decimal = 0
+        '        Dim cNetworkAssets As Decimal = 0
+        '        For Each account In allAccounts.Where(Function(c) c.NetworkId.Equals(sNetworkId, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(c) c.AccountCode)
+        '            Dim accountTransactions = allTransactions.Where(Function(c) c.AccountCode.Equals(account.AccountCode, StringComparison.CurrentCultureIgnoreCase)).ToList
+
+        '            Dim cAccountTransfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer).Sum(Function(c) c.Amount)
+
+        '            Dim sInOut = String.Empty
+        '            If cAccountTransfers > 0 Then
+        '                sInOut = " In"
+        '            ElseIf cAccountTransfers < 0 Then
+        '                sInOut = " Out"
+        '            End If
+
+        '            ' Calculate assets
+        '            'Dim accountAnalysis = CTransactions.Analyse(accountTransactions, allInstruments, allCurrencies)
+        '            Dim cAccountAssets = analysis.CurrentValue()
+
+        '            ' AccountP/L
+        '            Dim cAccountPl = cAccountAssets - cAccountTransfers
+        '            Dim sPl = String.Empty
+        '            If cAccountPl > 0 Then
+        '                sPl = " PROFIT"
+        '            ElseIf cAccountPl < 0 Then
+        '                sPl = " LOSS"
+        '            End If
+
+        '            Dim sAccountName = Regex.Replace(account.AccountName, "[^\u0000-\u007F]+", String.Empty)
+
+        '            ' Account output
+        '            out.AppendLine(LSet($"        {account.AccountCode} ({sAccountName})", COL1) & RSet(cAccountTransfers.ToString("c2"), COL2) & LSet(sInOut, COL3) & RSet(cAccountAssets.ToString("c2"), COL4) & RSet(cAccountPl.ToString("c2"), COL5) & LSet(sPl, COL6))
+
+        '            cNetworkTransfers += cAccountTransfers
+        '            cNetworkAssets += cAccountAssets
+        '        Next
+
+        '        Dim cNetworkdPl = cNetworkAssets - cNetworkTransfers
+        '        Dim sNetworkPl = String.Empty
+        '        If cNetworkdPl > 0 Then
+        '            sNetworkPl = " PROFIT"
+        '        ElseIf cNetworkdPl < 0 Then
+        '            sNetworkPl = " LOSS"
+        '        End If
+
+        '        ' Network footer
+        '        out.AppendLine(LSet("", COL1) & RSet(UNDER, COL2) & RSet("", COL3) & RSet(UNDER, COL4) & RSet(UNDER, COL4))
+        '        out.AppendLine(LSet($"    NETWORK TOTALS: {sNetworkId}", COL1) & RSet(cNetworkTransfers.ToString("c2"), COL2) & RSet("", COL3) & RSet(cNetworkAssets.ToString("c2"), COL4) & RSet(cNetworkdPl.ToString("c2"), COL5) & LSet(sNetworkPl, COL6))
+        '        out.AppendLine()
+        '    Next
+
+        '    out.AppendLine(UNDER)
+        '    out.AppendLine("END")
+
+        '    TxtNetworks.Text = out.ToString
+
+        'End Sub
+
         Private Sub LoadNetworks(allTransactions As IEnumerable(Of CTransaction),
                                  allAccounts As IEnumerable(Of CAccount),
-                                 analysis As CTransactionAnalyserResult)
+                                 analysis As CTransactionAnalyserResult, allInstrumentsDict As Dictionary(Of String, CInstrument),
+                                 allCurrenciesDict As Dictionary(Of String, CCurrencyDetail))
 
             Const COL1 = 35
             Const COL2 = 15
@@ -250,6 +333,11 @@ Namespace Charts
 
             Dim allNetworkIds = allAccounts.Select(Function(c) c.NetworkId.ToUpper).Distinct.Where(Function(c) Not String.IsNullOrEmpty(c))
 
+            Dim transactionsByAccount =
+                allTransactions.ToLookup(
+                    Function(t) t.AccountCode,
+                    StringComparer.OrdinalIgnoreCase)
+
             For Each sNetworkId In allNetworkIds.OrderBy(Function(c) c)
                 ' Network header
                 out.AppendLine(LSet($"    NETWORK {sNetworkId}", COL1) & RSet("TRANSFERS", COL2) & RSet("", COL3) & RSet("ASSETS", COL4) & RSet("P/L", COL5))
@@ -258,9 +346,18 @@ Namespace Charts
                 Dim cNetworkTransfers As Decimal = 0
                 Dim cNetworkAssets As Decimal = 0
                 For Each account In allAccounts.Where(Function(c) c.NetworkId.Equals(sNetworkId, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(c) c.AccountCode)
-                    Dim accountTransactions = allTransactions.Where(Function(c) c.AccountCode.Equals(account.AccountCode, StringComparison.CurrentCultureIgnoreCase)).ToList
+                    Dim accountTransactions = transactionsByAccount(account.AccountCode).ToList()
 
-                    Dim cAccountTransfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer).Sum(Function(c) c.Amount)
+                    'Dim cAccountTransfers = accountTransactions.Where(Function(c) c.TransactionType = ETransactionType.Transfer).Sum(Function(c) c.Amount)
+
+                    Dim cAccountTransfers = accountTransactions.
+                        Sum(Function(c)
+                                If c.TransactionType = ETransactionType.Transfer Then
+                                    Return c.Amount
+                                Else
+                                    Return 0D
+                                End If
+                            End Function)
 
                     Dim sInOut = String.Empty
                     If cAccountTransfers > 0 Then
@@ -271,7 +368,10 @@ Namespace Charts
 
                     ' Calculate assets
                     'Dim accountAnalysis = CTransactions.Analyse(accountTransactions, allInstruments, allCurrencies)
-                    Dim cAccountAssets = analysis.CurrentValue()
+                    'Dim cAccountAssets = analysis.CurrentValue()
+                    Dim accountAnalysis = CTransactions.Analyse(accountTransactions, allInstrumentsDict, allCurrenciesDict)
+
+                    Dim cAccountAssets = accountAnalysis.CurrentValue()
 
                     ' AccountP/L
                     Dim cAccountPl = cAccountAssets - cAccountTransfers
@@ -421,14 +521,14 @@ Namespace Charts
 
 
 
-            Dim miningTrans = allTransactions.Where(Function(c) c.TransactionType = ETransactionType.Mining OrElse ContainsIgnoreCase(c.Description, PART_DESCRIPTION))
+            Dim miningTransEnum = allTransactions.Where(Function(c) c.TransactionType = ETransactionType.Mining OrElse ContainsIgnoreCase(c.Description, PART_DESCRIPTION))
             If ChkMiningDateRange.Checked Then
-                miningTrans = miningTrans.Where(Function(c) c.TransDate.Date >= DtpMiningDateFrom.Value.Date And c.TransDate.Date <= DtpMiningDateTo.Value.Date)
+                miningTransEnum = miningTransEnum.Where(Function(c) c.TransDate.Date >= DtpMiningDateFrom.Value.Date And c.TransDate.Date <= DtpMiningDateTo.Value.Date)
             End If
 
-            miningTrans = miningTrans.ToList
+            Dim miningTrans = miningTransEnum.ToList
 
-            If Not miningTrans.Any Then
+            If miningTrans.Count = 0 Then
                 Return
             End If
 
@@ -952,47 +1052,112 @@ Namespace Charts
             End Try
         End Sub
 
+        'Private Sub LoadIsaTransfers()
+
+        '    ' All accounts containing ISA in the name
+        '    Dim isaAccounts = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountName.ToUpperInvariant.Contains("ISA"))
+
+        '    ' All transfers IN to ISA accounts
+        '    Dim isaTransfersIn = m_commonObjects.Transactions.GetAll.Where(Function(c) c.TransactionType = ETransactionType.Transfer AndAlso
+        '                                                                     c.Amount > 0 AndAlso
+        '                                                                     isaAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.OrdinalIgnoreCase)))
+
+        '    ' Exclude inter ISA transfers
+        '    Dim isaTransfersInExcInterIsa = isaTransfersIn.Where(Function(c) Not isaAccounts.Any(Function(d) c.Description.ToUpperInvariant.EndsWith(d.AccountCode)))
+
+        '    Dim sb = New StringBuilder
+        '    Dim chartData = New List(Of (YearA As Integer, Amount As Decimal))
+
+        '    For i = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
+        '        Dim iTaxYear = i
+
+        '        Dim taxYearTotal As Decimal = 0
+
+        '        Dim transfersForTaxYear = isaTransfersInExcInterIsa.Where(Function(c) c.TaxYear = iTaxYear)
+
+        '        sb.AppendLine($"TAX YEAR {iTaxYear}")
+        '        sb.AppendLine($"=============")
+
+        '        For Each t In transfersForTaxYear
+        '            taxYearTotal += t.Amount
+        '            sb.AppendLine($"  {t.TransDate.ToShortDateString} {LSet(t.Amount.ToString("c2"), 15)} {t.AccountCode}")
+        '        Next
+
+        '        sb.AppendLine($"TOTALS FOR TAX YEAR {iTaxYear}: {taxYearTotal:c}")
+        '        sb.AppendLine("")
+
+        '        chartData.Add((iTaxYear, taxYearTotal))
+        '    Next
+
+        '    TxtIsaDeposits.Text = sb.ToString
+
+        '    DisplayIsaDepositsChart(chartData)
+
+        '    m_fIsaTransfersLoaded = True
+        'End Sub
+
         Private Sub LoadIsaTransfers()
+            ' 1. Create a fast HashSet of ISA Account Codes for O(1) lookups
+            Dim isaAccountCodes As New HashSet(Of String)(
+        m_commonObjects.Accounts.GetAll() _
+            .Where(Function(c) c.AccountName.ToUpperInvariant().Contains("ISA")) _
+            .Select(Function(c) c.AccountCode),
+        StringComparer.OrdinalIgnoreCase
+    )
 
-            ' All accounts containing ISA in the name
-            Dim isaAccounts = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountName.ToUpperInvariant.Contains("ISA"))
+            If isaAccountCodes.Count = 0 Then Exit Sub
 
-            ' All transfers IN to ISA accounts
-            Dim isaTransfersIn = m_commonObjects.Transactions.GetAll.Where(Function(c) c.TransactionType = ETransactionType.Transfer AndAlso
-                                                                             c.Amount > 0 AndAlso
-                                                                             isaAccounts.Any(Function(d) d.AccountCode.Equals(c.AccountCode, StringComparison.OrdinalIgnoreCase)))
+            ' 2. Filter transfers IN to ISA accounts
+            Dim isaTransfersIn = m_commonObjects.Transactions.GetAll() _
+        .Where(Function(c) c.TransactionType = ETransactionType.Transfer AndAlso c.Amount > 0) _
+        .Where(Function(c) isaAccountCodes.Contains(c.AccountCode)) _
+        .ToList()
 
-            ' Exclude inter ISA transfers
-            Dim isaTransfersInExcInterIsa = isaTransfersIn.Where(Function(c) Not isaAccounts.Any(Function(d) c.Description.ToUpperInvariant.EndsWith(d.AccountCode)))
+            If isaTransfersIn.Count = 0 Then Exit Sub
 
-            Dim sb = New StringBuilder
-            Dim chartData = New List(Of (YearA As Integer, Amount As Decimal))
+            ' 3. CRITICAL: Match original logic exactly - NO ToUpperInvariant on account codes in the Any() check
+            '    Original: c.Description.ToUpperInvariant.EndsWith(d.AccountCode) - case-sensitive EndsWith!
+            Dim isaTransfersInExcInterIsa = isaTransfersIn _
+        .Where(Function(c)
+                   If String.IsNullOrEmpty(c.Description) Then Return True
+                   Dim descriptionUpper = c.Description.ToUpperInvariant()
+                   ' Original doesn't uppercase the account code - EndsWith is case-sensitive
+                   Return Not isaAccountCodes.Any(Function(code) descriptionUpper.EndsWith(code))
+               End Function) _
+        .ToList()
 
-            For i = isaTransfersInExcInterIsa.Min(Function(c) c.TaxYear) To isaTransfersInExcInterIsa.Max(Function(c) c.TaxYear)
-                Dim iTaxYear = i
+            If isaTransfersInExcInterIsa.Count = 0 Then Exit Sub
 
+            ' 4. Group by TaxYear
+            Dim transfersByYear = isaTransfersInExcInterIsa _
+        .GroupBy(Function(c) c.TaxYear) _
+        .OrderBy(Function(g) g.Key) _
+        .ToList()
+
+            Dim sb = New StringBuilder()
+            Dim chartData = New List(Of (YearA As Integer, Amount As Decimal))()
+
+            ' 5. Generate output
+            For Each group In transfersByYear
+                Dim currentTaxYear = group.Key
                 Dim taxYearTotal As Decimal = 0
 
-                Dim transfersForTaxYear = isaTransfersInExcInterIsa.Where(Function(c) c.TaxYear = iTaxYear)
+                sb.AppendLine($"TAX YEAR {currentTaxYear}")
+                sb.AppendLine("=============")
 
-                sb.AppendLine($"TAX YEAR {iTaxYear}")
-                sb.AppendLine($"=============")
-
-                For Each t In transfersForTaxYear
+                For Each t In group.OrderBy(Function(c) c.TransDate)
                     taxYearTotal += t.Amount
-                    sb.AppendLine($"  {t.TransDate.ToShortDateString} {LSet(t.Amount.ToString("c2"), 15)} {t.AccountCode}")
+                    sb.AppendLine($"  {t.TransDate.ToShortDateString()} {LSet(t.Amount.ToString("c2"), 15)} {t.AccountCode}")
                 Next
 
-                sb.AppendLine($"TOTALS FOR TAX YEAR {iTaxYear}: {taxYearTotal:c}")
+                sb.AppendLine($"TOTALS FOR TAX YEAR {currentTaxYear}: {taxYearTotal:c}")
                 sb.AppendLine("")
 
-                chartData.Add((iTaxYear, taxYearTotal))
+                chartData.Add((currentTaxYear, taxYearTotal))
             Next
 
-            TxtIsaDeposits.Text = sb.ToString
-
+            TxtIsaDeposits.Text = sb.ToString()
             DisplayIsaDepositsChart(chartData)
-
             m_fIsaTransfersLoaded = True
         End Sub
 
