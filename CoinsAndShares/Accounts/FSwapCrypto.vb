@@ -22,7 +22,10 @@ Namespace Accounts
 
             m_allCryptoInstruments = allInstruments.Where(Function(c) c.InstrumentType = EInstrumentType.Crypto)
 
-            Dim account = m_commonObjects.Accounts.GetAll.First(Function(c) c.AccountCode.Equals(sAccountCode, StringComparison.InvariantCultureIgnoreCase))
+            Dim account As CAccount = Nothing
+            If Not m_commonObjects.Accounts.GetAllDict().TryGetValue(sAccountCode.ToUpper, account) Then
+                Throw New Exception($"Account with code {sAccountCode} not found")
+            End If
             Dim currencies = m_commonObjects.Currencies
             Dim allCurrencies = currencies.GetAll
             Dim totalsByInstrument = From t In account.Transactions
@@ -130,8 +133,8 @@ Namespace Accounts
             Try
                 Cursor = Cursors.WaitCursor
                 Dim accounts = m_commonObjects.Accounts
-                Dim account = accounts.GetAll.FirstOrDefault(Function(c) c.AccountCode.Equals(m_sAccountCode, StringComparison.CurrentCultureIgnoreCase))
-                If account Is Nothing Then
+                Dim account As CAccount = Nothing
+                If Not accounts.GetAllDict().TryGetValue(m_sAccountCode.ToUpper, account) Then
                     Throw New Exception(My.Resources.Error_AccountCodeNotValid)
                 End If
                 Dim trans = account.Transactions.Where(Function(c) c.InstrumentCode.Equals(CmbFromInstrument.Text, StringComparison.CurrentCultureIgnoreCase))

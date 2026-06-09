@@ -24,16 +24,16 @@ Namespace Transactions
         Friend Sub AddNewTransactionsNow(transactions As IEnumerable(Of CTransaction))
             m_commonObjects.Database.TransactionEnsureActive()
             Dim accounts = m_commonObjects.Accounts
-            Dim allAccounts = accounts.GetAll()
+            Dim allAccountsDict = accounts.GetAllDict()
             Dim instruments = m_commonObjects.Instruments
-            Dim allInstruments = instruments.GetAll()
+            Dim allInstrumentsDict = instruments.GetAllDict()
             Dim lBatch As Long = GetMaxBatch() + 1
             Dim lId As Long = GetMaxId()
             For Each transaction In transactions
                 lId += 1
                 transaction.Id = lId
                 transaction.Batch = lBatch
-                SaveTransactionNow(transaction, allAccounts, allInstruments)
+                SaveTransactionNow(transaction, allAccountsDict, allInstrumentsDict)
             Next
         End Sub
         Private Function GetMaxBatch() As Long
@@ -52,10 +52,13 @@ Namespace Transactions
             m_commonObjects.Database.TransactionBegin()
             Try
                 Dim accounts = m_commonObjects.Accounts
-                Dim allAccounts = accounts.GetAll()
+                Dim allAccountsDict = accounts.GetAllDict()
+
                 Dim instruments = m_commonObjects.Instruments
-                Dim allInstruments = instruments.GetAll()
-                SaveTransactionNow(transaction, allAccounts, allInstruments)
+                Dim allInstrumentsDict = instruments.GetAllDict()
+
+                SaveTransactionNow(transaction, allAccountsDict, allInstrumentsDict)
+
                 m_commonObjects.Database.TransactionCommit()
                 RefreshForms()
             Catch ex As Exception
@@ -63,18 +66,18 @@ Namespace Transactions
             End Try
         End Sub
 
-        Private Sub SaveTransactionNow(transaction As CTransaction, allAccounts As IEnumerable(Of CAccount), allInstruments As IEnumerable(Of CInstrument))
+        Private Sub SaveTransactionNow(transaction As CTransaction, allAccountsDict As Dictionary(Of String, CAccount), allInstrumentsDict As Dictionary(Of String, CInstrument))
             m_commonObjects.Database.TransactionEnsureActive()
 
             'Dim accounts As New CAccounts(m_commonObjects)
-            Dim account = allAccounts.Where(Function(c) c.AccountCode.Equals(transaction.AccountCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-            If account Is Nothing Then
+            Dim account As CAccount = Nothing
+            If Not allAccountsDict.TryGetValue(transaction.AccountCode, account) Then
                 Throw New Exception(My.Resources.Error_AccountCodeNotValid)
             End If
             If Not String.IsNullOrEmpty(transaction.InstrumentCode) Then
                 'Dim instruments = New CInstruments(m_commonObjects)
-                Dim instrument = allInstruments.Where(Function(c) c.Code.Equals(transaction.InstrumentCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                If instrument Is Nothing Then
+                Dim instrument As CInstrument = Nothing
+                If Not allInstrumentsDict.TryGetValue(transaction.InstrumentCode, instrument) Then
                     Throw New Exception(My.Resources.Error_InstrumentCodeNotValid)
                 End If
                 If instrument.InstrumentType = EInstrumentType.Crypto AndAlso Not account.AccountType = EAccountType.Crypto Then

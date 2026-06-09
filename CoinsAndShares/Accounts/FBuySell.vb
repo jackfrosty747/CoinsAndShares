@@ -58,12 +58,12 @@ Namespace Accounts
 
             If OptSell.Checked Then
                 ' Just show instruments with some in
-                Dim allInstruments = m_commonObjects.Instruments.GetAll
-                Dim allCurrencies = m_commonObjects.Currencies.GetAll
+                Dim allInstrumentsDict = m_commonObjects.Instruments.GetAllDict
+                Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict
                 Dim totalsByInstrument = From t In account.Transactions
                                          Group t By t.InstrumentCode Into Group
                                          Select InstrumentCode, TotalQuantity = Group.Sum(Function(c) c.Amount),
-                                         LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                         LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
                 instrumentsSubset = instrumentsSubset.Where(Function(c) totalsByInstrument.Any(Function(b) b.InstrumentCode = c.Code And b.TotalQuantity > 0))
             End If
 
@@ -258,8 +258,8 @@ Namespace Accounts
         End Sub
 
         Private Function GetAccount() As CAccount
-            Dim account = m_commonObjects.Accounts.GetAll().Where(Function(c) c.AccountCode.Equals(m_sAccountCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-            If account Is Nothing Then
+            Dim account As CAccount = Nothing
+            If Not m_commonObjects.Accounts.GetAllDict().TryGetValue(m_sAccountCode.ToUpper, account) Then
                 Throw New Exception(My.Resources.Error_AccountCodeNotValid)
             End If
             Return account
@@ -329,8 +329,8 @@ Namespace Accounts
 
         Private Sub BtnAll_Click(sender As Object, e As EventArgs) Handles BtnAll.Click
             Try
-                Dim account = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountCode.Equals(m_sAccountCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                If account Is Nothing Then
+                Dim account As CAccount = Nothing
+                If Not m_commonObjects.Accounts.GetAllDict().TryGetValue(m_sAccountCode.ToUpper, account) Then
                     Throw New Exception(My.Resources.Error_AccountCodeNotValid)
                 End If
                 Dim trans = account.Transactions.Where(Function(c) c.InstrumentCode.Equals(CmbInstrument.Text, StringComparison.CurrentCultureIgnoreCase))

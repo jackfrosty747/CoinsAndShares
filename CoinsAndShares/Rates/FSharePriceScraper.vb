@@ -30,14 +30,12 @@ Namespace Rates
             For Each instrumentAnalysis In analysis.InstrumentAnalysis().Where(Function(c) c.CurrentHolding > 0)
                 Dim instrument As CInstrument = Nothing
                 If allInstrumentsDict.TryGetValue(instrumentAnalysis.InstrumentCode, instrument) Then
-
+                    'Dim instrument = allInstrumentsDict.Values.FirstOrDefault(Function(c) c.Code.Equals(instrumentAnalysis.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
+                    'If instrument IsNot Nothing AndAlso (instrument.InstrumentType = EInstrumentType.Share or instrument.InstrumentType = EInstrumentType.Crypto)Then
+                    Dim rateToUpdate = New RateToUpdate(instrument, instrumentAnalysis)
+                    ratesToUpdate.Add(rateToUpdate)
+                    'End If
                 End If
-
-                'Dim instrument = allInstrumentsDict.Values.FirstOrDefault(Function(c) c.Code.Equals(instrumentAnalysis.InstrumentCode, StringComparison.CurrentCultureIgnoreCase))
-                'If instrument IsNot Nothing AndAlso (instrument.InstrumentType = EInstrumentType.Share or instrument.InstrumentType = EInstrumentType.Crypto)Then
-                Dim rateToUpdate = New RateToUpdate(instrument, instrumentAnalysis)
-                ratesToUpdate.Add(rateToUpdate)
-                'End If
             Next
 
             ' Sort

@@ -16,8 +16,8 @@ Namespace Accounts
             m_commonObjects = commonObjects
             m_sAccountCode = sAccountCode
 
-            Dim account = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountCode.Equals(m_sAccountCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-            If account Is Nothing Then
+            Dim account As CAccount = Nothing
+            If Not m_commonObjects.Accounts.GetAllDict().TryGetValue(m_sAccountCode.ToUpper, account) Then
                 Throw New Exception(My.Resources.Error_AccountCodeNotValid)
             End If
 

@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports CoinsAndShares.Accounts
 Imports CoinsAndShares.Instruments
+Imports CoinsAndShares.Rates.Trading212.CTrading212
 Imports CoinsAndShares.Transactions
 
 Module MTransactions
@@ -55,7 +56,7 @@ Module MTransactions
         Throw New Exception($"{sDesc} is not a valid transaction type description")
     End Function
 
-    Friend Function GetValues(commonObjects As CCommonObjects) As CCoinsAndShares
+    Friend Function GetValuesOld(commonObjects As CCommonObjects) As CCoinsAndShares
 
         ' 060821 - PG - Rewriting to work via total asset worth less transfer from bank.  
 
@@ -64,10 +65,10 @@ Module MTransactions
         Dim currencies = commonObjects.Currencies
         Dim accounts = commonObjects.Accounts
 
-        Dim allTransactions = transactions.GetAll()
+        Dim allTransactions = transactions.GetAll().ToList
         Dim allInstruments = instruments.GetAllDict()
         Dim allCurrencies = currencies.GetAllDict()
-        Dim allAccounts = accounts.GetAll()
+        Dim allAccounts = accounts.GetAll().ToList
 
 
 
@@ -140,7 +141,7 @@ Module MTransactions
             If Not String.IsNullOrEmpty(ia.InstrumentCode) Then
 
                 Dim instrument As CInstrument = Nothing
-                If allInstruments.TryGetValue(ia.InstrumentCode, instrument) Then
+                If Not allInstruments.TryGetValue(ia.InstrumentCode, instrument) Then
                     Throw New WarningException($"Transaction analysis contains an instrument code {ia.InstrumentCode} that is not in the instruments list")
                 End If
 
@@ -161,42 +162,126 @@ Module MTransactions
 
         Debug.Assert(cTotalProfit = cCryptoProfit + cShareProfit)
 
-
-
-
-
         Dim coinsAndShares As New CCoinsAndShares(cCryptoProfit, cShareProfit, cCryptoAssets, cShareAssets)
         Return coinsAndShares
 
+    End Function
 
+    Friend Function GetValues(commonObjects As CCommonObjects) As CCoinsAndShares
 
+        ' 060821 - PG - Rewriting to work via total asset worth less transfer from bank. 
+        ' Optimized with Lookup/Dictionary indexing to convert O(N^2) loops into O(1) lookups.
 
+        Dim instruments = commonObjects.Instruments
+        Dim transactions = commonObjects.Transactions
+        Dim currencies = commonObjects.Currencies
+        Dim accounts = commonObjects.Accounts
 
+        Dim allTransactions = transactions.GetAll().ToList()
+        Dim allInstruments = instruments.GetAllDict()
+        Dim allCurrencies = currencies.GetAllDict()
+        Dim allAccounts = accounts.GetAll().ToList()
 
-        ' Return
+        ' --- INDEXING UPFRONT (The Performance Secret) ---
+        ' 1. Group transactions by AccountCode for fast O(1) lookup inside the loop
+        Dim transactionsByAccount = allTransactions.ToLookup(
+            Function(t) t.AccountCode,
+            StringComparer.OrdinalIgnoreCase
+        )
 
+        ' 2. Group transactions by Batch to eliminate the expensive nested searches
+        Dim transactionsByBatch = allTransactions.ToLookup(Function(t) t.Batch)
 
+        ' 3. Create quick-lookup sets/dictionaries for account types
+        Dim cryptoAccountCodes As New HashSet(Of String)(
+            allAccounts.Where(Function(a) a.AccountType = EAccountType.Crypto).Select(Function(a) a.AccountCode),
+            StringComparer.OrdinalIgnoreCase
+        )
+        Dim shareAccountCodes As New HashSet(Of String)(
+            allAccounts.Where(Function(a) a.AccountType = EAccountType.Share_Account).Select(Function(a) a.AccountCode),
+            StringComparer.OrdinalIgnoreCase
+        )
 
-        ' OLD BIT
+        Dim cNetBankAffect As Decimal
+        Dim cTransfersCrypto As Decimal
+        Dim cTransfersShares As Decimal
+        Dim cShareAccountCash As Decimal
+        Dim cCryptoAccountCash As Decimal
 
+        For Each account In allAccounts
+            ' O(1) retrieval instead of scanning the whole list every time
+            Dim accountTrans = transactionsByAccount(account.AccountCode)
+            If Not accountTrans.Any() Then Continue For
 
-        'Dim analysis = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+            Select Case account.AccountType
+                Case EAccountType.Bank_Account
+                    For Each trans In accountTrans
+                        If trans.TransactionType = ETransactionType.Transfer Then
+                            cNetBankAffect += trans.Amount
 
-        'Dim instrumentAnalysis = analysis.InstrumentAnalysis()
+                            ' Solve the Batch destination account bottleneck using our Lookup
+                            Dim thisBatch = transactionsByBatch(trans.Batch)
 
+                            ' Find the max destination account code that isn't the current account
+                            Dim destAccount = thisBatch _
+                                .Where(Function(d) Not d.AccountCode.Equals(account.AccountCode, StringComparison.OrdinalIgnoreCase)) _
+                                .Max(Function(e) e.AccountCode)
 
-        'Dim shareInstrumentCodes = allInstruments.Where(Function(c) c.InstrumentType = EInstrumentType.Share).Select(Function(d) d.Code)
-        'Dim cryptoInstrumentCodes = allInstruments.Where(Function(c) c.InstrumentType = EInstrumentType.Crypto).Select(Function(d) d.Code)
+                            If destAccount IsNot Nothing Then
+                                ' Use O(1) HashSet lookups instead of .Where().Any() scans
+                                If cryptoAccountCodes.Contains(destAccount) Then
+                                    cTransfersCrypto += trans.Amount
+                                ElseIf shareAccountCodes.Contains(destAccount) Then
+                                    cTransfersShares += trans.Amount
+                                End If
+                            End If
+                        End If
+                    Next
 
-        'Dim shares = instrumentAnalysis.Where(Function(c)
-        '                                          Return shareInstrumentCodes.Contains(c.InstrumentCode)
-        '                                      End Function).Sum(Function(f) f.Pl)
-        'Dim coins = instrumentAnalysis.Where(Function(c)
-        '                                         Return cryptoInstrumentCodes.Contains(c.InstrumentCode)
-        '                                     End Function).Sum(Function(f) f.Pl)
+                Case EAccountType.Share_Account
+                    cShareAccountCash += accountTrans _
+                        .Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode)) _
+                        .Sum(Function(c) c.Amount)
 
-        'Dim coinsAndShares As New CoinsAndShares(coins, shares)
-        'Return coinsAndShares
+                Case EAccountType.Crypto
+                    cCryptoAccountCash += accountTrans _
+                        .Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode)) _
+                        .Sum(Function(c) c.Amount)
+            End Select
+        Next
+
+        Dim cTotalCashBalance = cShareAccountCash + cCryptoAccountCash + cNetBankAffect
+        Debug.Assert(cNetBankAffect = cTransfersCrypto + cTransfersShares)
+
+        ' --- ASSET ANALYSIS ---
+        Dim analysis1 = CTransactions.Analyse(allTransactions, allInstruments, allCurrencies)
+        Dim instrumentAnalysis1 = analysis1.InstrumentAnalysis()
+
+        Dim cShareAssets As Decimal
+        Dim cCryptoAssets As Decimal
+
+        For Each ia In instrumentAnalysis1
+            If Not String.IsNullOrEmpty(ia.InstrumentCode) Then
+                Dim instrument As CInstrument = Nothing
+                If Not allInstruments.TryGetValue(ia.InstrumentCode, instrument) Then
+                    Throw New WarningException($"Transaction analysis contains an instrument code {ia.InstrumentCode} that is not in the instruments list")
+                End If
+
+                Select Case instrument.InstrumentType
+                    Case EInstrumentType.Crypto : cCryptoAssets += ia.CurrentWorth
+                    Case EInstrumentType.Share : cShareAssets += ia.CurrentWorth
+                End Select
+            End If
+        Next
+
+        Dim cTotalProfit = cTotalCashBalance + cShareAssets + cCryptoAssets
+        Dim cCryptoProfit = cTransfersCrypto + cCryptoAssets + cCryptoAccountCash
+        Dim cShareProfit = cTransfersShares + cShareAssets + cShareAccountCash
+
+        Debug.Assert(cTotalProfit = cCryptoProfit + cShareProfit)
+
+        Return New CCoinsAndShares(cCryptoProfit, cShareProfit, cCryptoAssets, cShareAssets)
+
     End Function
 
 End Module

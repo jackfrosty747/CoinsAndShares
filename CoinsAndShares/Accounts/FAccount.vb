@@ -70,9 +70,9 @@ Namespace Accounts
         End Sub
 
         Private Sub LoadData()
-            Dim all = m_commonObjects.Accounts.GetAll
-            Dim account = all.Where(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-            If account Is Nothing Then
+            Dim all = m_commonObjects.Accounts.GetAllDict
+            Dim account As CAccount = Nothing
+            If Not all.TryGetValue(AccountCode.ToUpper, account) Then
                 Throw New Exception(My.Resources.Error_ItemNotFound)
             End If
             TxtAccountCode.Text = account.AccountCode
@@ -157,8 +157,8 @@ Namespace Accounts
         End Sub
 
         Private Sub SaveChanges()
-            Dim existing = m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-            If existing Is Nothing Then
+            Dim existing As CAccount = Nothing
+            If Not m_commonObjects.Accounts.GetAllDict().TryGetValue(AccountCode.ToUpper, existing) Then
                 Throw New Exception(My.Resources.Error_AccountCodeNotValid)
             End If
             Dim sNetworkId = CmbNetworkId.Text.Trim.ToUpper
@@ -348,8 +348,11 @@ Namespace Accounts
                             m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
                             Dim dt = CCsv.ReadCsvToDt(ofd.FileName)
 
-                            Dim allAccounts = m_commonObjects.Accounts.GetAll
-                            Dim account = allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
+                            Dim allAccountsDict = m_commonObjects.Accounts.GetAllDict()
+                            Dim account As CAccount = Nothing
+                            If Not allAccountsDict.TryGetValue(AccountCode.ToUpper, account) Then
+                                Throw New Exception($"Account with code {AccountCode} not found")
+                            End If
                             Dim allTrans = account.Transactions
 
                             Dim currencies = m_commonObjects.Currencies
@@ -433,8 +436,11 @@ Namespace Accounts
                         m_commonObjects.FrmMdi.Cursor = Cursors.WaitCursor
                         Dim dt = CCsv.ReadCsvToDt(ofd.FileName)
 
-                        Dim allAccounts = m_commonObjects.Accounts.GetAll
-                        Dim account = allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(AccountCode, StringComparison.CurrentCultureIgnoreCase))
+                        Dim allAccountsDict = m_commonObjects.Accounts.GetAllDict()
+                        Dim account As CAccount = Nothing
+                        If Not allAccountsDict.TryGetValue(AccountCode.ToUpper, account) Then
+                            Throw New Exception($"Account with code {AccountCode} not found")
+                        End If
                         Dim allTrans = account.Transactions
 
                         Dim importAfterDate As Date

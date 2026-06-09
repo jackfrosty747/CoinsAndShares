@@ -1,5 +1,4 @@
-﻿Imports System.Collections.ObjectModel
-Imports CoinsAndShares.Currencies
+﻿Imports CoinsAndShares.Currencies
 Imports CoinsAndShares.Transactions
 
 Namespace Instruments
@@ -32,8 +31,8 @@ Namespace Instruments
             Me.RateProvider = rateProvider
             Transactions = New List(Of CTransaction)
         End Sub
-        Friend Function GetLocalCurrencyBalance(instruments As IEnumerable(Of CInstrument), currencies As IEnumerable(Of CCurrencyDetail)) As Decimal
-            Return Transactions.Sum(Function(c) c.GetLocalCurrencyBalance(instruments, currencies))
+        Friend Function GetLocalCurrencyBalance(instrumentsDict As Dictionary(Of String, CInstrument), currenciesDict As Dictionary(Of String, CCurrencyDetail)) As Decimal
+            Return Transactions.Sum(Function(c) c.GetLocalCurrencyBalance(instrumentsDict, currenciesDict))
         End Function
         Friend Function GetQuantityHeld() As Decimal
             Return Transactions.Sum(Function(c) c.Amount)

@@ -127,9 +127,9 @@
                 Dim cBalance As Decimal = 0
                 Dim account = m_allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(CmbAccountFrom.Text, StringComparison.InvariantCultureIgnoreCase))
                 If account IsNot Nothing Then
-                    Dim allInstruments = m_commonObjects.Instruments.GetAll()
-                    Dim allCurrencies = m_commonObjects.Currencies.GetAll()
-                    cBalance = account.GetLocalCashBalance(allInstruments, allCurrencies)
+                    Dim allInstrumentsDict = m_commonObjects.Instruments.GetAllDict()
+                    Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict()
+                    cBalance = account.GetLocalCashBalance(allInstrumentsDict, allCurrenciesDict)
                     TxtAmount.Text = cBalance.ToString("0.00")
                 End If
 

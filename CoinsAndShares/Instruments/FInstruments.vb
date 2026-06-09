@@ -9,7 +9,7 @@ Namespace Instruments
         Private ReadOnly m_commonObjects As CCommonObjects
 
         Private m_allInstruments As IEnumerable(Of CInstrument)
-        Private m_allCurrencies As IEnumerable(Of CCurrencyDetail)
+        Private m_allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)
 
         Friend Sub New(commonObjects As CCommonObjects)
 
@@ -36,16 +36,24 @@ Namespace Instruments
         End Sub
 
         Private Sub FilterChanged(sender As Object, e As EventArgs)
+            Dim opt As RadioButton = TryCast(sender, RadioButton)
+            If opt IsNot Nothing AndAlso opt.Checked = False Then
+                Return
+            End If
+
+            Cursor = Cursors.WaitCursor
             Try
                 FilterAndDisplay()
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
             End Try
         End Sub
 
         Private Sub LoadData()
             m_allInstruments = m_commonObjects.Instruments.GetAll()
-            m_allCurrencies = m_commonObjects.Currencies.GetAll()
+            m_allCurrenciesDict = m_commonObjects.Currencies.GetAllDict()
             FilterAndDisplay()
         End Sub
 
@@ -70,7 +78,9 @@ Namespace Instruments
                                           Return True
                                       End Function)
 
-            GridHelper.LoadData(GrdInstruments, filtered, m_commonObjects, Me, m_allCurrencies)
+            Dim filteredDict = filtered.ToDictionary(Function(c) c.Code, Function(c) c, StringComparer.InvariantCultureIgnoreCase)
+
+            GridHelper.LoadData(GrdInstruments, filteredDict, m_commonObjects, Me, m_allCurrenciesDict)
         End Sub
 
         Private NotInheritable Class GridHelper
@@ -98,11 +108,11 @@ Namespace Instruments
                 End Sub
             End Class
 
-            Friend Shared Sub LoadData(grid As UltraGrid, allInstruments As IEnumerable(Of CInstrument),
-                    commonObjects As CCommonObjects, frmInstruments As FInstruments, allCurrencies As IEnumerable(Of CCurrencyDetail))
+            Friend Shared Sub LoadData(grid As UltraGrid, allInstrumentsDict As Dictionary(Of String, CInstrument),
+                    commonObjects As CCommonObjects, frmInstruments As FInstruments, allCurrenciesDict As Dictionary(Of String, CCurrencyDetail))
                 grid.Tag = New LocalTagBits(commonObjects, frmInstruments)
                 Dim dt = GetBlankDt()
-                For Each instrument As CInstrument In allInstruments
+                For Each instrument As CInstrument In allInstrumentsDict.Values
                     Dim dr = dt.NewRow
                     dr(Columns.Code.ToString) = instrument.Code
                     dr(Columns.InstrumentTypeCode.ToString) = instrument.InstrumentType.Code
@@ -115,7 +125,7 @@ Namespace Instruments
                     End If
                     dr(Columns.LinkSymbol.ToString) = instrument.ProviderLinkCode
                     dr(Columns.AmountHeld.ToString) = instrument.GetQuantityHeld
-                    dr(Columns.LocalCurrencyBalance.ToString) = instrument.GetLocalCurrencyBalance(allInstruments, allCurrencies)
+                    dr(Columns.LocalCurrencyBalance.ToString) = instrument.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict)
                     dr(Columns.CurrencyCode.ToString) = instrument.CurrencyCode
                     dr(Columns.ProviderMultiplier.ToString) = instrument.ProviderMultiplier
                     dr(Columns.Notes.ToString) = instrument.Notes
@@ -277,13 +287,10 @@ Namespace Instruments
                 Return dt
             End Function
 
-            Friend Shared Function GetSelectedInstruments(grid As UltraGrid) As IEnumerable(Of CInstrument)
-                Dim col As New Collection(Of CInstrument)
+            Friend Shared Iterator Function GetSelectedInstruments(grid As UltraGrid) As IEnumerable(Of CInstrument)
                 For Each row In grid.Selected.Rows
-                    Dim instrument = GetInstrumentFromRow(row)
-                    col.Add(instrument)
+                    Yield GetInstrumentFromRow(row)
                 Next
-                Return col
             End Function
         End Class
         Private Sub BtnNew_Click(sender As Object, e As EventArgs) Handles BtnNew.Click

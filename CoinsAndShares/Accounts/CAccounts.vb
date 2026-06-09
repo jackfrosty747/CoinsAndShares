@@ -1,6 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.Data.SqlServerCe
-Imports System.Security.Principal
 Imports CoinsAndShares.Transactions
 
 Namespace Accounts
@@ -101,8 +100,8 @@ Namespace Accounts
         Friend Sub CreateNew(sCode As String, sDescription As String, accountType As EAccountType)
             m_commonObjects.Database.TransactionBegin()
             Try
-                Dim all = GetAll()
-                If all.Where(Function(c) c.AccountCode.Equals(sCode, StringComparison.CurrentCultureIgnoreCase)).Any Then
+                Dim all = GetAllDict()
+                If all.ContainsKey(sCode) Then
                     Throw New Exception(My.Resources.Error_ItemAlreadyExists)
                 End If
                 CreateNewNow(sCode, sDescription, accountType)

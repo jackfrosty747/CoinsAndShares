@@ -4,8 +4,8 @@ Imports CoinsAndShares.Instruments
 Namespace Hedging
     Friend Class FHedging
         Private ReadOnly m_commonObjects As CCommonObjects
-        Private ReadOnly m_allInstruments As IEnumerable(Of CInstrument)
-        Private ReadOnly m_allCurrencies As IEnumerable(Of CCurrencyDetail)
+        Private ReadOnly m_allInstruments As Dictionary(Of String, CInstrument)
+        Private ReadOnly m_allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)
         Friend Sub New(commonObjects As CCommonObjects)
 
             ' This call is required by the designer.
@@ -14,11 +14,11 @@ Namespace Hedging
             ' Add any initialization after the InitializeComponent() call.
             m_commonObjects = commonObjects
 
-            m_allInstruments = commonObjects.Instruments.GetAll()
+            m_allInstruments = commonObjects.Instruments.GetAllDict()
 
-            m_allCurrencies = commonObjects.Currencies.GetAll()
+            m_allCurrenciesDict = commonObjects.Currencies.GetAllDict()
 
-            CDropdowns.CHedgingGroupsGropdown.SetupDropdown(CmbHedgingGroupCode, m_allInstruments)
+            CDropdowns.CHedgingGroupsGropdown.SetupDropdown(CmbHedgingGroupCode, m_allInstruments.Values)
 
         End Sub
 
@@ -31,10 +31,10 @@ Namespace Hedging
         End Sub
         Private Sub LoadData()
 
-            Dim insts = m_allInstruments.Where(Function(c) c.HedgingGroupCode.Equals(CmbHedgingGroupCode.Text, StringComparison.InvariantCultureIgnoreCase))
+            Dim insts = m_allInstruments.Values.Where(Function(c) c.HedgingGroupCode.Equals(CmbHedgingGroupCode.Text, StringComparison.InvariantCultureIgnoreCase))
             Dim totalUkValue As Decimal
             For Each i In insts
-                totalUkValue += i.GetLocalCurrencyBalance(m_allInstruments, m_allCurrencies)
+                totalUkValue += i.GetLocalCurrencyBalance(m_allInstruments, m_allCurrenciesDict)
             Next
 
             TxtLocalValue.Text = totalUkValue.ToString("c2")

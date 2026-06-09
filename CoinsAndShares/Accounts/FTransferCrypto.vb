@@ -6,19 +6,18 @@ Namespace Accounts
 
         Private ReadOnly m_commonObjects As CCommonObjects
         Private ReadOnly m_allInstruments As IEnumerable(Of CInstrument)
-        Private ReadOnly m_allAccounts As IEnumerable(Of CAccount)
+        Private ReadOnly m_allAccountsDict As IDictionary(Of String, CAccount)
         Friend Sub New(commonObjects As CCommonObjects, sDefaultFromAccount As String)
 
             m_commonObjects = commonObjects
             m_allInstruments = m_commonObjects.Instruments.GetAll()
+            m_allAccountsDict = m_commonObjects.Accounts.GetAllDict()
 
             InitializeComponent()
 
             Icon = Icon.FromHandle(My.Resources.arrow_resize.GetHicon)
 
-            m_allAccounts = m_commonObjects.Accounts.GetAll()
-
-            Dim cryptoAccounts = m_allAccounts.Where(Function(c) c.AccountType = EAccountType.Crypto)
+            Dim cryptoAccounts = m_allAccountsDict.Values.Where(Function(c) c.AccountType = EAccountType.Crypto)
 
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountFrom, cryptoAccounts, commonObjects)
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountTo, cryptoAccounts, commonObjects)
@@ -206,13 +205,13 @@ Namespace Accounts
                 Throw New Exception(My.Resources.Error_NotAValidDate)
             End If
 
-            Dim fromAccount = m_allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(CmbAccountFrom.Text, StringComparison.CurrentCultureIgnoreCase))
-            If fromAccount Is Nothing AndAlso Not fSilent Then
+            Dim fromAccount As CAccount = Nothing
+            If Not m_allAccountsDict.TryGetValue(CmbAccountFrom.Text.ToUpper, fromAccount) AndAlso Not fSilent Then
                 Throw New Exception("Select account to send FROM")
             End If
 
-            Dim toAccount = m_allAccounts.FirstOrDefault(Function(c) c.AccountCode.Equals(CmbAccountTo.Text, StringComparison.CurrentCultureIgnoreCase))
-            If toAccount Is Nothing AndAlso Not fSilent Then
+            Dim toAccount As CAccount = Nothing
+            If Not m_allAccountsDict.TryGetValue(CmbAccountTo.Text.ToUpper, toAccount) AndAlso Not fSilent Then
                 Throw New Exception("Select account to send TO")
             End If
 
@@ -249,7 +248,10 @@ Namespace Accounts
         Private Sub LoadCryptos()
             Dim allCryptoInstruments = m_allInstruments.Where(Function(c) c.InstrumentType = EInstrumentType.Crypto)
 
-            Dim account = m_allAccounts.First(Function(c) c.AccountCode.Equals(CmbAccountFrom.Text, StringComparison.InvariantCultureIgnoreCase))
+            Dim account As CAccount = Nothing
+            If Not m_allAccountsDict.TryGetValue(CmbAccountFrom.Text.ToUpper, account) Then
+                Throw New Exception(My.Resources.Error_AccountCodeNotValid)
+            End If
             Dim allCurrencies = m_commonObjects.Currencies.GetAll
             Dim totalsByInstrument = From t In account.Transactions
                                      Group t By t.InstrumentCode Into Group
@@ -265,8 +267,8 @@ Namespace Accounts
         Private Sub BtnMax_Click(sender As Object, e As EventArgs) Handles BtnMax.Click
             Try
                 Cursor = Cursors.WaitCursor
-                Dim account = m_allAccounts.Where(Function(c) c.AccountCode.Equals(CmbAccountFrom.Text, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault
-                If account Is Nothing Then
+                Dim account As CAccount = Nothing
+                If Not m_allAccountsDict.TryGetValue(CmbAccountFrom.Text.ToUpper, account) Then
                     Throw New Exception(My.Resources.Error_AccountCodeNotValid)
                 End If
                 Dim trans = account.Transactions.Where(Function(c) c.InstrumentCode.Equals(CmbInstrumentToTransfer.Text, StringComparison.CurrentCultureIgnoreCase))

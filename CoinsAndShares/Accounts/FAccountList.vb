@@ -30,11 +30,11 @@ Namespace Accounts
             AddHandler ChkShowZero.CheckedChanged, AddressOf ChkShowZeroCheckedChanged
         End Sub
         Private Sub LoadData()
-            Dim allInstruments = m_commonObjects.Instruments.GetAllDict()
+            Dim allInstrumentsDict = m_commonObjects.Instruments.GetAllDict()
             Dim allAccounts = m_commonObjects.Accounts.GetAll().ToList
             Dim allCurrenciesDict = m_commonObjects.Currencies.GetAllDict()
-            GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstruments, allCurrenciesDict, ChkShowZero.Checked, m_commonObjects.Networks, Me)
-            LblGrandTotal.Text = FormatCurrency(allAccounts.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrenciesDict)))
+            GridHelper.LoadData(GrdAccounts, allAccounts, m_commonObjects, Me, allInstrumentsDict, allCurrenciesDict, ChkShowZero.Checked, m_commonObjects.Networks, Me)
+            LblGrandTotal.Text = FormatCurrency(allAccounts.Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict)))
             SelectChanged()
         End Sub
         Private Sub SelectChanged()
@@ -80,10 +80,10 @@ Namespace Accounts
 
                 Dim dtGroups As DataTable = GetGroupsTable(accounts)
 
-                accounts = accounts.OrderBy(Function(c) c.NetworkId).ThenBy(Function(c) c.AccountCode)
+                Dim orderedAccounts = accounts.OrderBy(Function(c) c.NetworkId).ThenBy(Function(c) c.AccountCode)
 
                 Dim dtAccounts As DataTable = GetBlankDt()
-                For Each account In accounts
+                For Each account In orderedAccounts
                     Dim cBalance = account.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict)
                     cBalance = Decimal.Round(cBalance, 2)
 
@@ -95,7 +95,7 @@ Namespace Accounts
 
                         dr(ColumnsAccount.CashSavingsRate.ToString) = account.CashSavingsRate
                         If account.CashSavingsRate > 0 Then
-                            dr(ColumnsAccount.CashSavingsRateDisplay.ToString) = account.CashSavingsRate.ToString("0.00") & "%"
+                            dr(ColumnsAccount.CashSavingsRateDisplay.ToString) = $"{account.CashSavingsRate:0.00}%"
                         End If
 
                         dr(ColumnsAccount.NetworkId.ToString) = account.NetworkId
@@ -153,11 +153,12 @@ Namespace Accounts
                 dt.Columns.Add(ColumnsGroup.IsGroupBand.ToString)
                 dt.Columns.Add(ColumnsGroup.AccountTypeCode.ToString)
                 dt.Columns.Add(ColumnsGroup.AccountTypeDesc.ToString)
+                Dim existingTypes = New HashSet(Of EAccountType)(accounts.Select(Function(c) c.AccountType))
                 For Each accountType As EAccountType In [Enum].GetValues(GetType(EAccountType))
-                    If accounts.Where(Function(c) c.AccountType = accountType).Any Then
+                    If existingTypes.Contains(accountType) Then
                         Dim dr = dt.NewRow()
                         dr(ColumnsGroup.AccountTypeCode.ToString) = accountType.Code
-                        dr(ColumnsGroup.AccountTypeDesc) = accountType.ToString.Replace("_", " ")
+                        dr(ColumnsGroup.AccountTypeDesc) = accountType.ToString().Replace("_", " ")
                         dt.Rows.Add(dr)
                     End If
                 Next
@@ -339,15 +340,12 @@ Namespace Accounts
                     tagBits.CommonObjects.Errors.Handle(ex)
                 End Try
             End Sub
-            Friend Shared Function GetSelectedRows(grid As UltraGrid) As IEnumerable(Of CAccount)
-                Dim col As New Collection(Of CAccount)
+            Friend Shared Iterator Function GetSelectedRows(grid As UltraGrid) As IEnumerable(Of CAccount)
                 For Each row In grid.Selected.Rows
                     If row.Cells.Exists(ColumnsAccount.IsAccountBand.ToString) Then
-                        Dim account = GetAccountFromRow(row)
-                        col.Add(account)
+                        Yield GetAccountFromRow(row)
                     End If
                 Next
-                Return col
             End Function
         End Class
 

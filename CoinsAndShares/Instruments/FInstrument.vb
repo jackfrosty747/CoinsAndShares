@@ -123,16 +123,16 @@ Namespace Instruments
                 transactions = transactions.Where(Function(c) c.InstrumentCode.Equals(sInstrumentCode, StringComparison.InvariantCultureIgnoreCase))
 
                 Dim instruments = New CInstruments(commonObjects)
-                Dim allInstruments = instruments.GetAll
+                Dim allInstrumentsDict = instruments.GetAllDict
                 Dim currencies = commonObjects.Currencies
-                Dim allCurrencies = currencies.GetAll
+                Dim allCurrenciesDict = currencies.GetAllDict
 
                 Dim totalsByAccount = From t In transactions
                                       Group t By t.AccountCode Into Group
                                       Select
                                              AccountCode,
                                              TotalQuantity = Group.Sum(Function(c) c.Amount),
-                                             LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstruments, allCurrencies))
+                                             LocalCurrencyValue = Group.Sum(Function(c) c.GetLocalCurrencyBalance(allInstrumentsDict, allCurrenciesDict))
 
                 Dim accounts = commonObjects.Accounts
                 Dim allAccounts = accounts.GetAll
@@ -272,13 +272,13 @@ Namespace Instruments
         End Class
 
         Private Sub BtnSave_Click(sender As Object, e As EventArgs) Handles BtnSave.Click
+            Cursor = Cursors.WaitCursor
             Try
-                If sender Is BtnSave Then
-                    SaveChanges()
-                End If
-
+                SaveChanges()
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
             End Try
         End Sub
         Private Sub SaveChanges()
@@ -287,7 +287,7 @@ Namespace Instruments
             If Not Decimal.TryParse(TxtRate.Text, rRate) Then
                 Throw New Exception("Rate is not a valid number")
             End If
-            If Not m_commonObjects.Currencies.GetAll.Where(Function(c) c.CurrencyCode.Equals(CmbCurrencyCode.Text, StringComparison.CurrentCultureIgnoreCase)).Any Then
+            If Not m_commonObjects.Currencies.GetAllDict().ContainsKey(CmbCurrencyCode.Text) Then
                 Throw New Exception(My.Resources.Error_CurrencyCodeNotValid)
             End If
             Dim rProviderMultiplier As Decimal

@@ -26,13 +26,13 @@ Namespace Accounts
             Me.CashSavingsRate = cashSavingsRate
             Transactions = New List(Of CTransaction)
         End Sub
-        Friend Function GetLocalCurrencyBalance(instruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail)) As Decimal
-            Return Transactions.Sum(Function(c) c.GetLocalCurrencyBalance(instruments, allCurrencies))
-        End Function
-        Friend Function GetLocalCashBalance(instruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail)) As Decimal
-            Dim cashTransactions = Transactions.Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode))
-            Return cashTransactions.Sum(Function(c) c.GetLocalCurrencyBalance(instruments, allCurrencies))
-        End Function
+        'Friend Function GetLocalCurrencyBalance(instruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail)) As Decimal
+        '    Return Transactions.Sum(Function(c) c.GetLocalCurrencyBalance(instruments, allCurrencies))
+        'End Function
+        'Friend Function GetLocalCashBalance(instruments As IEnumerable(Of CInstrument), allCurrencies As IEnumerable(Of CCurrencyDetail)) As Decimal
+        '    Dim cashTransactions = Transactions.Where(Function(c) String.IsNullOrEmpty(c.InstrumentCode))
+        '    Return cashTransactions.Sum(Function(c) c.GetLocalCurrencyBalance(instruments, allCurrencies))
+        'End Function
         Friend Function GetLocalCurrencyBalance(instrumentsDict As Dictionary(Of String, CInstrument), allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)) As Decimal
             Return Transactions.Sum(Function(c) c.GetLocalCurrencyBalance(instrumentsDict, allCurrenciesDict))
         End Function

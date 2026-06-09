@@ -40,7 +40,8 @@
                 Throw New Exception(My.Resources.Error_AccountCodeNotValid)
             End If
             Dim accountType As EAccountType = GetAccountTypeFromName(CmbAccountTypeName.Text, False)
-            If m_commonObjects.Accounts.GetAll.Where(Function(c) c.AccountCode.Equals(TxtAccountCode.Text, StringComparison.CurrentCultureIgnoreCase)).Any Then
+            Dim allAccountsDict = m_commonObjects.Accounts.GetAllDict()
+            If allAccountsDict.ContainsKey(TxtAccountCode.Text.ToUpper) Then
                 Throw New Exception(My.Resources.Error_ItemAlreadyExists)
             End If
             m_commonObjects.Accounts.CreateNew(TxtAccountCode.Text, TxtName.Text, accountType)
