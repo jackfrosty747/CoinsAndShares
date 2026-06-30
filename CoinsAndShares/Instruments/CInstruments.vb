@@ -180,7 +180,7 @@ Namespace Instruments
         'End Sub
         Private Function GetAllNow() As Dictionary(Of String, CInstrument)
 
-            Dim instruments As New Dictionary(Of String, CInstrument)(StringComparison.OrdinalIgnoreCase)
+            Dim instruments As New Dictionary(Of String, CInstrument)(StringComparer.OrdinalIgnoreCase)
 
             ' 1. Fetch Instruments cleanly without duplicate rows
             Dim sql As String = $"

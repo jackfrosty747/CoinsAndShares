@@ -58,7 +58,7 @@ Namespace Accounts
 
         Private Function GetAllNow() As Dictionary(Of String, CAccount)
 
-            Dim accounts As New Dictionary(Of String, CAccount)(StringComparison.OrdinalIgnoreCase)
+            Dim accounts As New Dictionary(Of String, CAccount)(StringComparer.OrdinalIgnoreCase)
 
             Dim sql As String = $"              
                 SELECT *

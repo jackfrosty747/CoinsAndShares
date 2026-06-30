@@ -42,6 +42,7 @@ Namespace Accounts
             LblSelected.Text = Format(selectedValue, "c2")
         End Sub
         Private NotInheritable Class GridHelper
+            Private Const APPEARANCE_ISA = "ISA"
             Private NotInheritable Class LocalTagBits : Inherits TagBits
                 Friend ReadOnly Property FrmAccountList As FAccountList
                 Friend ReadOnly Property Networks As CNetworks
@@ -201,6 +202,12 @@ Namespace Accounts
                         Dim backColour = tagBits.Networks.GetColour(account)
                         e.Row.CellAppearance.BackColor = backColour
 
+                        Dim name = e.Row.Cells(ColumnsAccount.AccountName).Text
+
+                        If name.ToUpper.Contains("ISA") Then
+                            e.Row.Cells(ColumnsAccount.AccountName).Appearance = grid.DisplayLayout.Appearances(APPEARANCE_ISA)
+                        End If
+
                     ElseIf e.Row.Cells.Exists(ColumnsGroup.IsGroupBand.ToString) Then
                         Dim sAccountType As String = e.Row.Cells(ColumnsGroup.AccountTypeCode).Text
                         accountType = GetAccountTypeFromCode(sAccountType, True)
@@ -335,6 +342,10 @@ Namespace Accounts
                                 col.Hidden = True
                         End Select
                     Next
+
+                    If Not grid.DisplayLayout.Appearances.Exists(APPEARANCE_ISA) Then
+                        grid.DisplayLayout.Appearances.Add(New Appearance With {.Key = APPEARANCE_ISA, .Image = My.Resources.bank, .ImageHAlign = HAlign.Right})
+                    End If
 
                 Catch ex As Exception
                     tagBits.CommonObjects.Errors.Handle(ex)
@@ -490,5 +501,8 @@ Namespace Accounts
             End Try
         End Sub
 
+        Private Sub GrdAccounts_InitializeLayout(sender As Object, e As InitializeLayoutEventArgs) Handles GrdAccounts.InitializeLayout
+
+        End Sub
     End Class
 End Namespace
