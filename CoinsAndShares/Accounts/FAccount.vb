@@ -423,7 +423,8 @@ Namespace Accounts
 
             ' Import Interest, Dividend and Cashback and transfers from Trading 212 CSV import
             Const COL_ACTION = "Action"
-            Const COL_TIME = "Time"
+            'Const COL_TIME = "Time"
+            Const COL_TIME = "Time (UTC)"
             Const COL_TICKER = "Ticker"
             Const COL_TOTAL = "Total"
             Const COL_MERCHANTNAME = "Merchant name"

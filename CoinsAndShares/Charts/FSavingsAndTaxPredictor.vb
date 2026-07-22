@@ -133,6 +133,12 @@ Namespace Charts
             Public ReadOnly Property AccountCode As String
             Public ReadOnly Property Name As String
             Public Property SavingsEarnedSoFar As Decimal
+            Public ReadOnly Property TaxableEarnedSoFar As Decimal
+                Get
+                    If NonTaxable Then Return 0
+                    Return SavingsEarnedSoFar
+                End Get
+            End Property
             Public Property CashBalance As Decimal
             Public ReadOnly Property InterestRate As Decimal
             Public Property PredictedInterest As Decimal
@@ -197,6 +203,10 @@ Namespace Charts
                             col.Header.Caption = "So Far"
                             col.Format = "c2"
                             col.CellAppearance.TextHAlign = HAlign.Right
+                        Case NameOf(Output.TaxableEarnedSoFar)
+                            col.Header.Caption = "Taxable So Far"
+                            col.Format = "c2"
+                            col.CellAppearance.TextHAlign = HAlign.Right
                         Case NameOf(Output.PredictedInterest)
                             col.Header.Caption = "Predicted"
                             col.Format = "c2"
@@ -215,6 +225,7 @@ Namespace Charts
                 With e.Layout.Bands(0)
                     .Columns(NameOf(Output.TaxableValue)).Header.VisiblePosition = 0
                     .Columns(NameOf(Output.PredictedInterest)).Header.VisiblePosition = 0
+                    .Columns(NameOf(Output.TaxableEarnedSoFar)).Header.VisiblePosition = 0
                     .Columns(NameOf(Output.SavingsEarnedSoFar)).Header.VisiblePosition = 0
                     .Columns(NameOf(Output.CashBalance)).Header.VisiblePosition = 0
                     .Columns(NameOf(Output.InterestRate)).Header.VisiblePosition = 0
