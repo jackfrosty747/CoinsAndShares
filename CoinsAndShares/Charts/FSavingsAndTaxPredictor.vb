@@ -35,6 +35,8 @@ Namespace Charts
 
             LoadData()
 
+            ShowSelected()
+
         End Sub
 
         Private Sub LoadData()
@@ -236,6 +238,29 @@ Namespace Charts
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             End Try
+        End Sub
+
+        Private Sub GrdHoldings_AfterSelectChange(sender As Object, e As AfterSelectChangeEventArgs) Handles GrdHoldings.AfterSelectChange
+            ShowSelected()
+        End Sub
+
+        Private Sub ShowSelected()
+            Dim taxableInterest As Decimal = 0D
+            PnlSelected.Visible = GrdHoldings.Selected.Rows.Count > 0
+            For Each row As UltraGridRow In GrdHoldings.Selected.Rows
+                Dim output = TryCast(row.ListObject, Output)
+                If output IsNot Nothing Then
+                    taxableInterest += output.TaxableEarnedSoFar
+                End If
+            Next
+            LblSelectedTaxableInterestSoFar.Text = taxableInterest.ToString("c2")
+        End Sub
+
+        Private Sub DtpTaxYearStart_ValueChanged(sender As Object, e As EventArgs) Handles DtpTaxYearStart.ValueChanged
+            Dim out As String
+            Dim days = DateDiff(DateInterval.Day, DtpTaxYearStart.Value.Date, Today.Date)
+            out = $"Days in tax year so far: {days} ({days / 365D:P2})"
+            LblDaysSummary.Text = out
         End Sub
     End Class
 

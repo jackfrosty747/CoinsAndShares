@@ -37,9 +37,15 @@
             Me.Label3 = New System.Windows.Forms.Label()
             Me.LblTaxable = New System.Windows.Forms.Label()
             Me.Label2 = New System.Windows.Forms.Label()
+            Me.PnlSelected = New System.Windows.Forms.Panel()
+            Me.LblSelectedTaxableInterestSoFar = New System.Windows.Forms.Label()
+            Me.Label7 = New System.Windows.Forms.Label()
+            Me.Label6 = New System.Windows.Forms.Label()
+            Me.LblDaysSummary = New System.Windows.Forms.Label()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.Panel2.SuspendLayout()
+            Me.PnlSelected.SuspendLayout()
             Me.SuspendLayout()
             '
             'Label1
@@ -81,13 +87,14 @@
             Me.GrdHoldings.Dock = System.Windows.Forms.DockStyle.Fill
             Me.GrdHoldings.Location = New System.Drawing.Point(0, 38)
             Me.GrdHoldings.Name = "GrdHoldings"
-            Me.GrdHoldings.Size = New System.Drawing.Size(624, 365)
+            Me.GrdHoldings.Size = New System.Drawing.Size(624, 327)
             Me.GrdHoldings.TabIndex = 13
             Me.GrdHoldings.Text = "Cash Savings"
             '
             'Panel1
             '
             Me.Panel1.BackColor = System.Drawing.Color.White
+            Me.Panel1.Controls.Add(Me.LblDaysSummary)
             Me.Panel1.Controls.Add(Me.DtpTaxYearStart)
             Me.Panel1.Controls.Add(Me.Label1)
             Me.Panel1.Controls.Add(Me.BtnRefresh)
@@ -204,12 +211,71 @@
             Me.Label2.TabIndex = 0
             Me.Label2.Text = "TAXABLE:"
             '
+            'PnlSelected
+            '
+            Me.PnlSelected.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+            Me.PnlSelected.Controls.Add(Me.LblSelectedTaxableInterestSoFar)
+            Me.PnlSelected.Controls.Add(Me.Label7)
+            Me.PnlSelected.Controls.Add(Me.Label6)
+            Me.PnlSelected.Dock = System.Windows.Forms.DockStyle.Bottom
+            Me.PnlSelected.Location = New System.Drawing.Point(0, 365)
+            Me.PnlSelected.Name = "PnlSelected"
+            Me.PnlSelected.Padding = New System.Windows.Forms.Padding(5)
+            Me.PnlSelected.Size = New System.Drawing.Size(624, 38)
+            Me.PnlSelected.TabIndex = 16
+            '
+            'LblSelectedTaxableInterestSoFar
+            '
+            Me.LblSelectedTaxableInterestSoFar.AutoSize = True
+            Me.LblSelectedTaxableInterestSoFar.Dock = System.Windows.Forms.DockStyle.Left
+            Me.LblSelectedTaxableInterestSoFar.Location = New System.Drawing.Point(200, 5)
+            Me.LblSelectedTaxableInterestSoFar.Name = "LblSelectedTaxableInterestSoFar"
+            Me.LblSelectedTaxableInterestSoFar.Padding = New System.Windows.Forms.Padding(0, 5, 0, 0)
+            Me.LblSelectedTaxableInterestSoFar.Size = New System.Drawing.Size(170, 18)
+            Me.LblSelectedTaxableInterestSoFar.TabIndex = 2
+            Me.LblSelectedTaxableInterestSoFar.Text = "LblSelectedTaxableInterestSoFar"
+            '
+            'Label7
+            '
+            Me.Label7.AutoSize = True
+            Me.Label7.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label7.Location = New System.Drawing.Point(71, 5)
+            Me.Label7.Name = "Label7"
+            Me.Label7.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
+            Me.Label7.Size = New System.Drawing.Size(129, 18)
+            Me.Label7.TabIndex = 1
+            Me.Label7.Text = "Taxable Interest So Far:"
+            '
+            'Label6
+            '
+            Me.Label6.AutoSize = True
+            Me.Label6.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label6.Location = New System.Drawing.Point(5, 5)
+            Me.Label6.Name = "Label6"
+            Me.Label6.Padding = New System.Windows.Forms.Padding(5, 5, 0, 0)
+            Me.Label6.Size = New System.Drawing.Size(66, 18)
+            Me.Label6.TabIndex = 0
+            Me.Label6.Text = "SELECTED:"
+            '
+            'LblDaysSummary
+            '
+            Me.LblDaysSummary.AutoSize = True
+            Me.LblDaysSummary.Dock = System.Windows.Forms.DockStyle.Left
+            Me.LblDaysSummary.Location = New System.Drawing.Point(277, 5)
+            Me.LblDaysSummary.Name = "LblDaysSummary"
+            Me.LblDaysSummary.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
+            Me.LblDaysSummary.Size = New System.Drawing.Size(92, 16)
+            Me.LblDaysSummary.TabIndex = 3
+            Me.LblDaysSummary.Text = "LblDaysSummary"
+            '
             'FSavingsAndTaxPredictor
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
             Me.ClientSize = New System.Drawing.Size(624, 441)
             Me.Controls.Add(Me.GrdHoldings)
+            Me.Controls.Add(Me.PnlSelected)
             Me.Controls.Add(Me.Panel2)
             Me.Controls.Add(Me.Panel1)
             Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -220,6 +286,8 @@
             Me.Panel1.PerformLayout()
             Me.Panel2.ResumeLayout(False)
             Me.Panel2.PerformLayout()
+            Me.PnlSelected.ResumeLayout(False)
+            Me.PnlSelected.PerformLayout()
             Me.ResumeLayout(False)
 
         End Sub
@@ -238,6 +306,11 @@
         Friend WithEvents Label4 As Label
         Friend WithEvents LblToPay As Label
         Friend WithEvents Label5 As Label
+        Friend WithEvents PnlSelected As Panel
+        Friend WithEvents Label6 As Label
+        Friend WithEvents Label7 As Label
+        Friend WithEvents LblSelectedTaxableInterestSoFar As Label
+        Friend WithEvents LblDaysSummary As Label
     End Class
 
 End Namespace
