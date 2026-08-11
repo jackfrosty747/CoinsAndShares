@@ -429,6 +429,12 @@ Namespace Accounts
             Const COL_TOTAL = "Total"
             Const COL_MERCHANTNAME = "Merchant name"
             Const CASH_ACCOUNT = "Cash"
+            Const COL_NOOFSHARES = "No. of shares"
+            Const COL_PRICEPERSHARE = "Price / share"
+
+            Const ACTION_MARKET_BUY = "Market buy"
+            Const TICKER_CASHBACK_INVEST = "VWRP"
+            Const INSTRUMENT_PIE_CODE = "212VWRPPIE"
 
             Try
                 Using ofd = New OpenFileDialog()
@@ -467,6 +473,7 @@ Namespace Accounts
 
                         Dim adjustments As New List(Of CAdjustment)
                         Dim transfers As New List(Of Tuple(Of Date, Decimal, String))
+                        Dim buySells As New List(Of CBuySell)
 
                         Dim warnings = New List(Of String)
 
@@ -489,6 +496,20 @@ Namespace Accounts
                             End If
 
                             transDate = transDate.Date
+
+                            Dim noOfShares As Decimal = 0
+                            If dt.Columns.Contains(COL_NOOFSHARES) Then
+                                If CStr(dr(COL_NOOFSHARES)).Length > 0 Then
+                                    noOfShares = CDatabase.DbToDecimal(dr(COL_NOOFSHARES))
+                                End If
+                            End If
+
+                            Dim pricePerShare As Decimal = 0
+                            If dt.Columns.Contains(COL_PRICEPERSHARE) Then
+                                If CStr(dr(COL_PRICEPERSHARE)).Length > 0 Then
+                                    pricePerShare = CDatabase.DbToDecimal(dr(COL_PRICEPERSHARE))
+                                End If
+                            End If
 
                             If transDate.Date > importAfterDate.Date Then
 
@@ -515,6 +536,8 @@ Namespace Accounts
                                         End If
                                     End If
                                     transfers.Add(New Tuple(Of Date, Decimal, String)(transDate.Date, cTotal, sDescriptionSuffix))
+                                ElseIf sAction.Equals(ACTION_MARKET_BUY, StringComparison.InvariantCultureIgnoreCase) AndAlso sTicker.Equals(TICKER_CASHBACK_INVEST, StringComparison.InvariantCultureIgnoreCase) Then
+                                    buySells.Add(New CBuySell(EBuySell.Buy, INSTRUMENT_PIE_CODE, transDate, noOfShares, pricePerShare, cTotal, AccountCode))
                                 Else
                                     warnings.Add($"{sAction} found in file; this must be added manually")
                                 End If
@@ -547,6 +570,10 @@ Namespace Accounts
                             Next
                             sMsg &= $" {transfers.Count} transfers"
                         End If
+
+                        For Each buySell In buySells
+                            m_commonObjects.Accounts.ProcessBuySell(buySell)
+                        Next
 
                         If warnings.Count > 0 Then
                             sMsg &= vbNewLine & vbNewLine
