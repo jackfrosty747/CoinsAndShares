@@ -1,4 +1,5 @@
 ﻿Imports HtmlAgilityPack
+Imports YahooFinanceApi
 
 Namespace Rates.YahooFinance
     Friend Class CYahooFinance : Implements IRateProvider
@@ -11,53 +12,33 @@ Namespace Rates.YahooFinance
             Throw New NotImplementedException($"Not available from {GetName()}")
         End Function
 
-        Friend Function GetNewRates(providerIds As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
+        Friend Function GetNewRates(tickers As IEnumerable(Of String)) As IEnumerable(Of CRate) Implements IRateProvider.GetNewRates
 
-            If providerIds.Count <> 1 Then
-                Throw New NotImplementedException($"Can only get one price with {GetName()} scraper")
+            If tickers Is Nothing OrElse Not tickers.Any Then
+                Throw New ArgumentNullException(NameOf(tickers), "Tickers cannot be null or empty")
             End If
 
-            Dim symbol = providerIds.First
+            ' Convert tickers to an array for easier processing
+            Dim symbols As String() = tickers.ToArray()
 
-            Dim url = "https://finance.yahoo.com/quote/" & symbol
-
-            ' Dim a = New YahooFinanceClient()
-
-
-            'Dim result = Task.Run(Function() Yahoo.Finance.QuoteSummaryStore.DownloadAsync(symbol)).GetAwaiter().GetResult()
-
-            'Dim price = result.AskPrice
-
-
-
-            Return Nothing
-
-
-            Dim sPrice = ""
+            Dim results = Task.Run(Function()
+                                       Return Yahoo.Symbols(symbols) _
+                                              .Fields(Field.Symbol, Field.RegularMarketPrice) _
+                                              .QueryAsync()
+                                   End Function).Result
 
             Dim rates As New List(Of CRate)
-            Dim rate = New CRate(symbol, CDec(sPrice))
-            rates.Add(rate)
+
+            For Each ticker In tickers
+                Dim result As Security = Nothing
+                If results.TryGetValue(ticker, result) Then
+                    rates.Add(New CRate(ticker, CDec(result.RegularMarketPrice)))
+                End If
+            Next
+
             Return rates
 
         End Function
-
-        Private Shared Sub FindXPath(doc As HtmlDocument, sKnownPrice As String)
-            FindXPathA(doc.DocumentNode, sKnownPrice)
-        End Sub
-
-        Private Shared Sub FindXPathA(hn As HtmlNode, sKnownPrice As String)
-            Static found As Boolean
-            For Each n In hn.ChildNodes
-                FindXPathA(n, sKnownPrice)
-                If found Then Return
-                If n.InnerText.Contains(sKnownPrice) Then
-                    Debug.WriteLine(n.ParentNode.XPath)
-                    MsgBox("Path should be: " & n.ParentNode.XPath)
-                    found = True
-                End If
-            Next
-        End Sub
 
         Friend Function GetName() As String Implements IRateProvider.GetName
             Return "Yahoo Finance"

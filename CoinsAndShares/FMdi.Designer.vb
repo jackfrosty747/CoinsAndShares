@@ -329,13 +329,13 @@ Partial Class FMdi
         'MnuHelpAbout
         '
         Me.MnuHelpAbout.Name = "MnuHelpAbout"
-        Me.MnuHelpAbout.Size = New System.Drawing.Size(180, 22)
+        Me.MnuHelpAbout.Size = New System.Drawing.Size(171, 22)
         Me.MnuHelpAbout.Text = "About"
         '
         'TsmiHelpIpAddress
         '
         Me.TsmiHelpIpAddress.Name = "TsmiHelpIpAddress"
-        Me.TsmiHelpIpAddress.Size = New System.Drawing.Size(180, 22)
+        Me.TsmiHelpIpAddress.Size = New System.Drawing.Size(171, 22)
         Me.TsmiHelpIpAddress.Text = "Get MY IP Address"
         '
         'ContextMenuStrip1

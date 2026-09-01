@@ -15,6 +15,7 @@ Imports CoinsAndShares.Settings
 Imports CoinsAndShares.Snapshots
 Imports CoinsAndShares.SQLInterface
 Imports CoinsAndShares.Transactions
+Imports YahooFinanceApi
 
 Friend Class FMdi
 
@@ -833,4 +834,5 @@ Projected Tax: {projectedTax:c2}"
             'e.Cancel = True
         End Try
     End Sub
+
 End Class
