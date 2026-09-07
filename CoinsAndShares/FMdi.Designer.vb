@@ -70,7 +70,6 @@ Partial Class FMdi
         Me.MnuAssets = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuInterest = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuReportsSavingsTax = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MnuReportsIsaTransfersNew = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuReportsSavingsAndTaxPredictor = New System.Windows.Forms.ToolStripMenuItem()
         Me.NoptesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MnuNotes = New System.Windows.Forms.ToolStripMenuItem()
@@ -265,7 +264,7 @@ Partial Class FMdi
         '
         'ChartsToolStripMenuItem
         '
-        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsIsaTransfersNew, Me.MnuReportsSavingsAndTaxPredictor})
+        Me.ChartsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MnuReports, Me.MnuAssets, Me.MnuInterest, Me.MnuReportsSavingsTax, Me.MnuReportsSavingsAndTaxPredictor})
         Me.ChartsToolStripMenuItem.Name = "ChartsToolStripMenuItem"
         Me.ChartsToolStripMenuItem.Size = New System.Drawing.Size(59, 20)
         Me.ChartsToolStripMenuItem.Text = "Reports"
@@ -293,12 +292,6 @@ Partial Class FMdi
         Me.MnuReportsSavingsTax.Name = "MnuReportsSavingsTax"
         Me.MnuReportsSavingsTax.Size = New System.Drawing.Size(210, 22)
         Me.MnuReportsSavingsTax.Text = "Savings Tax Summary"
-        '
-        'MnuReportsIsaTransfersNew
-        '
-        Me.MnuReportsIsaTransfersNew.Name = "MnuReportsIsaTransfersNew"
-        Me.MnuReportsIsaTransfersNew.Size = New System.Drawing.Size(210, 22)
-        Me.MnuReportsIsaTransfersNew.Text = "ISA Transfers New"
         '
         'MnuReportsSavingsAndTaxPredictor
         '
@@ -428,7 +421,6 @@ Partial Class FMdi
     Friend WithEvents MnuFileDatabaseMaintenance As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsTax As ToolStripMenuItem
     Friend WithEvents TsslPortfolioValue As ToolStripStatusLabel
-    Friend WithEvents MnuReportsIsaTransfersNew As ToolStripMenuItem
     Friend WithEvents MnuReportsSavingsAndTaxPredictor As ToolStripMenuItem
     Friend WithEvents TsmiHelpIpAddress As ToolStripMenuItem
     Friend WithEvents TsslIpAddress As ToolStripStatusLabel

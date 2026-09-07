@@ -1,5 +1,6 @@
 ﻿Namespace Accounts
     Friend Class FTransferFiat
+        Const CASH_ACCOUNT = "Cash"
         Private ReadOnly m_commonObjects As CCommonObjects
         Private ReadOnly m_allAccounts As IEnumerable(Of CAccount)
         Private m_fOkPressed As Boolean
@@ -20,7 +21,8 @@
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountFrom, m_allAccounts, commonObjects)
             CDropdowns.CAccountsDropdown.SetupAccountsDropdown(CmbAccountTo, m_allAccounts, commonObjects)
 
-            CmbAccountFrom.Text = sDefaultFromAccount
+            CmbAccountFrom.Text = If(m_allAccounts.Any(Function(c) c.AccountCode.Equals(sDefaultFromAccount, StringComparison.CurrentCultureIgnoreCase)), sDefaultFromAccount, String.Empty)
+            CmbAccountTo.Text = If(m_allAccounts.Any(Function(c) c.AccountCode.Equals(CASH_ACCOUNT, StringComparison.CurrentCultureIgnoreCase)) AndAlso Not sDefaultFromAccount.Equals(CASH_ACCOUNT, StringComparison.CurrentCultureIgnoreCase), CASH_ACCOUNT, String.Empty)
 
             AmountTextChanged(Nothing, Nothing)
             SameDateChecked()
@@ -110,7 +112,7 @@
 
         Private Sub ChkSameAsSendingDate_CheckedChanged(sender As Object, e As EventArgs) Handles ChkSameAsSendingDate.CheckedChanged
             Try
-                SameDateChecked
+                SameDateChecked()
             Catch ex As Exception
                 m_commonObjects.Errors.Handle(ex)
             End Try

@@ -135,7 +135,9 @@ Namespace Accounts
             Friend Shared Function GetSelectedValue(grid As UltraGrid) As Decimal
                 Dim cOut As Decimal
                 For Each row As UltraGridRow In grid.Selected.Rows
-                    cOut += CDec(row.Cells(ColumnsAccount.LocalCurrencyBalance.ToString).Value)
+                    If row.Band Is grid.DisplayLayout.Bands(1) Then
+                        cOut += CDec(row.Cells(ColumnsAccount.LocalCurrencyBalance.ToString).Value)
+                    End If
                 Next
                 Return cOut
             End Function
@@ -291,6 +293,7 @@ Namespace Accounts
                         .ColHeadersVisible = False
                         .Override.RowSpacingBefore = 5
                         .Override.CellAppearance.FontData.Bold = DefaultableBoolean.True
+                        .Override.SelectTypeRow = SelectType.None
                     End With
                     For Each col As UltraGridColumn In e.Layout.Bands(0).Columns
                         Select Case col.Key
@@ -501,8 +504,5 @@ Namespace Accounts
             End Try
         End Sub
 
-        Private Sub GrdAccounts_InitializeLayout(sender As Object, e As InitializeLayoutEventArgs) Handles GrdAccounts.InitializeLayout
-
-        End Sub
     End Class
 End Namespace
