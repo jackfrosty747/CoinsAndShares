@@ -224,4 +224,17 @@ Module PublicFunctions
         Return New CAccount(accountCode, accountName, accountType, notes, networkId, includeOnShortcuts, nonTaxable, cashSavingsRate)
     End Function
 
+    Friend Function GetTaxYearStartDate(d As Date) As Date
+
+        ' Return the start date of the tax year for the given date.  Tax year is assumed to run from 6th April to 5th April
+        Dim taxYearStart As Date
+        If d.Month < 4 OrElse (d.Month = 4 AndAlso d.Day < 6) Then
+            taxYearStart = New Date(d.Year - 1, 4, 6)
+        Else
+            taxYearStart = New Date(d.Year, 4, 6)
+        End If
+        Return taxYearStart
+
+    End Function
+
 End Module

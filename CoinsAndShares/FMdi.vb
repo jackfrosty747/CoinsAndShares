@@ -75,6 +75,8 @@ Friend Class FMdi
             TsslIpAddress.Text = "IP Address: Error"
         End Try
 
+        LoadAccountList()
+
     End Sub
 
     Private Sub ShowPortfolioValue()
@@ -221,21 +223,25 @@ Friend Class FMdi
     End Sub
 
     Private Sub MnuAccountList_Click(sender As Object, e As EventArgs) Handles MnuAccountList.Click
+        Cursor = Cursors.WaitCursor
         Try
-            Dim frmAccountList = MdiChildren.Where(Function(c) TypeOf c Is FAccountList).FirstOrDefault
-            If frmAccountList Is Nothing Then
-                Cursor = Cursors.WaitCursor
-                frmAccountList = New FAccountList(m_commonObjects) With {
-                    .MdiParent = Me
-                }
-                frmAccountList.Show()
-            End If
-            frmAccountList.Activate()
+            LoadAccountList()
         Catch ex As Exception
             m_commonObjects.Errors.Handle(ex)
         Finally
             Cursor = Cursors.Default
         End Try
+    End Sub
+
+    Private Sub LoadAccountList()
+        Dim frmAccountList = MdiChildren.Where(Function(c) TypeOf c Is FAccountList).FirstOrDefault
+        If frmAccountList Is Nothing Then
+            frmAccountList = New FAccountList(m_commonObjects) With {
+                .MdiParent = Me
+            }
+            frmAccountList.Show()
+        End If
+        frmAccountList.Activate()
     End Sub
 
     Private Sub MnuTransactionHistory_Click(sender As Object, e As EventArgs) Handles MnuTransactionHistory.Click

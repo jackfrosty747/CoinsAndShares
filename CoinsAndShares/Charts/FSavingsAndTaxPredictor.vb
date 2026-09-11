@@ -19,19 +19,19 @@ Namespace Charts
 
             Icon = Icon.FromHandle(My.Resources.bank.GetHicon)
 
-            ' Get the current date
-            Dim currentDate As Date = Date.Today
-            ' Calculate the tax year start date based on the current date
-            Dim taxYearStart As Date
-            If currentDate.Month > 4 Or (currentDate.Month = 4 And currentDate.Day >= 6) Then
-                ' If the current date is on or after April 6th, use the current year's April 6th
-                taxYearStart = New Date(currentDate.Year, 4, 6)
-            Else
-                ' If the current date is before April 6th, use the previous year's April 6th
-                taxYearStart = New Date(currentDate.Year - 1, 4, 6)
-            End If
+            '' Get the current date
+            'Dim currentDate As Date = Date.Today
+            '' Calculate the tax year start date based on the current date
+            'Dim taxYearStart As Date
+            'If currentDate.Month > 4 Or (currentDate.Month = 4 And currentDate.Day >= 6) Then
+            '    ' If the current date is on or after April 6th, use the current year's April 6th
+            '    taxYearStart = New Date(currentDate.Year, 4, 6)
+            'Else
+            '    ' If the current date is before April 6th, use the previous year's April 6th
+            '    taxYearStart = New Date(currentDate.Year - 1, 4, 6)
+            'End If
 
-            DtpTaxYearStart.Value = taxYearStart
+            DtpTaxYearStart.Value = GetTaxYearStartDate(Today.Date)
 
             LoadData()
 

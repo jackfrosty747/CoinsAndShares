@@ -14,6 +14,12 @@ Namespace Charts
 
         Private ReadOnly m_commonObjects As CCommonObjects
         Private ReadOnly m_fFormLoaded As Boolean
+
+        Private m_allTransactions As IEnumerable(Of CTransaction)
+        Private m_allInstrumentsDict As Dictionary(Of String, CInstrument)
+        Private m_allCurrenciesDict As Dictionary(Of String, CCurrencyDetail)
+        Private m_allAccounts As IEnumerable(Of CAccount)
+
         Friend Sub New(commonObjects As CCommonObjects)
             ' This call is required by the designer.
             InitializeComponent()
@@ -31,6 +37,14 @@ Namespace Charts
             DtpMiningDateFrom.Value = Now.AddMonths(-1).Date
             DtpMiningDateTo.Value = Now.Date
             ChkReduceByElectricityCost.Checked = True
+
+            ' Dividend date
+            DtpDividendFrom.Value = GetTaxYearStartDate(Today.Date).Date
+            DtpDividendTo.Value = DtpDividendFrom.Value.AddYears(1).AddDays(-1).Date
+
+            AddHandler DtpDividendFrom.ValueChanged, AddressOf DtpDividend_ValueChanged
+            AddHandler DtpDividendTo.ValueChanged, AddressOf DtpDividend_ValueChanged
+
             EnableDisablePlDateRange()
             EnableDisableMiningDateRange()
             LoadBonusDescriptionButtons()
@@ -64,25 +78,154 @@ Namespace Charts
                                       End Sub
             Next
         End Sub
-        Private Sub LoadData()
-            Dim transactions = m_commonObjects.Transactions
-            Dim instruments = m_commonObjects.Instruments
-            Dim currencies = m_commonObjects.Currencies
-            Dim accounts = m_commonObjects.Accounts
-            Dim allTransactions = transactions.GetAll()
-            Dim allInstrumentsDict = instruments.GetAllDict()
-            Dim allCurrenciesDict = currencies.GetAllDict()
-            Dim allAccounts = accounts.GetAll()
 
-            Dim analysis = CTransactions.Analyse(allTransactions, allInstrumentsDict, allCurrenciesDict)
+        Private Sub LoadData()
+
+            If m_allTransactions Is Nothing Then
+                m_allTransactions = m_commonObjects.Transactions.GetAll()
+            End If
+            If m_allInstrumentsDict Is Nothing Then
+                m_allInstrumentsDict = m_commonObjects.Instruments.GetAllDict()
+            End If
+            If m_allCurrenciesDict Is Nothing Then
+                m_allCurrenciesDict = m_commonObjects.Currencies.GetAllDict()
+            End If
+            If m_allAccounts Is Nothing Then
+                m_allAccounts = m_commonObjects.Accounts.GetAll()
+            End If
+
+            Dim analysis = CTransactions.Analyse(m_allTransactions, m_allInstrumentsDict, m_allCurrenciesDict)
 
             LoadDataPl()
-            LoadDataHoldings(allTransactions, allInstrumentsDict, analysis)
-            LoadDataPlPerInstrument(allTransactions, allInstrumentsDict, analysis)
-            LoadMining(allTransactions, allInstrumentsDict)
-            LoadNetworks(allTransactions, allAccounts, analysis, allInstrumentsDict, allCurrenciesDict)
-            LoadSavings(allAccounts, allInstrumentsDict, allCurrenciesDict)
-            LoadBonuses(allTransactions, Nothing)
+            LoadDataHoldings(m_allTransactions, m_allInstrumentsDict, analysis)
+            LoadDataPlPerInstrument(m_allTransactions, m_allInstrumentsDict, analysis)
+            LoadMining(m_allTransactions, m_allInstrumentsDict)
+            LoadNetworks(m_allTransactions, m_allAccounts, analysis, m_allInstrumentsDict, m_allCurrenciesDict)
+            LoadSavings(m_allAccounts, m_allInstrumentsDict, m_allCurrenciesDict)
+            LoadBonuses(m_allTransactions, Nothing)
+            LoadDividends()
+
+        End Sub
+
+        Private Sub LoadDividends()
+
+            Dim dividendTransactions = m_allTransactions.
+                Where(Function(c) c.Description.IndexOf("dividend", StringComparison.OrdinalIgnoreCase) >= 0 AndAlso
+                                  c.TransDate.Date >= DtpDividendFrom.Value.Date AndAlso
+                                  c.TransDate.Date <= DtpDividendTo.Value.Date).
+                OrderBy(Function(c) c.TransDate).
+                ToList()
+
+            Dim out = New StringBuilder()
+
+            If dividendTransactions.Count = 0 Then
+                TxtDividend.Text = "No dividends found."
+                Return
+            End If
+
+            '---------------------------------------------------------
+            ' Summary
+            '---------------------------------------------------------
+
+            Dim total = dividendTransactions.Sum(Function(c) c.Amount)
+            Dim average = total / dividendTransactions.Count
+            Dim largest = dividendTransactions.OrderByDescending(Function(c) c.Amount).First()
+
+            out.AppendLine("DIVIDEND SUMMARY")
+            out.AppendLine(New String("="c, 50))
+            out.AppendLine("Total dividends:    " & total.ToString("C2"))
+            out.AppendLine("Number of payments: " & dividendTransactions.Count.ToString())
+            out.AppendLine("Average payment:    " & average.ToString("C2"))
+            out.AppendLine("Largest payment:    " & largest.Amount.ToString("C2") &
+                            " (" & largest.Description & ")")
+            out.AppendLine()
+
+            '---------------------------------------------------------
+            ' By investment
+            '---------------------------------------------------------
+
+            out.AppendLine("BY INVESTMENT")
+            out.AppendLine(New String("-"c, 50))
+
+            ' Remove "Dividend" from description to get investment name
+            Dim byInvestment = dividendTransactions.
+                GroupBy(Function(c) c.Description.ToUpper().Replace(" DIVIDEND", "").Trim()).
+                Select(Function(g) New With {
+                    .Name = g.Key,
+                    .Count = g.Count(),
+                    .Total = g.Sum(Function(c) c.Amount)
+                }).
+                OrderByDescending(Function(x) x.Total)
+
+            For Each x In byInvestment
+                out.AppendLine(String.Format("{0,-20} {1,3} payments   {2,12:C2}",
+                                             x.Name,
+                                             x.Count,
+                                             x.Total))
+            Next
+
+            out.AppendLine()
+
+            out.AppendLine("BY ACCOUNT")
+            out.AppendLine(New String("-"c, 50))
+
+            '---------------------------------------------------------
+            ' By account
+            '---------------------------------------------------------
+            Dim byAccount = dividendTransactions.
+                GroupBy(Function(c) c.AccountCode).
+                Select(Function(g) New With {
+                    .Account = g.Key,
+                    .Total = g.Sum(Function(c) c.Amount)
+                }).
+                OrderByDescending(Function(x) x.Total)
+
+            For Each x In byAccount
+                out.AppendLine(String.Format("{0,-30} {1,15:C2}",
+                                             x.Account,
+                                             x.Total))
+            Next
+
+            out.AppendLine()
+
+            '---------------------------------------------------------
+            ' By month
+            '---------------------------------------------------------
+
+            out.AppendLine("BY MONTH")
+            out.AppendLine(New String("-"c, 50))
+
+            Dim byMonth = dividendTransactions.
+                GroupBy(Function(c) New DateTime(c.TransDate.Year, c.TransDate.Month, 1)).
+                Select(Function(g) New With {
+                    .Month = g.Key,
+                    .Total = g.Sum(Function(c) c.Amount)
+                }).
+                OrderBy(Function(x) x.Month)
+
+            For Each x In byMonth
+                out.AppendLine(String.Format("{0:MMM yyyy} {1,15:C2}",
+                                             x.Month,
+                                             x.Total))
+            Next
+
+            out.AppendLine()
+
+            '---------------------------------------------------------
+            ' Individual payments
+            '---------------------------------------------------------
+
+            out.AppendLine("PAYMENTS")
+            out.AppendLine(New String("-"c, 70))
+
+            For Each t In dividendTransactions
+                out.AppendLine(String.Format("{0:yyyy-MM-dd}  {1,-35} {2,12:C2}",
+                                             t.TransDate,
+                                             t.Description,
+                                             t.Amount))
+            Next
+
+            TxtDividend.Text = out.ToString()
 
         End Sub
 
@@ -1216,6 +1359,19 @@ Namespace Charts
             Finally
                 Cursor = Cursors.Default
             End Try
+        End Sub
+
+        Private Sub DtpDividend_ValueChanged(sender As Object, e As EventArgs)
+
+            Cursor = Cursors.WaitCursor
+            Try
+                LoadDividends()
+            Catch ex As Exception
+                m_commonObjects.Errors.Handle(ex)
+            Finally
+                Cursor = Cursors.Default
+            End Try
+
         End Sub
     End Class
 End Namespace

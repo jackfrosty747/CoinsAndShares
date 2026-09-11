@@ -28,6 +28,7 @@
             Me.BtnRefresh = New System.Windows.Forms.Button()
             Me.GrdHoldings = New Infragistics.Win.UltraWinGrid.UltraGrid()
             Me.Panel1 = New System.Windows.Forms.Panel()
+            Me.LblDaysSummary = New System.Windows.Forms.Label()
             Me.Panel2 = New System.Windows.Forms.Panel()
             Me.LblToPay = New System.Windows.Forms.Label()
             Me.Label5 = New System.Windows.Forms.Label()
@@ -41,7 +42,6 @@
             Me.LblSelectedTaxableInterestSoFar = New System.Windows.Forms.Label()
             Me.Label7 = New System.Windows.Forms.Label()
             Me.Label6 = New System.Windows.Forms.Label()
-            Me.LblDaysSummary = New System.Windows.Forms.Label()
             CType(Me.GrdHoldings, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
             Me.Panel2.SuspendLayout()
@@ -104,6 +104,17 @@
             Me.Panel1.Padding = New System.Windows.Forms.Padding(5)
             Me.Panel1.Size = New System.Drawing.Size(624, 38)
             Me.Panel1.TabIndex = 14
+            '
+            'LblDaysSummary
+            '
+            Me.LblDaysSummary.AutoSize = True
+            Me.LblDaysSummary.Dock = System.Windows.Forms.DockStyle.Left
+            Me.LblDaysSummary.Location = New System.Drawing.Point(277, 5)
+            Me.LblDaysSummary.Name = "LblDaysSummary"
+            Me.LblDaysSummary.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
+            Me.LblDaysSummary.Size = New System.Drawing.Size(92, 16)
+            Me.LblDaysSummary.TabIndex = 3
+            Me.LblDaysSummary.Text = "LblDaysSummary"
             '
             'Panel2
             '
@@ -257,17 +268,6 @@
             Me.Label6.Size = New System.Drawing.Size(66, 18)
             Me.Label6.TabIndex = 0
             Me.Label6.Text = "SELECTED:"
-            '
-            'LblDaysSummary
-            '
-            Me.LblDaysSummary.AutoSize = True
-            Me.LblDaysSummary.Dock = System.Windows.Forms.DockStyle.Left
-            Me.LblDaysSummary.Location = New System.Drawing.Point(277, 5)
-            Me.LblDaysSummary.Name = "LblDaysSummary"
-            Me.LblDaysSummary.Padding = New System.Windows.Forms.Padding(0, 3, 0, 0)
-            Me.LblDaysSummary.Size = New System.Drawing.Size(92, 16)
-            Me.LblDaysSummary.TabIndex = 3
-            Me.LblDaysSummary.Text = "LblDaysSummary"
             '
             'FSavingsAndTaxPredictor
             '

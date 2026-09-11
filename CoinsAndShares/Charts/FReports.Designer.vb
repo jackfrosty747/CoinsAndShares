@@ -24,25 +24,25 @@
         <System.Diagnostics.DebuggerStepThrough()>
         Private Sub InitializeComponent()
             Me.components = New System.ComponentModel.Container()
-            Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-            Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-            Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-            Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-            Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-            Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-            Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-            Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-            Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-            Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-            Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-            Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-            Dim Series7 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea22 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend16 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series22 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea23 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend17 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series23 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea24 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend18 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series24 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea25 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Series25 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea26 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Series26 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea27 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend19 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series27 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+            Dim ChartArea28 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+            Dim Legend20 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+            Dim Series28 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
             Me.TabControl1 = New System.Windows.Forms.TabControl()
             Me.TabPage1 = New System.Windows.Forms.TabPage()
             Me.ChartPl = New System.Windows.Forms.DataVisualization.Charting.Chart()
@@ -97,6 +97,13 @@
             Me.TpIsaDeposits = New System.Windows.Forms.TabPage()
             Me.ChartIsaDeposits = New System.Windows.Forms.DataVisualization.Charting.Chart()
             Me.TxtIsaDeposits = New System.Windows.Forms.TextBox()
+            Me.TabPage8 = New System.Windows.Forms.TabPage()
+            Me.TxtDividend = New System.Windows.Forms.TextBox()
+            Me.Panel6 = New System.Windows.Forms.Panel()
+            Me.DtpDividendTo = New System.Windows.Forms.DateTimePicker()
+            Me.Label9 = New System.Windows.Forms.Label()
+            Me.DtpDividendFrom = New System.Windows.Forms.DateTimePicker()
+            Me.Label8 = New System.Windows.Forms.Label()
             Me.Panel1 = New System.Windows.Forms.Panel()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             Me.TabControl1.SuspendLayout()
@@ -122,6 +129,8 @@
             Me.TabPage7.SuspendLayout()
             Me.TpIsaDeposits.SuspendLayout()
             CType(Me.ChartIsaDeposits, System.ComponentModel.ISupportInitialize).BeginInit()
+            Me.TabPage8.SuspendLayout()
+            Me.Panel6.SuspendLayout()
             Me.Panel1.SuspendLayout()
             Me.SuspendLayout()
             '
@@ -135,6 +144,7 @@
             Me.TabControl1.Controls.Add(Me.TabPage6)
             Me.TabControl1.Controls.Add(Me.TabPage7)
             Me.TabControl1.Controls.Add(Me.TpIsaDeposits)
+            Me.TabControl1.Controls.Add(Me.TabPage8)
             Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
             Me.TabControl1.Location = New System.Drawing.Point(5, 5)
             Me.TabControl1.Name = "TabControl1"
@@ -157,18 +167,18 @@
             '
             'ChartPl
             '
-            ChartArea1.Name = "ChartArea1"
-            Me.ChartPl.ChartAreas.Add(ChartArea1)
+            ChartArea22.Name = "ChartArea1"
+            Me.ChartPl.ChartAreas.Add(ChartArea22)
             Me.ChartPl.Dock = System.Windows.Forms.DockStyle.Fill
-            Legend1.Name = "Legend1"
-            Me.ChartPl.Legends.Add(Legend1)
+            Legend16.Name = "Legend1"
+            Me.ChartPl.Legends.Add(Legend16)
             Me.ChartPl.Location = New System.Drawing.Point(3, 41)
             Me.ChartPl.Name = "ChartPl"
             Me.ChartPl.Padding = New System.Windows.Forms.Padding(3)
-            Series1.ChartArea = "ChartArea1"
-            Series1.Legend = "Legend1"
-            Series1.Name = "Series1"
-            Me.ChartPl.Series.Add(Series1)
+            Series22.ChartArea = "ChartArea1"
+            Series22.Legend = "Legend1"
+            Series22.Name = "Series1"
+            Me.ChartPl.Series.Add(Series22)
             Me.ChartPl.Size = New System.Drawing.Size(760, 481)
             Me.ChartPl.TabIndex = 4
             Me.ChartPl.Text = "Chart1"
@@ -276,17 +286,17 @@
             '
             'ChartHoldings
             '
-            ChartArea2.Name = "ChartArea1"
-            Me.ChartHoldings.ChartAreas.Add(ChartArea2)
+            ChartArea23.Name = "ChartArea1"
+            Me.ChartHoldings.ChartAreas.Add(ChartArea23)
             Me.ChartHoldings.Dock = System.Windows.Forms.DockStyle.Fill
-            Legend2.Name = "Legend1"
-            Me.ChartHoldings.Legends.Add(Legend2)
+            Legend17.Name = "Legend1"
+            Me.ChartHoldings.Legends.Add(Legend17)
             Me.ChartHoldings.Location = New System.Drawing.Point(3, 41)
             Me.ChartHoldings.Name = "ChartHoldings"
-            Series2.ChartArea = "ChartArea1"
-            Series2.Legend = "Legend1"
-            Series2.Name = "Series1"
-            Me.ChartHoldings.Series.Add(Series2)
+            Series23.ChartArea = "ChartArea1"
+            Series23.Legend = "Legend1"
+            Series23.Name = "Series1"
+            Me.ChartHoldings.Series.Add(Series23)
             Me.ChartHoldings.Size = New System.Drawing.Size(760, 481)
             Me.ChartHoldings.TabIndex = 7
             Me.ChartHoldings.Text = "Chart2"
@@ -319,8 +329,6 @@
             Me.CmbAccountHoldings.Name = "CmbAccountHoldings"
             Me.CmbAccountHoldings.Size = New System.Drawing.Size(97, 22)
             Me.CmbAccountHoldings.TabIndex = 10
-            Me.ToolTip1.SetToolTip(Me.CmbAccountHoldings, "Show instruments held by this account.  Not only the holdings within that account" &
-        "")
             Me.CmbAccountHoldings.ValueMember = ""
             '
             'Label4
@@ -426,17 +434,17 @@
             '
             'ChartPlPerInstrument
             '
-            ChartArea3.Name = "ChartArea1"
-            Me.ChartPlPerInstrument.ChartAreas.Add(ChartArea3)
+            ChartArea24.Name = "ChartArea1"
+            Me.ChartPlPerInstrument.ChartAreas.Add(ChartArea24)
             Me.ChartPlPerInstrument.Dock = System.Windows.Forms.DockStyle.Fill
-            Legend3.Name = "Legend1"
-            Me.ChartPlPerInstrument.Legends.Add(Legend3)
+            Legend18.Name = "Legend1"
+            Me.ChartPlPerInstrument.Legends.Add(Legend18)
             Me.ChartPlPerInstrument.Location = New System.Drawing.Point(3, 41)
             Me.ChartPlPerInstrument.Name = "ChartPlPerInstrument"
-            Series3.ChartArea = "ChartArea1"
-            Series3.Legend = "Legend1"
-            Series3.Name = "Series1"
-            Me.ChartPlPerInstrument.Series.Add(Series3)
+            Series24.ChartArea = "ChartArea1"
+            Series24.Legend = "Legend1"
+            Series24.Name = "Series1"
+            Me.ChartPlPerInstrument.Series.Add(Series24)
             Me.ChartPlPerInstrument.Size = New System.Drawing.Size(760, 481)
             Me.ChartPlPerInstrument.TabIndex = 7
             Me.ChartPlPerInstrument.Text = "Chart2"
@@ -465,7 +473,6 @@
             Me.CmbAccountPlPerInstrument.Name = "CmbAccountPlPerInstrument"
             Me.CmbAccountPlPerInstrument.Size = New System.Drawing.Size(97, 22)
             Me.CmbAccountPlPerInstrument.TabIndex = 8
-            Me.ToolTip1.SetToolTip(Me.CmbAccountPlPerInstrument, "Show instruments held by this account.  Not only the P/L within that account")
             Me.CmbAccountPlPerInstrument.ValueMember = ""
             '
             'Label3
@@ -549,28 +556,28 @@
             '
             'ChartMiningByDate
             '
-            ChartArea4.Name = "ChartArea1"
-            Me.ChartMiningByDate.ChartAreas.Add(ChartArea4)
+            ChartArea25.Name = "ChartArea1"
+            Me.ChartMiningByDate.ChartAreas.Add(ChartArea25)
             Me.ChartMiningByDate.Dock = System.Windows.Forms.DockStyle.Fill
             Me.ChartMiningByDate.Location = New System.Drawing.Point(3, 3)
             Me.ChartMiningByDate.Name = "ChartMiningByDate"
-            Series4.ChartArea = "ChartArea1"
-            Series4.Name = "Series1"
-            Me.ChartMiningByDate.Series.Add(Series4)
+            Series25.ChartArea = "ChartArea1"
+            Series25.Name = "Series1"
+            Me.ChartMiningByDate.Series.Add(Series25)
             Me.ChartMiningByDate.Size = New System.Drawing.Size(374, 462)
             Me.ChartMiningByDate.TabIndex = 8
             Me.ChartMiningByDate.Text = "Chart2"
             '
             'ChartMiningCumulative
             '
-            ChartArea5.Name = "ChartArea1"
-            Me.ChartMiningCumulative.ChartAreas.Add(ChartArea5)
+            ChartArea26.Name = "ChartArea1"
+            Me.ChartMiningCumulative.ChartAreas.Add(ChartArea26)
             Me.ChartMiningCumulative.Dock = System.Windows.Forms.DockStyle.Fill
             Me.ChartMiningCumulative.Location = New System.Drawing.Point(383, 3)
             Me.ChartMiningCumulative.Name = "ChartMiningCumulative"
-            Series5.ChartArea = "ChartArea1"
-            Series5.Name = "Series1"
-            Me.ChartMiningCumulative.Series.Add(Series5)
+            Series26.ChartArea = "ChartArea1"
+            Series26.Name = "Series1"
+            Me.ChartMiningCumulative.Series.Add(Series26)
             Me.ChartMiningCumulative.Size = New System.Drawing.Size(374, 462)
             Me.ChartMiningCumulative.TabIndex = 11
             Me.ChartMiningCumulative.Text = "Chart2"
@@ -621,7 +628,6 @@
             Me.ChkReduceByElectricityCost.Size = New System.Drawing.Size(141, 26)
             Me.ChkReduceByElectricityCost.TabIndex = 11
             Me.ChkReduceByElectricityCost.Text = "Include Electricity Cost"
-            Me.ToolTip1.SetToolTip(Me.ChkReduceByElectricityCost, "Reduce daily profits by electricity cost as set in Electricity screen")
             Me.ChkReduceByElectricityCost.UseVisualStyleBackColor = True
             '
             'DtpMiningDateTo
@@ -708,18 +714,18 @@
             '
             'ChartSavings
             '
-            ChartArea6.Name = "ChartArea1"
-            Me.ChartSavings.ChartAreas.Add(ChartArea6)
+            ChartArea27.Name = "ChartArea1"
+            Me.ChartSavings.ChartAreas.Add(ChartArea27)
             Me.ChartSavings.Dock = System.Windows.Forms.DockStyle.Fill
-            Legend4.Name = "Legend1"
-            Me.ChartSavings.Legends.Add(Legend4)
+            Legend19.Name = "Legend1"
+            Me.ChartSavings.Legends.Add(Legend19)
             Me.ChartSavings.Location = New System.Drawing.Point(3, 3)
             Me.ChartSavings.Name = "ChartSavings"
             Me.ChartSavings.Padding = New System.Windows.Forms.Padding(3)
-            Series6.ChartArea = "ChartArea1"
-            Series6.Legend = "Legend1"
-            Series6.Name = "Series1"
-            Me.ChartSavings.Series.Add(Series6)
+            Series27.ChartArea = "ChartArea1"
+            Series27.Legend = "Legend1"
+            Series27.Name = "Series1"
+            Me.ChartSavings.Series.Add(Series27)
             Me.ChartSavings.Size = New System.Drawing.Size(760, 519)
             Me.ChartSavings.TabIndex = 5
             Me.ChartSavings.Text = "Chart1"
@@ -770,17 +776,17 @@
             '
             'ChartIsaDeposits
             '
-            ChartArea7.Name = "ChartArea1"
-            Me.ChartIsaDeposits.ChartAreas.Add(ChartArea7)
+            ChartArea28.Name = "ChartArea1"
+            Me.ChartIsaDeposits.ChartAreas.Add(ChartArea28)
             Me.ChartIsaDeposits.Dock = System.Windows.Forms.DockStyle.Fill
-            Legend5.Name = "Legend1"
-            Me.ChartIsaDeposits.Legends.Add(Legend5)
+            Legend20.Name = "Legend1"
+            Me.ChartIsaDeposits.Legends.Add(Legend20)
             Me.ChartIsaDeposits.Location = New System.Drawing.Point(291, 3)
             Me.ChartIsaDeposits.Name = "ChartIsaDeposits"
-            Series7.ChartArea = "ChartArea1"
-            Series7.Legend = "Legend1"
-            Series7.Name = "Series1"
-            Me.ChartIsaDeposits.Series.Add(Series7)
+            Series28.ChartArea = "ChartArea1"
+            Series28.Legend = "Legend1"
+            Series28.Name = "Series1"
+            Me.ChartIsaDeposits.Series.Add(Series28)
             Me.ChartIsaDeposits.Size = New System.Drawing.Size(472, 519)
             Me.ChartIsaDeposits.TabIndex = 1
             Me.ChartIsaDeposits.Text = "Chart1"
@@ -797,6 +803,81 @@
             Me.TxtIsaDeposits.Size = New System.Drawing.Size(288, 519)
             Me.TxtIsaDeposits.TabIndex = 0
             Me.TxtIsaDeposits.WordWrap = False
+            '
+            'TabPage8
+            '
+            Me.TabPage8.Controls.Add(Me.TxtDividend)
+            Me.TabPage8.Controls.Add(Me.Panel6)
+            Me.TabPage8.Location = New System.Drawing.Point(4, 22)
+            Me.TabPage8.Name = "TabPage8"
+            Me.TabPage8.Padding = New System.Windows.Forms.Padding(3)
+            Me.TabPage8.Size = New System.Drawing.Size(766, 525)
+            Me.TabPage8.TabIndex = 8
+            Me.TabPage8.Text = "Dividend"
+            Me.TabPage8.UseVisualStyleBackColor = True
+            '
+            'TxtDividend
+            '
+            Me.TxtDividend.Dock = System.Windows.Forms.DockStyle.Fill
+            Me.TxtDividend.Font = New System.Drawing.Font("Lucida Console", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.TxtDividend.Location = New System.Drawing.Point(3, 41)
+            Me.TxtDividend.Multiline = True
+            Me.TxtDividend.Name = "TxtDividend"
+            Me.TxtDividend.ReadOnly = True
+            Me.TxtDividend.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+            Me.TxtDividend.Size = New System.Drawing.Size(760, 481)
+            Me.TxtDividend.TabIndex = 0
+            '
+            'Panel6
+            '
+            Me.Panel6.Controls.Add(Me.DtpDividendTo)
+            Me.Panel6.Controls.Add(Me.Label9)
+            Me.Panel6.Controls.Add(Me.DtpDividendFrom)
+            Me.Panel6.Controls.Add(Me.Label8)
+            Me.Panel6.Dock = System.Windows.Forms.DockStyle.Top
+            Me.Panel6.Location = New System.Drawing.Point(3, 3)
+            Me.Panel6.Name = "Panel6"
+            Me.Panel6.Padding = New System.Windows.Forms.Padding(5)
+            Me.Panel6.Size = New System.Drawing.Size(760, 38)
+            Me.Panel6.TabIndex = 3
+            '
+            'DtpDividendTo
+            '
+            Me.DtpDividendTo.Dock = System.Windows.Forms.DockStyle.Left
+            Me.DtpDividendTo.Location = New System.Drawing.Point(292, 5)
+            Me.DtpDividendTo.Name = "DtpDividendTo"
+            Me.DtpDividendTo.Size = New System.Drawing.Size(200, 22)
+            Me.DtpDividendTo.TabIndex = 2
+            '
+            'Label9
+            '
+            Me.Label9.AutoSize = True
+            Me.Label9.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label9.Location = New System.Drawing.Point(272, 5)
+            Me.Label9.Name = "Label9"
+            Me.Label9.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+            Me.Label9.Size = New System.Drawing.Size(20, 17)
+            Me.Label9.TabIndex = 4
+            Me.Label9.Text = "TO"
+            '
+            'DtpDividendFrom
+            '
+            Me.DtpDividendFrom.Dock = System.Windows.Forms.DockStyle.Left
+            Me.DtpDividendFrom.Location = New System.Drawing.Point(72, 5)
+            Me.DtpDividendFrom.Name = "DtpDividendFrom"
+            Me.DtpDividendFrom.Size = New System.Drawing.Size(200, 22)
+            Me.DtpDividendFrom.TabIndex = 1
+            '
+            'Label8
+            '
+            Me.Label8.AutoSize = True
+            Me.Label8.Dock = System.Windows.Forms.DockStyle.Left
+            Me.Label8.Location = New System.Drawing.Point(5, 5)
+            Me.Label8.Name = "Label8"
+            Me.Label8.Padding = New System.Windows.Forms.Padding(0, 4, 0, 0)
+            Me.Label8.Size = New System.Drawing.Size(67, 17)
+            Me.Label8.TabIndex = 3
+            Me.Label8.Text = "DATE FROM"
             '
             'Panel1
             '
@@ -849,6 +930,10 @@
             Me.TpIsaDeposits.ResumeLayout(False)
             Me.TpIsaDeposits.PerformLayout()
             CType(Me.ChartIsaDeposits, System.ComponentModel.ISupportInitialize).EndInit()
+            Me.TabPage8.ResumeLayout(False)
+            Me.TabPage8.PerformLayout()
+            Me.Panel6.ResumeLayout(False)
+            Me.Panel6.PerformLayout()
             Me.Panel1.ResumeLayout(False)
             Me.ResumeLayout(False)
 
@@ -910,6 +995,13 @@
         Friend WithEvents TpIsaDeposits As TabPage
         Friend WithEvents TxtIsaDeposits As TextBox
         Friend WithEvents ChartIsaDeposits As DataVisualization.Charting.Chart
+        Friend WithEvents TabPage8 As TabPage
+        Friend WithEvents TxtDividend As TextBox
+        Friend WithEvents DtpDividendTo As DateTimePicker
+        Friend WithEvents DtpDividendFrom As DateTimePicker
+        Friend WithEvents Panel6 As Panel
+        Friend WithEvents Label9 As Label
+        Friend WithEvents Label8 As Label
     End Class
 
 End Namespace
