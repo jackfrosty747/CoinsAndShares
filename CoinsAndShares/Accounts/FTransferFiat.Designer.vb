@@ -39,6 +39,7 @@
             Me.BtnCancel = New System.Windows.Forms.Button()
             Me.BtnOk = New System.Windows.Forms.Button()
             Me.Panel2 = New System.Windows.Forms.Panel()
+            Me.Label7 = New System.Windows.Forms.Label()
             Me.BtnAll = New System.Windows.Forms.Button()
             Me.Label5 = New System.Windows.Forms.Label()
             Me.DtpSendDateTime = New System.Windows.Forms.DateTimePicker()
@@ -49,7 +50,7 @@
             Me.ChkSameAsSendingDate = New System.Windows.Forms.CheckBox()
             Me.DtpReceiveDateTime = New System.Windows.Forms.DateTimePicker()
             Me.Label4 = New System.Windows.Forms.Label()
-            Me.Label7 = New System.Windows.Forms.Label()
+            Me.BtnSwapAccounts = New System.Windows.Forms.Button()
             CType(Me.CmbAccountFrom, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.CmbAccountTo, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.Panel1.SuspendLayout()
@@ -82,7 +83,7 @@
             Me.Label2.AutoSize = True
             Me.Label2.Location = New System.Drawing.Point(60, 37)
             Me.Label2.Name = "Label2"
-            Me.Label2.Size = New System.Drawing.Size(64, 13)
+            Me.Label2.Size = New System.Drawing.Size(63, 13)
             Me.Label2.TabIndex = 0
             Me.Label2.Text = "To Account"
             '
@@ -225,6 +226,15 @@
             Me.Panel2.Size = New System.Drawing.Size(600, 130)
             Me.Panel2.TabIndex = 0
             '
+            'Label7
+            '
+            Me.Label7.AutoSize = True
+            Me.Label7.Location = New System.Drawing.Point(361, 108)
+            Me.Label7.Name = "Label7"
+            Me.Label7.Size = New System.Drawing.Size(194, 13)
+            Me.Label7.TabIndex = 4
+            Me.Label7.Text = "Fees will appear as separate batches"
+            '
             'BtnAll
             '
             Me.BtnAll.AutoSize = True
@@ -259,7 +269,7 @@
             Me.Label3.AutoSize = True
             Me.Label3.Location = New System.Drawing.Point(60, 86)
             Me.Label3.Name = "Label3"
-            Me.Label3.Size = New System.Drawing.Size(65, 13)
+            Me.Label3.Size = New System.Drawing.Size(64, 13)
             Me.Label3.TabIndex = 4
             Me.Label3.Text = "Date / Time"
             '
@@ -324,24 +334,28 @@
             Me.Label4.AutoSize = True
             Me.Label4.Location = New System.Drawing.Point(60, 93)
             Me.Label4.Name = "Label4"
-            Me.Label4.Size = New System.Drawing.Size(65, 13)
+            Me.Label4.Size = New System.Drawing.Size(64, 13)
             Me.Label4.TabIndex = 4
             Me.Label4.Text = "Date / Time"
             '
-            'Label7
+            'BtnSwapAccounts
             '
-            Me.Label7.AutoSize = True
-            Me.Label7.Location = New System.Drawing.Point(361, 108)
-            Me.Label7.Name = "Label7"
-            Me.Label7.Size = New System.Drawing.Size(194, 13)
-            Me.Label7.TabIndex = 4
-            Me.Label7.Text = "Fees will appear as separate batches"
+            Me.BtnSwapAccounts.AutoSize = True
+            Me.BtnSwapAccounts.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+            Me.BtnSwapAccounts.BackColor = System.Drawing.SystemColors.ButtonFace
+            Me.BtnSwapAccounts.Location = New System.Drawing.Point(12, 191)
+            Me.BtnSwapAccounts.Name = "BtnSwapAccounts"
+            Me.BtnSwapAccounts.Size = New System.Drawing.Size(95, 23)
+            Me.BtnSwapAccounts.TabIndex = 4
+            Me.BtnSwapAccounts.Text = "Swap Accounts"
+            Me.BtnSwapAccounts.UseVisualStyleBackColor = False
             '
             'FTransferFiat
             '
             Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
             Me.ClientSize = New System.Drawing.Size(624, 441)
+            Me.Controls.Add(Me.BtnSwapAccounts)
             Me.Controls.Add(Me.Panel3)
             Me.Controls.Add(Me.Panel2)
             Me.Controls.Add(Me.Panel1)
@@ -391,6 +405,7 @@
         Friend WithEvents LblCreditLabel As Label
         Friend WithEvents Label7 As Label
         Friend WithEvents BtnAll As Button
+        Friend WithEvents BtnSwapAccounts As Button
     End Class
 
 End Namespace

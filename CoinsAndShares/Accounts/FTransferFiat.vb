@@ -141,5 +141,11 @@
                 Cursor = Cursors.Default
             End Try
         End Sub
+
+        Private Sub BtnSwapAccounts_Click(sender As Object, e As EventArgs) Handles BtnSwapAccounts.Click
+            Dim sFrom = CmbAccountFrom.Text
+            CmbAccountFrom.Text = CmbAccountTo.Text
+            CmbAccountTo.Text = sFrom
+        End Sub
     End Class
 End Namespace
